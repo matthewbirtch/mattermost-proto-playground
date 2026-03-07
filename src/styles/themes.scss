@@ -1,0 +1,215 @@
+// ============================================================
+// Theme Custom Properties
+// Applied via data-theme attribute on <html>
+// e.g. <html data-theme="onyx">
+//
+// Default theme: Denim
+// ============================================================
+
+@use './tokens' as *;
+
+// ============================================================
+// Denim (default)
+// ============================================================
+:root,
+[data-theme='denim'] {
+  // Sidebar
+  --sidebar-bg: #{$color-indigo-500};
+  --sidebar-header-bg: #192a4d;
+  --sidebar-team-bg: #162545;
+  --sidebar-text: #{$color-neutral-0};
+  --sidebar-text-hover-bg: #{$color-indigo-400};
+  --sidebar-text-active-border: #{$color-blue-300};
+  --sidebar-text-active-color: #{$color-neutral-0};
+  --sidebar-unread-text: #{$color-neutral-0};
+  --sidebar-header-text-color: #{$color-neutral-0};
+
+  // Center channel
+  --center-channel-bg: #{$color-neutral-0};
+  --center-channel-color: #{$color-neutral-900};
+
+  // Buttons
+  --button-bg: #{$color-blue-500};
+  --button-color: #{$color-neutral-0};
+
+  // Interactions
+  --link-color: #{$color-blue-600};
+  --error-text: #{$color-red-400};
+  --mention-bg: #{$color-neutral-0};
+  --mention-color: #{$color-indigo-500};
+  --mention-highlight-bg: #{$color-yellow-200};
+  --mention-highlight-link: #{$color-neutral-1100};
+  --new-message-separator: #{$color-yellow-600};
+
+  // Status
+  --online-indicator: #{$color-green-500};
+  --away-indicator: #{$color-yellow-500};
+  --dnd-indicator: #{$color-red-400};
+
+  // Misc
+  --calls-bg: #{$color-indigo-600};
+}
+
+// ============================================================
+// Sapphire
+// ============================================================
+[data-theme='sapphire'] {
+  // Sidebar
+  --sidebar-bg: #1543a3;
+  --sidebar-header-bg: #123b91;
+  --sidebar-team-bg: #123582;
+  --sidebar-text: #{$color-neutral-0};
+  --sidebar-text-hover-bg: #2a58ba;
+  --sidebar-text-active-border: #{$color-cyan-300};
+  --sidebar-text-active-color: #{$color-neutral-0};
+  --sidebar-unread-text: #{$color-neutral-0};
+  --sidebar-header-text-color: #{$color-neutral-0};
+
+  // Center channel
+  --center-channel-bg: #{$color-neutral-0};
+  --center-channel-color: #{$color-neutral-900};
+
+  // Buttons
+  --button-bg: #{$color-blue-500};
+  --button-color: #{$color-neutral-0};
+
+  // Interactions
+  --link-color: #{$color-blue-600};
+  --error-text: #{$color-red-300};
+  --mention-bg: #{$color-neutral-0};
+  --mention-color: #1543a3;
+  --mention-highlight-bg: #{$color-teal-200};
+  --mention-highlight-link: #{$color-teal-800};
+  --new-message-separator: #{$color-yellow-400};
+
+  // Status
+  --online-indicator: #{$color-green-500};
+  --away-indicator: #{$color-yellow-500};
+  --dnd-indicator: #{$color-red-400};
+
+  // Misc
+  --calls-bg: #091d48;
+}
+
+// ============================================================
+// Quartz
+// ============================================================
+[data-theme='quartz'] {
+  // Sidebar
+  --sidebar-bg: #{$color-neutral-50};
+  --sidebar-header-bg: #ebecef;
+  --sidebar-team-bg: #e5e7eb;
+  --sidebar-text: #{$color-neutral-1100};
+  --sidebar-text-hover-bg: #e8eaed;
+  --sidebar-text-active-border: #{$color-cyan-500};
+  --sidebar-text-active-color: #{$color-neutral-1100};
+  --sidebar-unread-text: #{$color-neutral-1100};
+  --sidebar-header-text-color: #{$color-neutral-1100};
+
+  // Center channel
+  --center-channel-bg: #{$color-neutral-0};
+  --center-channel-color: #{$color-neutral-900};
+
+  // Buttons
+  --button-bg: #{$color-blue-500};
+  --button-color: #{$color-neutral-0};
+
+  // Interactions
+  --link-color: #{$color-blue-600};
+  --error-text: #{$color-red-400};
+  --mention-bg: #{$color-blue-500};
+  --mention-color: #{$color-neutral-0};
+  --mention-highlight-bg: #{$color-teal-200};
+  --mention-highlight-link: #{$color-teal-800};
+  --new-message-separator: #{$color-teal-600};
+
+  // Status
+  --online-indicator: #{$color-green-500};
+  --away-indicator: #{$color-yellow-500};
+  --dnd-indicator: #{$color-red-400};
+
+  // Misc
+  --calls-bg: #{$color-neutral-1050};
+}
+
+// ============================================================
+// Indigo
+// ============================================================
+[data-theme='indigo'] {
+  // Sidebar
+  --sidebar-bg: #151e32;
+  --sidebar-header-bg: #182339;
+  --sidebar-team-bg: #1c2740;
+  --sidebar-text: #{$color-neutral-0};
+  --sidebar-text-hover-bg: #222c3f;
+  --sidebar-text-active-border: #4a7ce8;
+  --sidebar-text-active-color: #{$color-neutral-0};
+  --sidebar-unread-text: #{$color-neutral-0};
+  --sidebar-header-text-color: #{$color-neutral-0};
+
+  // Center channel
+  --center-channel-bg: #111827;
+  --center-channel-color: #{$color-neutral-150};
+
+  // Buttons
+  --button-bg: #4a7ce8;
+  --button-color: #{$color-neutral-0};
+
+  // Interactions
+  --link-color: #{$color-blue-300};
+  --error-text: #{$color-red-300};
+  --mention-bg: #4a7ce8;
+  --mention-color: #{$color-neutral-0};
+  --mention-highlight-bg: #{$color-blue-700};
+  --mention-highlight-link: #{$color-teal-100};
+  --new-message-separator: #{$color-yellow-400};
+
+  // Status
+  --online-indicator: #{$color-green-500};
+  --away-indicator: #{$color-yellow-500};
+  --dnd-indicator: #{$color-red-400};
+
+  // Misc
+  --calls-bg: #222c3f;
+}
+
+// ============================================================
+// Onyx
+// ============================================================
+[data-theme='onyx'] {
+  // Sidebar
+  --sidebar-bg: #202228;
+  --sidebar-header-bg: #24272d;
+  --sidebar-team-bg: #292c33;
+  --sidebar-text: #{$color-neutral-0};
+  --sidebar-text-hover-bg: #25262a;
+  --sidebar-text-active-border: #4a7ce8;
+  --sidebar-text-active-color: #{$color-neutral-0};
+  --sidebar-unread-text: #{$color-neutral-0};
+  --sidebar-header-text-color: #{$color-neutral-0};
+
+  // Center channel
+  --center-channel-bg: #191b1f;
+  --center-channel-color: #{$color-neutral-150};
+
+  // Buttons
+  --button-bg: #4a7ce8;
+  --button-color: #{$color-neutral-0};
+
+  // Interactions
+  --link-color: #{$color-blue-300};
+  --error-text: #{$color-red-300};
+  --mention-bg: #4a7ce8;
+  --mention-color: #{$color-neutral-0};
+  --mention-highlight-bg: #{$color-teal-800};
+  --mention-highlight-link: #{$color-teal-100};
+  --new-message-separator: #{$color-yellow-400};
+
+  // Status
+  --online-indicator: #{$color-green-500};
+  --away-indicator: #{$color-yellow-500};
+  --dnd-indicator: #{$color-red-400};
+
+  // Misc
+  --calls-bg: #24262d;
+}

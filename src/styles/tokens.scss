@@ -1,83 +1,192 @@
 // ============================================================
-// Design Tokens — sourced from Figma design system
-// Populate these as components are pulled from Figma files.
+// Foundation Design Tokens
 // ============================================================
 
-// --- Color: Brand ---
-$color-brand-primary: #1e52a4;
-$color-brand-secondary: #5d89ea;
+// --- Neutral ---
+$color-neutral-0:    #ffffff;
+$color-neutral-50:   #f4f4f6;
+$color-neutral-100:  #e8e9ed;
+$color-neutral-150:  #dddfe4;
+$color-neutral-200:  #d1d4db;
+$color-neutral-250:  #c6c9d2;
+$color-neutral-300:  #babec9;
+$color-neutral-350:  #afb3c0;
+$color-neutral-400:  #a4a9b7;
+$color-neutral-450:  #989dae;
+$color-neutral-500:  #8d93a5;
+$color-neutral-550:  #82889c;
+$color-neutral-600:  #767d93;
+$color-neutral-650:  #6c7389;
+$color-neutral-700:  #63697e;
+$color-neutral-750:  #5a6072;
+$color-neutral-800:  #505667;
+$color-neutral-850:  #484d5b;
+$color-neutral-900:  #3f4350;
+$color-neutral-950:  #363a45;
+$color-neutral-1000: #2d3039;
+$color-neutral-1050: #24262e;
+$color-neutral-1100: #1b1d22;
+$color-neutral-1150: #121317;
+$color-neutral-1200: #090a0b;
 
-// --- Color: Neutral ---
-$color-neutral-0: #ffffff;
-$color-neutral-50: #f8f9fa;
-$color-neutral-100: #f0f2f5;
-$color-neutral-200: #d8dde6;
-$color-neutral-300: #b8c0cc;
-$color-neutral-400: #8f9aac;
-$color-neutral-500: #63748a;
-$color-neutral-600: #45556c;
-$color-neutral-700: #2d3e56;
-$color-neutral-800: #1a2a40;
-$color-neutral-900: #0d1724;
+// --- Blue ---
+$color-blue-100: #a5bef3;
+$color-blue-200: #81a3ef;
+$color-blue-300: #5d89ea;
+$color-blue-400: #386fe5;
+$color-blue-500: #1c58d9;
+$color-blue-600: #174ab5;
+$color-blue-700: #133a91;
+$color-blue-800: #0e2b6c;
 
-// --- Color: Semantic ---
-$color-success: #3db887;
-$color-warning: #f5a623;
-$color-danger: #d24b4e;
-$color-info: #1c9ee4;
+// --- Cyan ---
+$color-cyan-100: #a2d6f6;
+$color-cyan-200: #7cc5f3;
+$color-cyan-300: #57b5f0;
+$color-cyan-400: #32a4ec;
+$color-cyan-500: #1592e0;
+$color-cyan-600: #1279ba;
+$color-cyan-700: #0e6295;
+$color-cyan-800: #0b4970;
 
-// --- Typography ---
-$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-$font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+// --- Green ---
+$color-green-100: #b3e5d1;
+$color-green-200: #94dbbf;
+$color-green-300: #75d1ac;
+$color-green-400: #57c79a;
+$color-green-500: #3db887;
+$color-green-600: #339970;
+$color-green-700: #297a5a;
+$color-green-800: #1f5c43;
 
-$font-size-xs: 11px;
-$font-size-sm: 12px;
-$font-size-md: 14px;
-$font-size-lg: 16px;
-$font-size-xl: 18px;
+// --- Indigo ---
+$color-indigo-100: #7492d2;
+$color-indigo-200: #3c64b9;
+$color-indigo-300: #32539a;
+$color-indigo-400: #28427b;
+$color-indigo-500: #1e325c;
+$color-indigo-600: #14213e;
+$color-indigo-700: #0f1a2e;
+$color-indigo-800: #0a111f;
+
+// --- Orange ---
+$color-orange-100: #f6c9a2;
+$color-orange-200: #f2b47e;
+$color-orange-300: #ef9e57;
+$color-orange-400: #ec8832;
+$color-orange-500: #e07315;
+$color-orange-600: #ba6012;
+$color-orange-700: #954d0e;
+$color-orange-800: #703a0b;
+
+// --- Purple ---
+$color-purple-100: #b7bae1;
+$color-purple-200: #9a9ed5;
+$color-purple-300: #7e83c9;
+$color-purple-400: #6167bd;
+$color-purple-500: #484fad;
+$color-purple-600: #3c4290;
+$color-purple-700: #303573;
+$color-purple-800: #242856;
+
+// --- Red ---
+$color-red-100: #ebadae;
+$color-red-200: #e28d8e;
+$color-red-300: #da6c6e;
+$color-red-400: #d24b4e;
+$color-red-500: #c43133;
+$color-red-600: #a3292b;
+$color-red-700: #832122;
+$color-red-800: #621819;
+
+// --- Teal ---
+$color-teal-100: #a4f4f4;
+$color-teal-200: #7ff0f0;
+$color-teal-300: #5becec;
+$color-teal-400: #36e7e7;
+$color-teal-500: #1adbdb;
+$color-teal-600: #15b7b7;
+$color-teal-700: #119292;
+$color-teal-800: #0d6e6e;
+
+// --- Yellow ---
+$color-yellow-100: #ffe099;
+$color-yellow-200: #ffd470;
+$color-yellow-300: #ffc847;
+$color-yellow-400: #ffbc1f;
+$color-yellow-500: #f5ab00;
+$color-yellow-600: #cc8f00;
+$color-yellow-700: #a37200;
+$color-yellow-800: #7a5600;
+
+// ============================================================
+// Typography
+// ============================================================
+$font-family-base:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-family-heading: 'Metropolis', $font-family-base;
+$font-family-mono:    'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+$font-size-xs:  11px;
+$font-size-sm:  12px;
+$font-size-md:  14px;
+$font-size-lg:  16px;
+$font-size-xl:  18px;
 $font-size-2xl: 22px;
 $font-size-3xl: 28px;
 
-$font-weight-regular: 400;
-$font-weight-medium: 500;
+$font-weight-regular:  400;
+$font-weight-medium:   500;
 $font-weight-semibold: 600;
-$font-weight-bold: 700;
+$font-weight-bold:     700;
 
 $line-height-tight: 1.2;
-$line-height-base: 1.5;
+$line-height-base:  1.5;
 $line-height-loose: 1.75;
 
-// --- Spacing ---
-$space-1: 4px;
-$space-2: 8px;
-$space-3: 12px;
-$space-4: 16px;
-$space-5: 20px;
-$space-6: 24px;
-$space-8: 32px;
-$space-10: 40px;
-$space-12: 48px;
-$space-16: 64px;
+// ============================================================
+// Spacing
+// ============================================================
+$spacing-xxxxs:  2px;
+$spacing-xxxs:  4px;
+$spacing-xxs:  6px;
+$spacing-xs:  8px;
+$spacing-s:  10px;
+$spacing-m:  12px;
+$spacing-l:  16px;
+$spacing-xl:  20px;
+$spacing-xxl:  24px;
+$spacing-xxxl:  32px;
+$spacing-xxxxl:  40px;
+$spacing-xxxxxl:  48px;
 
-// --- Border Radius ---
-$radius-sm: 4px;
-$radius-md: 8px;
-$radius-lg: 12px;
-$radius-xl: 16px;
-$radius-full: 9999px;
+// ============================================================
+// Border Radius
+// ============================================================
+$radius-xs:   2px;
+$radius-s:   4px;
+$radius-m:   8px;
+$radius-l:   12px;
+$radius-xl:   16px;
+$radius-full: 50%;
 
-// --- Shadows ---
+// ============================================================
+// Shadows
+// ============================================================
 $shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
 $shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
 $shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.16);
 
-// --- Breakpoints ---
+// ============================================================
+// Breakpoints
+// ============================================================
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
 
-// --- Z-index ---
+// ============================================================
+// Z-index
+// ============================================================
 $z-sidebar: 100;
-$z-modal: 200;
+$z-modal:   200;
 $z-tooltip: 300;

@@ -1,5 +1,6 @@
 // tokens and mixins are auto-injected by vite.config additionalData
 @use 'reset';
+@use 'themes';
 
 // Base body styles — token variables available here via additionalData
 body {

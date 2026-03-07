@@ -199,11 +199,14 @@
   --radius-full: 50%;
 
   // ============================================================
-  // Shadows
+  // Elevations (W3C design tokens format)
   // ============================================================
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.16);
+  --elevation-1: 0 2px 3px 0 #00000014;   // Subtle - hover, small dropdowns
+  --elevation-2: 0 4px 6px 0 #0000001F;   // Low - buttons, chips, small cards
+  --elevation-3: 0 6px 14px 0 #0000001F;  // Medium - cards, menus, tooltips
+  --elevation-4: 0 8px 24px 0 #0000001F;  // High - modals, popovers, floating panels
+  --elevation-5: 0 12px 32px 0 #0000001F; // Higher - dialogs, drawers
+  --elevation-6: 0 20px 32px 0 #0000001F; // Highest - full-screen overlays
 
   // ============================================================
   // Z-index

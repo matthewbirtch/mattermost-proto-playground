@@ -9,13 +9,13 @@
   align-items: center;
   gap: var(--spacing-xs);
   font-family: var(--font-family-body);
-  color: var(--color-neutral-900);
+  color: var(--center-channel-color);
   cursor: pointer;
   user-select: none;
 
   &:has(.radio__input:disabled) {
     cursor: not-allowed;
-    opacity: 0.7;
+    color: rgba(var(--center-channel-color-rgb), 0.56);
   }
 }
 
@@ -51,16 +51,17 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  background-color: var(--color-neutral-0);
-  border: 1px solid rgba(var(--color-neutral-900-rgb), 0.24);
+  background-color: var(--center-channel-bg);
+  border: 1px solid rgba(var(--center-channel-color-rgb), 0.24);
   border-radius: var(--radius-full);
   transition:
     background-color 150ms ease,
     border-color 150ms ease,
+    border-width 150ms ease,
     box-shadow 150ms ease;
 
   .radio__input:focus-visible ~ & {
-    box-shadow: 0 0 0 2px var(--color-blue-300);
+    box-shadow: 0 0 0 4px rgba(var(--button-bg-rgb), 0.56);
   }
 
   .radio:has(.radio__input:not(:disabled)):hover & {
@@ -68,73 +69,88 @@
   }
 
   .radio__input:disabled ~ & {
-    background-color: rgba(255, 255, 255, 0.32);
+    background-color: rgba(var(--center-channel-color-rgb), 0.32);
     border-color: rgba(var(--color-neutral-900-rgb), 0.16);
   }
 }
 
-// Checked — valid (blue)
+// Checked — valid (blue ring + blue dot on white, Figma style)
 .radio__input:checked ~ .radio__circle {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-blue-500);
+  background-color: var(--center-channel-bg);
+  border-width: 1px;
+  border-color: var(--button-bg);
+}
+
+.radio__input:checked ~ .radio__circle .radio__dot {
+  background-color: var(--button-bg);
 }
 
 .radio:has(.radio__input:not(:disabled)):hover .radio__input:checked ~ .radio__circle {
-  background-color: var(--color-blue-600);
-  border-color: var(--color-blue-600);
+  border-color: var(--button-bg);
+}
+
+.radio:has(.radio__input:not(:disabled)):hover .radio__input:checked ~ .radio__circle .radio__dot {
+  background-color: var(--button-bg);
 }
 
 .radio__input:focus-visible:checked ~ .radio__circle {
-  border-color: var(--color-blue-300);
-  box-shadow: 0 0 0 2px var(--color-blue-300);
+  border-color: var(--button-bg);
+  box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
 }
 
 .radio__input:disabled:checked ~ .radio__circle {
-  background-color: rgba(var(--color-neutral-900-rgb), 0.32);
-  border-color: transparent;
+  background-color: var(--center-channel-bg);
+  border-color: rgba(var(--center-channel-color-rgb), 0.32);
+  border-width: 1px;
+}
+
+.radio__input:disabled:checked ~ .radio__circle .radio__dot {
+  background-color: rgba(var(--center-channel-color-rgb), 0.32);
 }
 
 // Invalid (error) state — unchecked
 .radio--invalid .radio__circle {
-  border-color: rgba(var(--color-red-500-rgb), 0.5);
+  border-color: var(--error-text);
 }
 
 .radio:has(.radio__input:not(:disabled)):hover.radio--invalid .radio__input:not(:checked) ~ .radio__circle {
-  border-color: var(--color-red-500);
+  border-color: var(--error-text);
 }
 
-// Invalid — checked (red)
+// Invalid — checked (red ring + red dot on white)
 .radio--invalid .radio__input:checked ~ .radio__circle {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
+  background-color: var(--center-channel-bg);
+  border-width: 1px;
+  border-color: var(--error-text);
+}
+
+.radio--invalid .radio__input:checked ~ .radio__circle .radio__dot {
+  background-color: var(--error-text);
 }
 
 .radio:has(.radio__input:not(:disabled)):hover.radio--invalid .radio__input:checked ~ .radio__circle {
-  background-color: var(--color-red-600);
-  border-color: var(--color-red-600);
+  border-color: var(--error-text);
+}
+
+.radio:has(.radio__input:not(:disabled)):hover.radio--invalid .radio__input:checked ~ .radio__circle .radio__dot {
+  background-color: var(--error-text);
 }
 
 .radio--invalid .radio__input:focus-visible ~ .radio__circle {
-  box-shadow: 0 0 0 2px var(--color-red-400);
+  box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
 }
 
 .radio--invalid .radio__input:focus-visible:checked ~ .radio__circle {
-  border-color: rgba(var(--color-neutral-0-rgb), 0.24);
-  box-shadow: 0 0 0 2px var(--color-red-400);
+  box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
 }
 
 // ---------------------------------------------------------------------------
-// Inner dot (checked state)
+// Inner dot (checked state) — colored dot on white circle
 // ---------------------------------------------------------------------------
 .radio__dot {
   display: block;
   border-radius: var(--radius-full);
-  background-color: var(--color-neutral-0);
   pointer-events: none;
-}
-
-.radio__input:disabled:checked ~ .radio__circle .radio__dot {
-  background-color: var(--color-neutral-0);
 }
 
 // ---------------------------------------------------------------------------

@@ -209,6 +209,21 @@
   --elevation-6: 0 20px 32px 0 #0000001F; // Highest - full-screen overlays
 
   // ============================================================
+  // Icon sizes (Mattermost Icon component scale)
+  // ============================================================
+  --icon-size-10: 10px;
+  --icon-size-12: 12px;
+  --icon-size-16: 16px;
+  --icon-size-20: 20px;
+  --icon-size-24: 24px;
+  --icon-size-28: 28px;
+  --icon-size-32: 32px;
+  --icon-size-40: 40px;
+  --icon-size-52: 52px;
+  --icon-size-64: 64px;
+  --icon-size-104: 104px;
+
+  // ============================================================
   // Z-index
   // ============================================================
   --z-sidebar: 100;

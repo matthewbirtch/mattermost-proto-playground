@@ -1,14 +1,14 @@
-// tokens and mixins are auto-injected by vite.config additionalData
+@use 'tokens';
 @use 'reset';
 @use 'themes';
 
-// Base body styles — token variables available here via additionalData
+// Base body styles — CSS variables from tokens + themes
 body {
-  font-family: $font-family-base;
-  font-size: $font-size-md;
-  line-height: $line-height-base;
-  color: $color-neutral-800;
-  background-color: $color-neutral-50;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

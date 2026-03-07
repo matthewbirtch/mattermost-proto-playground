@@ -1,0 +1,48 @@
+@use '@/styles/tokens.scss' as *;
+
+// ---------------------------------------------------------------------------
+// Block — circular image container (Figma User Avatar, Type=Image only)
+// ---------------------------------------------------------------------------
+.userAvatar {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  display: inline-block;
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    vertical-align: middle;
+    border-radius: var(--radius-full);
+  }
+
+  // Status badge slot (positions StatusBadge component at bottom-right)
+  &__status {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: content-box;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers (Figma Size scale; Fallback/System variants not used)
+  // ---------------------------------------------------------------------------
+  $sizes: 12, 16, 20, 24, 28, 32, 40, 48, 56, 64, 72, 80, 96, 120;
+
+  @each $size in $sizes {
+    &--size-#{$size} {
+      width: #{$size}px;
+      height: #{$size}px;
+
+      .userAvatar__status {
+        right: if($size <= 28, -1px, -2px);
+        bottom: if($size <= 28, -1px, -2px);
+      }
+    }
+  }
+}

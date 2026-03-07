@@ -13,6 +13,8 @@
   border: 1px solid transparent;
   cursor: pointer;
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+  background-color: transparent;
+  color: rgba(var(--center-channel-color-rgb), 0.64);
 
   &:focus-visible {
     outline: none;
@@ -22,92 +24,92 @@
     cursor: not-allowed;
     opacity: 0.5;
   }
-}
-
-// ---------------------------------------------------------------------------
-// Elements
-// ---------------------------------------------------------------------------
-.icon-button__icon-slot {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-// ---------------------------------------------------------------------------
-// Size modifiers (Default padding). Compact overrides below.
-// ---------------------------------------------------------------------------
-.icon-button--size-x-small {
-  width: 24px;
-  height: 24px;
-  padding: var(--spacing-xxs);
-
-  &.icon-button--padding-compact {
-    width: 20px;
-    height: 20px;
-    padding: var(--spacing-xxxs);
-  }
-}
-
-.icon-button--size-small {
-  width: 32px;
-  height: 32px;
-  padding: var(--spacing-xs);
-
-  &.icon-button--padding-compact {
-    width: 28px;
-    height: 28px;
-    padding: var(--spacing-xxs);
-  }
-}
-
-.icon-button--size-medium {
-  width: 40px;
-  height: 40px;
-  padding: var(--spacing-s);
-
-  &.icon-button--padding-compact {
-    width: 36px;
-    height: 36px;
-    padding: var(--spacing-xs);
-  }
-}
-
-.icon-button--size-large {
-  width: 48px;
-  height: 48px;
-  padding: var(--spacing-m);
-
-  &.icon-button--padding-compact {
-    width: 44px;
-    height: 44px;
-    padding: var(--spacing-s);
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Rounded modifier (pill shape). Figma: Rounded = On.
-// ---------------------------------------------------------------------------
-.icon-button--rounded {
-  border-radius: var(--radius-full);
-}
-
-// ---------------------------------------------------------------------------
-// Default style (Figma: Style = Default). No fill — transparent bg, icon 0.64 opacity.
-// Hover: subtle tint (--center-channel-color-8), icon 0.75. Toggled: filled --button-bg, --button-color.
-// ---------------------------------------------------------------------------
-.icon-button {
-  background-color: transparent;
-  color: rgba(var(--center-channel-color-rgb), 0.64);
 
   &:hover:not(:disabled) {
     background-color: rgba(var(--center-channel-color-rgb), 0.08);
     color: rgba(var(--center-channel-color-rgb), 0.75);
   }
-  &:active:not(:disabled):not(.icon-button--toggled) {
+
+  &:active:not(:disabled):not(#{&}--toggled) {
     background-color: rgba(var(--center-channel-color-rgb), 0.12);
   }
-  &.icon-button--toggled {
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--button-bg);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Elements
+  // ---------------------------------------------------------------------------
+  &__icon-slot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers (Default padding). Compact overrides below.
+  // ---------------------------------------------------------------------------
+  &--size-x-small {
+    width: 24px;
+    height: 24px;
+    padding: var(--spacing-xxs);
+
+    &.icon-button--padding-compact {
+      width: 20px;
+      height: 20px;
+      padding: var(--spacing-xxxs);
+    }
+  }
+
+  &--size-small {
+    width: 32px;
+    height: 32px;
+    padding: var(--spacing-xs);
+
+    &.icon-button--padding-compact {
+      width: 28px;
+      height: 28px;
+      padding: var(--spacing-xxs);
+    }
+  }
+
+  &--size-medium {
+    width: 40px;
+    height: 40px;
+    padding: var(--spacing-s);
+
+    &.icon-button--padding-compact {
+      width: 36px;
+      height: 36px;
+      padding: var(--spacing-xs);
+    }
+  }
+
+  &--size-large {
+    width: 48px;
+    height: 48px;
+    padding: var(--spacing-m);
+
+    &.icon-button--padding-compact {
+      width: 44px;
+      height: 44px;
+      padding: var(--spacing-s);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Rounded modifier (pill shape). Figma: Rounded = On.
+  // ---------------------------------------------------------------------------
+  &--rounded {
+    border-radius: var(--radius-full);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Default style — toggled state
+  // ---------------------------------------------------------------------------
+  #{&}--toggled {
     background-color: var(--button-bg);
     color: var(--button-color);
 
@@ -115,59 +117,59 @@
       box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--button-bg);
     }
   }
-  &:focus-visible {
-    box-shadow: 0 0 0 2px var(--button-bg);
-  }
-}
 
-// ---------------------------------------------------------------------------
-// Style = Inverted (Figma: for dark backgrounds). Theme tokens only.
-// ---------------------------------------------------------------------------
-.icon-button--style-inverted {
-  background-color: var(--sidebar-text);
-  color: var(--sidebar-bg);
+  // ---------------------------------------------------------------------------
+  // Style = Inverted (Figma: for dark backgrounds)
+  // ---------------------------------------------------------------------------
+  &--style-inverted {
+    background-color: var(--sidebar-text);
+    color: var(--sidebar-bg);
 
-  &:hover:not(:disabled) {
-    background-color: rgba(var(--sidebar-text-rgb), 0.92);
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--sidebar-text-rgb), 0.92);
+    }
+    &:active:not(:disabled),
+    &.icon-button--toggled {
+      background-color: rgba(var(--sidebar-text-rgb), 0.88);
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
+    }
   }
-  &:active:not(:disabled),
-  &.icon-button--toggled {
-    background-color: rgba(var(--sidebar-text-rgb), 0.88);
-  }
-  &:focus-visible {
-    box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
-  }
-}
 
-// ---------------------------------------------------------------------------
-// Destructive (Figma: Destructive = True). Theme tokens only.
-// ---------------------------------------------------------------------------
-.icon-button--destructive {
-  background-color: var(--error-text);
-  color: var(--button-color);
+  // ---------------------------------------------------------------------------
+  // Destructive (Figma: Destructive = True)
+  // ---------------------------------------------------------------------------
+  &--destructive {
+    background-color: var(--error-text);
+    color: var(--button-color);
 
-  &:hover:not(:disabled) {
-    background-color: rgba(var(--error-text-rgb), 0.92);
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--error-text-rgb), 0.92);
+    }
+    &:active:not(:disabled),
+    &.icon-button--toggled {
+      background-color: rgba(var(--error-text-rgb), 0.84);
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+    }
   }
-  &:active:not(:disabled),
-  &.icon-button--toggled {
-    background-color: rgba(var(--error-text-rgb), 0.84);
-  }
-  &:focus-visible {
-    box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-  }
-}
 
-// Inverted + destructive. Theme tokens only.
-.icon-button--style-inverted.icon-button--destructive {
-  background-color: var(--error-text);
-  color: var(--button-color);
+  // Inverted + destructive
+  #{&}--style-inverted#{&}--destructive {
+    background-color: var(--error-text);
+    color: var(--button-color);
 
-  &:hover:not(:disabled) {
-    background-color: rgba(var(--error-text-rgb), 0.92);
-  }
-  &:active:not(:disabled),
-  &.icon-button--toggled {
-    background-color: rgba(var(--error-text-rgb), 0.84);
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--error-text-rgb), 0.92);
+    }
+    &:active:not(:disabled),
+    &.icon-button--toggled {
+      background-color: rgba(var(--error-text-rgb), 0.84);
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+    }
   }
 }

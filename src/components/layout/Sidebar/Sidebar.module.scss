@@ -22,9 +22,9 @@
 .sidebar__header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-xxs);
   padding: var(--spacing-l) var(--spacing-l) var(--spacing-m);
-  border-bottom: 1px solid var(--color-neutral-700);
+  border-bottom: 1px solid rgba(var(--sidebar-text-rgb), 0.08);
 }
 
 .sidebar__logo {
@@ -34,8 +34,6 @@
   width: 28px;
   height: 28px;
   border-radius: var(--radius-s);
-  background-color: var(--brand-primary);
-  color: var(--color-neutral-0);
   font-size: var(--font-size-50);
   font-weight: var(--font-weight-bold);
   flex-shrink: 0;
@@ -44,7 +42,7 @@
 .sidebar__title {
   font-size: var(--font-size-75);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-100);
+  color: var(--sidebar-text);
   @include truncate;
 }
 
@@ -59,13 +57,12 @@
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-neutral-400);
+  color: rgba(var(--sidebar-text-rgb), 0.64);
 }
 
 .sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
 .sidebar__nav-item {
@@ -74,14 +71,22 @@
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-l);
   font-size: var(--font-size-100);
-  color: var(--sidebar-text);
+  color: rgba(var(--sidebar-text-rgb), 0.75);
   border-radius: 0;
   transition: background-color 120ms ease, color 120ms ease;
 
   &:hover {
     background-color: var(--sidebar-text-hover-bg);
-    color: var(--sidebar-text-active-color);
+    color: rgba(var(--sidebar-text-active-color-rgb), 0.88);
   }
+
+  &--active {
+    color: var(--sidebar-text);
+    border-left: 2px solid var(--sidebar-text-active-border);
+    background-color: rgba(var(--sidebar-text-rgb), 0.08);
+    padding-left: calc(var(--spacing-l) - 2px);
+  }
+  
 }
 
 // ---------------------------------------------------------------------------
@@ -99,7 +104,7 @@
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--color-neutral-400);
+  color: rgba(var(--sidebar-text-rgb), 0.64);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -125,13 +130,4 @@
     border-color: var(--sidebar-text-active-border);
     box-shadow: 0 0 0 2px rgba(var(--sidebar-text-active-border-rgb, 74, 124, 232), 0.3);
   }
-}
-
-// ---------------------------------------------------------------------------
-// Modifiers (element modifier)
-// ---------------------------------------------------------------------------
-.sidebar__nav-item--active {
-  color: var(--color-neutral-0);
-  border-left: 2px solid var(--sidebar-text-active-border);
-  padding-left: calc(var(--spacing-l) - 2px);
 }

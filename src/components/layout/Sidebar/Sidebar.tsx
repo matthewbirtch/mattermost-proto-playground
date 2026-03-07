@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import GlobeIcon from '@mattermost/compass-icons/components/globe'
 import AppsIcon from '@mattermost/compass-icons/components/apps'
+import MattermostIcon from '@mattermost/compass-icons/components/mattermost'
 import Icon from '@/components/ui/Icon/Icon'
 import { PROTOTYPES } from '@/router'
 import ThemeSwitcher from './ThemeSwitcher'
@@ -10,7 +11,9 @@ export default function Sidebar() {
   return (
     <nav className={styles.sidebar}>
       <div className={styles['sidebar__header']}>
-        <span className={styles['sidebar__logo']}>MM</span>
+        <span className={styles['sidebar__logo']} aria-hidden>
+          <Icon glyph={<MattermostIcon size={24} />} size="24" />
+        </span>
         <span className={styles['sidebar__title']}>Proto Playground</span>
       </div>
 

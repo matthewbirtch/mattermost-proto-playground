@@ -1,7 +1,8 @@
-import Avatar from '@/components/ui/Avatar/Avatar'
+import UserAvatar from '@/components/ui/UserAvatar/UserAvatar'
 import Button from '@/components/ui/Button/Button'
 import Checkbox from '@/components/ui/Checkbox/Checkbox'
 import Radio from '@/components/ui/Radio/Radio'
+import Switch from '@/components/ui/Switch/Switch'
 import StatusBadge from '@/components/ui/StatusBadge/StatusBadge'
 import Emoji from '@/components/ui/Emoji/Emoji'
 import Icon from '@/components/ui/Icon/Icon'
@@ -144,6 +145,41 @@ export default function Components() {
       </section>
 
       <section className={styles['components__section']}>
+        <h2 className={styles['components__section-title']}>Switch</h2>
+        <p className={styles['components__subheading']} style={{ marginBottom: 'var(--spacing-m)' }}>
+          Native HTML checkbox with <code>role="switch"</code> for toggle semantics. Figma Switch v2.0.0 — track + sliding knob; checked = on (right), unchecked = off (left).
+        </p>
+        <div className={styles['components__button-block']}>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>States</span>
+            <Switch size="Medium">Unchecked</Switch>
+            <Switch size="Medium" defaultChecked>Checked</Switch>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Sizes</span>
+            <Switch size="Small">Small</Switch>
+            <Switch size="Medium" defaultChecked>Medium</Switch>
+            <Switch size="Large" defaultChecked>Large</Switch>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>With secondary label</span>
+            <Switch size="Medium" secondaryLabel="Optional description text">
+              Label
+            </Switch>
+            <Switch size="Medium" defaultChecked secondaryLabel="Optional description">
+              Label
+            </Switch>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Semi-bold & disabled</span>
+            <Switch size="Medium" semiBold>Semi-bold label</Switch>
+            <Switch size="Medium" disabled>Disabled unchecked</Switch>
+            <Switch size="Medium" defaultChecked disabled>Disabled checked</Switch>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Icon Button</h2>
         <div className={styles['components__button-block']}>
           <div className={styles['components__button-row']}>
@@ -222,7 +258,7 @@ export default function Components() {
       <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Status Badge</h2>
         <p className={styles['components__subheading']} style={{ marginBottom: 'var(--spacing-m)' }}>
-          Figma Status Badge v2.0.1 — standalone; also used on Avatar when status is on.
+          Figma Status Badge v2.0.1 — standalone; also used on UserAvatar when status is on.
         </p>
         <div className={styles['components__button-block']}>
           <div className={styles['components__button-row']}>
@@ -244,14 +280,14 @@ export default function Components() {
       </section>
 
       <section className={styles['components__section']}>
-        <h2 className={styles['components__section-title']}>Avatar</h2>
+        <h2 className={styles['components__section-title']}>User Avatar</h2>
         <p className={styles['components__subheading']} style={{ marginBottom: 'var(--spacing-m)' }}>
           User Avatar (Image type only; Fallback and System variants not implemented).
         </p>
         <div className={styles['components__row']}>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>24, no status</span>
-            <Avatar
+            <UserAvatar
               alt="Leonard Riley"
               src={avatarLeonard}
               size="24"
@@ -259,7 +295,7 @@ export default function Components() {
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>32</span>
-            <Avatar
+            <UserAvatar
               alt="Danielle Okoro"
               src={avatarDanielle}
               size="32"
@@ -267,7 +303,7 @@ export default function Components() {
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>48 (default), status</span>
-            <Avatar
+            <UserAvatar
               alt="Marco Rinaldi"
               src={avatarMarco}
               size="48"
@@ -276,7 +312,7 @@ export default function Components() {
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>64</span>
-            <Avatar
+            <UserAvatar
               alt="Emma Novak"
               src={avatarEmma}
               size="64"
@@ -284,7 +320,7 @@ export default function Components() {
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>96, status</span>
-            <Avatar
+            <UserAvatar
               alt="Sofia Bauer"
               src={avatarSofia}
               size="96"

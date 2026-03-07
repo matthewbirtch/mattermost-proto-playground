@@ -1,10 +1,10 @@
 import type { ImgHTMLAttributes } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge/StatusBadge'
 import type { StatusBadgeSize } from '@/components/ui/StatusBadge/StatusBadge'
-import styles from './Avatar.module.scss'
+import styles from './UserAvatar.module.scss'
 
 /** Figma User Avatar sizes (Image type only). */
-export type AvatarSize =
+export type UserAvatarSize =
   | '12'
   | '16'
   | '20'
@@ -20,7 +20,7 @@ export type AvatarSize =
   | '96'
   | '120'
 
-export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt' | 'width' | 'height'> {
+export interface UserAvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt' | 'width' | 'height'> {
   /** Alt text for the avatar image. */
   alt: string
   /** Optional CSS class name. */
@@ -28,15 +28,15 @@ export interface AvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, '
   /** Image URL for the avatar. */
   src: string
   /** Size variant. Figma: Size. Default: 48. */
-  size?: AvatarSize
+  size?: UserAvatarSize
   /** When true, shows online status badge (green dot with check). Figma: Status = On. */
   status?: boolean
 }
 
 const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
-/** Map Avatar size to StatusBadge size (Figma scale). */
-const AVATAR_TO_BADGE_SIZE: Record<AvatarSize, StatusBadgeSize> = {
+/** Map UserAvatar size to StatusBadge size (Figma scale). */
+const USER_AVATAR_TO_BADGE_SIZE: Record<UserAvatarSize, StatusBadgeSize> = {
   '12': 'XX-Small',
   '16': 'XX-Small',
   '20': 'X-Small',
@@ -60,30 +60,30 @@ const AVATAR_TO_BADGE_SIZE: Record<AvatarSize, StatusBadgeSize> = {
  *
  * @see Figma User Avatar (Type=Image)
  */
-export default function Avatar({
+export default function UserAvatar({
   alt,
   className = '',
   src,
   size = '48',
   status = false,
   ...imgProps
-}: AvatarProps) {
-  const sizeClass = styles[`avatar--size-${toKebab(size)}`]
-  const rootClass = [styles.avatar, sizeClass, className].filter(Boolean).join(' ')
+}: UserAvatarProps) {
+  const sizeClass = styles[`userAvatar--size-${toKebab(size)}`]
+  const rootClass = [styles.userAvatar, sizeClass, className].filter(Boolean).join(' ')
 
   return (
     <div className={rootClass} data-size={size}>
       <img
         {...imgProps}
         alt={alt}
-        className={styles.avatar__image}
+        className={styles.userAvatar__image}
         src={src}
         width={Number(size)}
         height={Number(size)}
       />
       {status && (
-        <span className={styles.avatar__status}>
-          <StatusBadge status="Online" size={AVATAR_TO_BADGE_SIZE[size]} />
+        <span className={styles.userAvatar__status}>
+          <StatusBadge status="Online" size={USER_AVATAR_TO_BADGE_SIZE[size]} />
         </span>
       )}
     </div>

@@ -141,15 +141,68 @@
   border-color: var(--color-red-500);
 }
 
+// Keep box filled during icon leave animation (so icon scales down on correct background)
+.checkbox--icon-leaving .checkbox__box {
+  background-color: var(--button-bg);
+  border-color: var(--button-bg);
+
+  .checkbox__icon {
+    color: var(--center-channel-bg);
+  }
+}
+
+.checkbox--icon-leaving.checkbox--invalid .checkbox__box {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+
+  .checkbox__icon {
+    color: var(--color-neutral-0);
+  }
+}
+
 // ---------------------------------------------------------------------------
-// Icon (check / minus)
+// Icon (check / minus) — scale animation on appear/disappear
 // ---------------------------------------------------------------------------
+$checkbox-icon-duration: 150ms;
+
+@keyframes checkbox-icon-enter {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes checkbox-icon-leave {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.5);
+  }
+}
+
 .checkbox__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--color-neutral-0);
   pointer-events: none;
+  transform-origin: center;
+
+  // Shown for 2 frames before --enter so the browser paints the small state first
+  &.checkbox__icon--enter-pending {
+    transform: scale(0.5);
+  }
+
+  &.checkbox__icon--enter {
+    animation: checkbox-icon-enter $checkbox-icon-duration ease-out forwards;
+  }
+
+  &.checkbox__icon--leave {
+    animation: checkbox-icon-leave $checkbox-icon-duration ease-in forwards;
+  }
 }
 
 // ---------------------------------------------------------------------------

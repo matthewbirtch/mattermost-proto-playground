@@ -62,19 +62,22 @@
 .navItem {
   display: block;
   padding: var(--spacing-xs) var(--spacing-l);
-  font-size: var(--font-size-75);
-  color: var(--color-neutral-300);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-100);
+  color: var(--color-sidebar-text);
   border-radius: 0;
   transition: background-color 120ms ease, color 120ms ease;
 
   &:hover {
-    background-color: var(--color-neutral-700);
-    color: var(--color-neutral-100);
+    background-color: var(--sidebar-text-hover-bg);
+    color: var(--sidebar-text-active-color);
   }
 
   &.active {
-    background-color: color-mix(in srgb, var(--brand-primary) 25%, transparent);
     color: var(--color-neutral-0);
-    font-weight: var(--font-weight-semibold);
+    border-left: 2px solid var(--sidebar-text-active-border);
+    padding-left: calc(var(--spacing-l) - 2px);
   }
 }

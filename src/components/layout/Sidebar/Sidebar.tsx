@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import GlobeIcon from '@mattermost/compass-icons/components/globe'
+import AppsIcon from '@mattermost/compass-icons/components/apps'
 import Icon from '@/components/ui/Icon/Icon'
 import { PROTOTYPES } from '@/router'
 import styles from './Sidebar.module.scss'
@@ -25,6 +26,17 @@ export default function Sidebar() {
             >
               <Icon glyph={<GlobeIcon size={16} />} size="16" />
               Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/components"
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.active : ''}`
+              }
+            >
+              <Icon glyph={<AppsIcon size={16} />} size="16" />
+              Components
             </NavLink>
           </li>
           {PROTOTYPES.map(({ id, label, path }) => (

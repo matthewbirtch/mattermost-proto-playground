@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import AppShell from '@/components/layout/AppShell/AppShell'
 import Home from '@/pages/Home/Home'
+import Components from '@/pages/Components/Components'
 import ExampleFlow from '@/pages/ExampleFlow/ExampleFlow'
 
 // Register prototype flows here.
@@ -19,6 +20,7 @@ export default function AppRouter() {
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<Home />} />
+        <Route path="/components" element={<Components />} />
         {PROTOTYPES.map(({ id, path, component: Component }) => (
           <Route key={id} path={path} element={<Component />} />
         ))}

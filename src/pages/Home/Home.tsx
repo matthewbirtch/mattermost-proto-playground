@@ -15,10 +15,6 @@ export default function Home() {
         </p>
       </header>
 
-      <Illustration aria-label="No items yet">
-        <AICopilotIllustration />
-      </Illustration>
-
       <div className={styles['home__grid']}>
         {PROTOTYPES.map(({ id, label, path }) => (
           <Link key={id} to={path} className={styles['home__card']}>

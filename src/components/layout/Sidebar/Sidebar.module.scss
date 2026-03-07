@@ -1,0 +1,80 @@
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: $color-neutral-800;
+  color: $color-neutral-200;
+  display: flex;
+  flex-direction: column;
+  z-index: $z-sidebar;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-4 $space-4 $space-3;
+  border-bottom: 1px solid $color-neutral-700;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: $radius-sm;
+  background-color: $color-brand-primary;
+  color: $color-neutral-0;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-neutral-100;
+  @include truncate;
+}
+
+.section {
+  padding: $space-4 0 $space-2;
+}
+
+.sectionLabel {
+  display: block;
+  padding: 0 $space-4 $space-2;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $color-neutral-400;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.navItem {
+  display: block;
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  color: $color-neutral-300;
+  border-radius: 0;
+  transition: background-color 120ms ease, color 120ms ease;
+
+  &:hover {
+    background-color: $color-neutral-700;
+    color: $color-neutral-100;
+  }
+
+  &.active {
+    background-color: rgba($color-brand-primary, 0.25);
+    color: $color-neutral-0;
+    font-weight: $font-weight-medium;
+  }
+}

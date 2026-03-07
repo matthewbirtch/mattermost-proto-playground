@@ -1,0 +1,77 @@
+.page {
+  padding: $space-10 $space-8;
+  max-width: 960px;
+}
+
+.header {
+  margin-bottom: $space-8;
+}
+
+.heading {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-neutral-900;
+  margin-bottom: $space-2;
+}
+
+.subheading {
+  font-size: $font-size-md;
+  color: $color-neutral-500;
+  line-height: $line-height-loose;
+
+  code {
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;
+    background-color: $color-neutral-100;
+    padding: 1px 6px;
+    border-radius: $radius-sm;
+    color: $color-neutral-700;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: $space-4;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $color-neutral-200;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background-color: $color-neutral-0;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+
+  &:hover {
+    border-color: $color-brand-secondary;
+    box-shadow: $shadow-md;
+  }
+}
+
+.cardThumb {
+  height: 140px;
+  background-color: $color-neutral-100;
+  background-image: linear-gradient(
+    135deg,
+    $color-neutral-100 25%,
+    $color-neutral-200 100%
+  );
+}
+
+.cardBody {
+  @include flex-between;
+  padding: $space-3 $space-4;
+}
+
+.cardLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-neutral-800;
+}
+
+.cardArrow {
+  font-size: $font-size-lg;
+  color: $color-neutral-400;
+}

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { PROTOTYPES } from '@/router'
+import AICopilotIllustration from '@/assets/illustrations/ai-copilot-intro.svg?react'
 import styles from './Home.module.scss'
+import Illustration from '@/components/ui/Illustration/Illustration'
 
 export default function Home() {
   return (
@@ -12,6 +14,10 @@ export default function Home() {
           <code>src/router/index.tsx</code>.
         </p>
       </header>
+
+      <Illustration aria-label="No items yet">
+        <AICopilotIllustration />
+      </Illustration>
 
       <div className={styles.grid}>
         {PROTOTYPES.map(({ id, label, path }) => (

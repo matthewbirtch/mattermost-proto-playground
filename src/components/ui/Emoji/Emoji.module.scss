@@ -1,0 +1,77 @@
+@use '@/styles/tokens.scss' as *;
+
+.emoji {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+// Size variants — same scale as Icon
+.size10 {
+  width: var(--icon-size-10);
+  height: var(--icon-size-10);
+  font-size: var(--icon-size-10);
+}
+
+.size12 {
+  width: var(--icon-size-12);
+  height: var(--icon-size-12);
+  font-size: var(--icon-size-12);
+}
+
+.size16 {
+  width: var(--icon-size-16);
+  height: var(--icon-size-16);
+  font-size: var(--icon-size-16);
+}
+
+.size20 {
+  width: var(--icon-size-20);
+  height: var(--icon-size-20);
+  font-size: var(--icon-size-20);
+}
+
+.size24 {
+  width: var(--icon-size-24);
+  height: var(--icon-size-24);
+  font-size: var(--icon-size-24);
+}
+
+.size28 {
+  width: var(--icon-size-28);
+  height: var(--icon-size-28);
+  font-size: var(--icon-size-28);
+}
+
+.size32 {
+  width: var(--icon-size-32);
+  height: var(--icon-size-32);
+  font-size: var(--icon-size-32);
+}
+
+.size40 {
+  width: var(--icon-size-40);
+  height: var(--icon-size-40);
+  font-size: var(--icon-size-40);
+}
+
+.size52 {
+  width: var(--icon-size-52);
+  height: var(--icon-size-52);
+  font-size: var(--icon-size-52);
+}
+
+.size64 {
+  width: var(--icon-size-64);
+  height: var(--icon-size-64);
+  font-size: var(--icon-size-64);
+}
+
+.size104 {
+  width: var(--icon-size-104);
+  height: var(--icon-size-104);
+  font-size: var(--icon-size-104);
+}

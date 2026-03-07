@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "icons:fetch": "node scripts/fetch-icon-svgs.mjs"
   },
   "dependencies": {
     "@fontsource/metropolis": "^5.2.5",

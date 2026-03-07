@@ -110,9 +110,13 @@
   &.icon-button--toggled {
     background-color: var(--button-bg);
     color: var(--button-color);
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--button-bg);
+    }
   }
   &:focus-visible {
-    box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--center-channel-color);
+    box-shadow: 0 0 0 2px var(--button-bg);
   }
 }
 

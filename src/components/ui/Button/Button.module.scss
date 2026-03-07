@@ -85,10 +85,10 @@
   color: var(--button-color);
 
   &:hover:not(:disabled) {
-    background-color: var(--color-blue-600);
+    background: linear-gradient(0deg, rgba(var(--color-neutral-1100-rgb), 0.08) 0%, rgba(var(--color-neutral-1100-rgb), 0.08) 100%), var(--button-bg);
   }
   &:active:not(:disabled) {
-    background-color: var(--color-blue-700);
+    background: linear-gradient(0deg, rgba(var(--color-neutral-1100-rgb), 0.16) 0%, rgba(var(--color-neutral-1100-rgb), 0.16) 100%), var(--button-bg);
   }
   &:disabled {
     background-color: rgba(var(--center-channel-color-rgb), 0.08);
@@ -177,7 +177,7 @@
 // ---------------------------------------------------------------------------
 .button--destructive.button--emphasis-primary {
   background-color: var(--error-text);
-  color: var(--color-neutral-0);
+  color: var(--button-color);
 
   &:hover:not(:disabled) {
     background-color: var(--error-text);
@@ -283,18 +283,18 @@
 }
 
 .button--appearance-inverted.button--emphasis-secondary {
-  color: var(--color-neutral-0);
-  border-color: var(--color-neutral-0);
+  color: var(--sidebar-text);
+  border-color: var(--sidebar-text);
 
   &:hover:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.12);
+    background-color: rgba(var(--sidebar-text-rgb), 0.12);
   }
   &:active:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.2);
+    background-color: rgba(var(--sidebar-text-rgb), 0.2);
   }
   &:disabled {
-    border-color: rgba(var(--sidebar-text-rgb), 0.32);
-    color: rgba(var(--sidebar-text-rgb), 0.32);
+    border-color: rgba(var(--center-channel-color-rgb), 0.32);
+    color: rgba(var(--center-channel-color-rgb), 0.32);
   }
   &:focus-visible {
     box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
@@ -302,14 +302,14 @@
 }
 
 .button--appearance-inverted.button--emphasis-tertiary {
-  background-color: rgba(var(--color-neutral-0-rgb), 0.16);
-  color: var(--color-neutral-0);
+  background-color: rgba(var(--sidebar-text-rgb), 0.08);
+  color: var(--sidebar-text);
 
   &:hover:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.24);
+    background-color: rgba(var(--sidebar-text-rgb), 0.12);
   }
   &:active:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.32);
+    background-color: rgba(var(--sidebar-text-rgb), 0.16);
   }
   &:disabled {
     background-color: rgba(var(--sidebar-text-rgb), 0.08);
@@ -321,13 +321,13 @@
 }
 
 .button--appearance-inverted.button--emphasis-quaternary {
-  color: var(--color-neutral-0);
+  color: var(--sidebar-text);
 
   &:hover:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.12);
+    background-color: rgba(var(--sidebar-text-rgb), 0.12);
   }
   &:active:not(:disabled) {
-    background-color: rgba(var(--color-neutral-0-rgb), 0.2);
+    background-color: rgba(var(--sidebar-text-rgb), 0.2);
   }
   &:disabled {
     color: rgba(var(--sidebar-text-rgb), 0.32);
@@ -338,58 +338,12 @@
 }
 
 .button--appearance-inverted.button--emphasis-link {
-  color: var(--color-neutral-0);
+  color: var(--sidebar-text);
 
   &:disabled {
     color: rgba(var(--sidebar-text-rgb), 0.32);
   }
   &:focus-visible {
     box-shadow: 0 0 0 3px var(--color-neutral-1100), 0 0 0 5px var(--color-neutral-0);
-  }
-}
-
-// Inverted + destructive
-.button--appearance-inverted.button--destructive.button--emphasis-primary {
-  background-color: var(--color-red-400);
-  color: var(--color-neutral-0);
-
-  &:hover:not(:disabled) {
-    background-color: var(--color-red-300);
-  }
-  &:active:not(:disabled) {
-    background-color: var(--color-red-200);
-  }
-  &:disabled {
-    background-color: rgba(var(--sidebar-text-rgb), 0.08);
-    color: rgba(var(--sidebar-text-rgb), 0.32);
-  }
-}
-
-.button--appearance-inverted.button--destructive.button--emphasis-secondary {
-  color: var(--color-red-200);
-  border-color: var(--color-red-200);
-
-  &:disabled {
-    border-color: rgba(var(--sidebar-text-rgb), 0.32);
-    color: rgba(var(--sidebar-text-rgb), 0.32);
-  }
-}
-
-.button--appearance-inverted.button--destructive.button--emphasis-tertiary {
-  color: var(--color-red-200);
-  border-color: var(--color-red-200);
-
-  &:disabled {
-    background-color: rgba(var(--sidebar-text-rgb), 0.08);
-    border-color: rgba(var(--sidebar-text-rgb), 0.32);
-    color: rgba(var(--sidebar-text-rgb), 0.32);
-  }
-}
-
-.button--appearance-inverted.button--destructive.button--emphasis-link {
-  color: var(--color-red-200);
-
-  &:disabled {
-    color: rgba(var(--sidebar-text-rgb), 0.32);
   }
 }

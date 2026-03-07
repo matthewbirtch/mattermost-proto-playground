@@ -65,12 +65,12 @@
   }
 
   .radio:has(.radio__input:not(:disabled)):hover & {
-    border-color: rgba(var(--color-neutral-900-rgb), 0.32);
+    border-color: rgba(var(--center-channel-color-rgb), 0.32);
   }
 
   .radio__input:disabled ~ & {
     background-color: rgba(var(--center-channel-color-rgb), 0.32);
-    border-color: rgba(var(--color-neutral-900-rgb), 0.16);
+    border-color: rgba(var(--center-channel-color-rgb), 0.16);
   }
 }
 
@@ -145,12 +145,18 @@
 }
 
 // ---------------------------------------------------------------------------
-// Inner dot (checked state) — colored dot on white circle
+// Inner dot — scales 50% → 100% when checked, 100% → 50% when unchecked
 // ---------------------------------------------------------------------------
 .radio__dot {
   display: block;
   border-radius: var(--radius-full);
   pointer-events: none;
+  transform: scale(0.5);
+  transition: transform 180ms ease-out;
+}
+
+.radio__input:checked ~ .radio__circle .radio__dot {
+  transform: scale(1);
 }
 
 // ---------------------------------------------------------------------------

@@ -76,7 +76,7 @@ export default function Radio({
         {...rest}
       />
       <span className={styles['radio__circle']}>
-        {resolvedChecked && <span className={styles['radio__dot']} />}
+        <span className={styles['radio__dot']} aria-hidden />
       </span>
       {children != null && (
         <span className={styles['radio__label']}>{children}</span>

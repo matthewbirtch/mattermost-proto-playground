@@ -1,5 +1,8 @@
 @use '@/styles/tokens.scss' as *;
 
+// ---------------------------------------------------------------------------
+// Block
+// ---------------------------------------------------------------------------
 .emoji {
   position: relative;
   display: inline-flex;
@@ -9,68 +12,70 @@
   line-height: 1;
 }
 
-// Size variants — same scale as Icon
-.size10 {
+// ---------------------------------------------------------------------------
+// Size modifiers
+// ---------------------------------------------------------------------------
+.emoji--size-10 {
   width: var(--icon-size-10);
   height: var(--icon-size-10);
   font-size: var(--icon-size-10);
 }
 
-.size12 {
+.emoji--size-12 {
   width: var(--icon-size-12);
   height: var(--icon-size-12);
   font-size: var(--icon-size-12);
 }
 
-.size16 {
+.emoji--size-16 {
   width: var(--icon-size-16);
   height: var(--icon-size-16);
   font-size: var(--icon-size-16);
 }
 
-.size20 {
+.emoji--size-20 {
   width: var(--icon-size-20);
   height: var(--icon-size-20);
   font-size: var(--icon-size-20);
 }
 
-.size24 {
+.emoji--size-24 {
   width: var(--icon-size-24);
   height: var(--icon-size-24);
   font-size: var(--icon-size-24);
 }
 
-.size28 {
+.emoji--size-28 {
   width: var(--icon-size-28);
   height: var(--icon-size-28);
   font-size: var(--icon-size-28);
 }
 
-.size32 {
+.emoji--size-32 {
   width: var(--icon-size-32);
   height: var(--icon-size-32);
   font-size: var(--icon-size-32);
 }
 
-.size40 {
+.emoji--size-40 {
   width: var(--icon-size-40);
   height: var(--icon-size-40);
   font-size: var(--icon-size-40);
 }
 
-.size52 {
+.emoji--size-52 {
   width: var(--icon-size-52);
   height: var(--icon-size-52);
   font-size: var(--icon-size-52);
 }
 
-.size64 {
+.emoji--size-64 {
   width: var(--icon-size-64);
   height: var(--icon-size-64);
   font-size: var(--icon-size-64);
 }
 
-.size104 {
+.emoji--size-104 {
   width: var(--icon-size-104);
   height: var(--icon-size-104);
   font-size: var(--icon-size-104);

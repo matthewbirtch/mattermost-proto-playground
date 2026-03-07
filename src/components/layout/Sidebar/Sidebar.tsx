@@ -3,25 +3,26 @@ import GlobeIcon from '@mattermost/compass-icons/components/globe'
 import AppsIcon from '@mattermost/compass-icons/components/apps'
 import Icon from '@/components/ui/Icon/Icon'
 import { PROTOTYPES } from '@/router'
+import ThemeSwitcher from './ThemeSwitcher'
 import styles from './Sidebar.module.scss'
 
 export default function Sidebar() {
   return (
     <nav className={styles.sidebar}>
-      <div className={styles.header}>
-        <span className={styles.logo}>MM</span>
-        <span className={styles.title}>Proto Playground</span>
+      <div className={styles['sidebar__header']}>
+        <span className={styles['sidebar__logo']}>MM</span>
+        <span className={styles['sidebar__title']}>Proto Playground</span>
       </div>
 
-      <div className={styles.section}>
-        <span className={styles.sectionLabel}>Flows</span>
-        <ul className={styles.nav}>
+      <div className={styles['sidebar__section']}>
+        <span className={styles['sidebar__section-label']}>Flows</span>
+        <ul className={styles['sidebar__nav']}>
           <li>
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
-                `${styles.navItem} ${isActive ? styles.active : ''}`
+                `${styles['sidebar__nav-item']} ${isActive ? styles['sidebar__nav-item--active'] : ''}`
               }
             >
               <Icon glyph={<GlobeIcon size={16} />} size="16" />
@@ -32,7 +33,7 @@ export default function Sidebar() {
             <NavLink
               to="/components"
               className={({ isActive }) =>
-                `${styles.navItem} ${isActive ? styles.active : ''}`
+                `${styles['sidebar__nav-item']} ${isActive ? styles['sidebar__nav-item--active'] : ''}`
               }
             >
               <Icon glyph={<AppsIcon size={16} />} size="16" />
@@ -44,7 +45,7 @@ export default function Sidebar() {
               <NavLink
                 to={path}
                 className={({ isActive }) =>
-                  `${styles.navItem} ${isActive ? styles.active : ''}`
+                  `${styles['sidebar__nav-item']} ${isActive ? styles['sidebar__nav-item--active'] : ''}`
                 }
               >
                 {label}
@@ -53,6 +54,8 @@ export default function Sidebar() {
           ))}
         </ul>
       </div>
+
+      <ThemeSwitcher />
     </nav>
   )
 }

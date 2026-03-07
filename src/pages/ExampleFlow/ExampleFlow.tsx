@@ -11,9 +11,9 @@ import styles from './ExampleFlow.module.scss'
 
 export default function ExampleFlow() {
   return (
-    <div className={styles.page}>
-      <div className={styles.canvas}>
-        <p className={styles.hint}>
+    <div className={styles['example-flow']}>
+      <div className={styles['example-flow__canvas']}>
+        <p className={styles['example-flow__hint']}>
           Replace this with your prototype content.
           <br />
           Drop Figma components in here to build the flow.

@@ -25,17 +25,17 @@ export interface IconProps {
 }
 
 const SIZE_CLASS_MAP: Record<IconSize, string> = {
-  '10': styles.size10,
-  '12': styles.size12,
-  '16': styles.size16,
-  '20': styles.size20,
-  '24': styles.size24,
-  '28': styles.size28,
-  '32': styles.size32,
-  '40': styles.size40,
-  '52': styles.size52,
-  '64': styles.size64,
-  '104': styles.size104,
+  '10': styles['icon--size-10'],
+  '12': styles['icon--size-12'],
+  '16': styles['icon--size-16'],
+  '20': styles['icon--size-20'],
+  '24': styles['icon--size-24'],
+  '28': styles['icon--size-28'],
+  '32': styles['icon--size-32'],
+  '40': styles['icon--size-40'],
+  '52': styles['icon--size-52'],
+  '64': styles['icon--size-64'],
+  '104': styles['icon--size-104'],
 }
 
 const SIZE_PX_MAP: Record<IconSize, number> = {
@@ -72,14 +72,14 @@ export default function Icon({
     ) : (
       <EmoticonHappyOutlineIcon
         size={sizePx}
-        className={styles.glyphSvg}
+        className={styles['icon__glyph']}
         aria-hidden
       />
     )
 
   return (
     <div className={rootClass} role="img" aria-hidden>
-      <div className={styles.glyphArea}>{glyphContent}</div>
+      <div className={styles['icon__glyph-area']}>{glyphContent}</div>
     </div>
   )
 }

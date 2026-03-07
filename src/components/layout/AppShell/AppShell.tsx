@@ -4,9 +4,9 @@ import styles from './AppShell.module.scss'
 
 export default function AppShell() {
   return (
-    <div className={styles.shell}>
+    <div className={styles['app-shell']}>
       <Sidebar />
-      <main className={styles.main}>
+      <main className={styles['app-shell__main']}>
         <Outlet />
       </main>
     </div>

@@ -1,3 +1,9 @@
+@use '@/styles/tokens.scss' as *;
+@use '@/styles/mixins.scss' as *;
+
+// ---------------------------------------------------------------------------
+// Block
+// ---------------------------------------------------------------------------
 .sidebar {
   width: 220px;
   flex-shrink: 0;
@@ -10,7 +16,10 @@
   z-index: var(--z-sidebar);
 }
 
-.header {
+// ---------------------------------------------------------------------------
+// Elements
+// ---------------------------------------------------------------------------
+.sidebar__header {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -18,7 +27,7 @@
   border-bottom: 1px solid var(--color-neutral-700);
 }
 
-.logo {
+.sidebar__logo {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,18 +41,18 @@
   flex-shrink: 0;
 }
 
-.title {
+.sidebar__title {
   font-size: var(--font-size-75);
   font-weight: var(--font-weight-semibold);
   color: var(--color-neutral-100);
   @include truncate;
 }
 
-.section {
+.sidebar__section {
   padding: var(--spacing-l) 0 var(--spacing-xs);
 }
 
-.sectionLabel {
+.sidebar__section-label {
   display: block;
   padding: 0 var(--spacing-l) var(--spacing-xs);
   font-size: var(--font-size-50);
@@ -53,20 +62,19 @@
   color: var(--color-neutral-400);
 }
 
-.nav {
+.sidebar__nav {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 
-.navItem {
-  display: block;
-  padding: var(--spacing-xs) var(--spacing-l);
+.sidebar__nav-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-l);
   font-size: var(--font-size-100);
-  color: var(--color-sidebar-text);
+  color: var(--sidebar-text);
   border-radius: 0;
   transition: background-color 120ms ease, color 120ms ease;
 
@@ -74,10 +82,56 @@
     background-color: var(--sidebar-text-hover-bg);
     color: var(--sidebar-text-active-color);
   }
+}
 
-  &.active {
-    color: var(--color-neutral-0);
-    border-left: 2px solid var(--sidebar-text-active-border);
-    padding-left: calc(var(--spacing-l) - 2px);
+// ---------------------------------------------------------------------------
+// Theme switcher (footer)
+// ---------------------------------------------------------------------------
+.sidebar__theme {
+  margin-top: auto;
+  padding: var(--spacing-m) var(--spacing-l) var(--spacing-l);
+  border-top: 1px solid rgba(var(--sidebar-text-rgb, 255, 255, 255), 0.12);
+}
+
+.sidebar__theme-label {
+  display: block;
+  font-size: var(--font-size-50);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-neutral-400);
+  margin-bottom: var(--spacing-xs);
+}
+
+.sidebar__theme-select {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-s);
+  font-size: var(--font-size-100);
+  font-family: inherit;
+  color: var(--sidebar-text);
+  background-color: rgba(var(--sidebar-bg-rgb, 0, 0, 0), 0.4);
+  border: 1px solid rgba(var(--sidebar-text-rgb, 255, 255, 255), 0.2);
+  border-radius: var(--radius-s);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+
+  &:hover {
+    background-color: var(--sidebar-text-hover-bg);
+    border-color: rgba(var(--sidebar-text-rgb, 255, 255, 255), 0.3);
   }
+
+  &:focus {
+    outline: none;
+    border-color: var(--sidebar-text-active-border);
+    box-shadow: 0 0 0 2px rgba(var(--sidebar-text-active-border-rgb, 74, 124, 232), 0.3);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Modifiers (element modifier)
+// ---------------------------------------------------------------------------
+.sidebar__nav-item--active {
+  color: var(--color-neutral-0);
+  border-left: 2px solid var(--sidebar-text-active-border);
+  padding-left: calc(var(--spacing-l) - 2px);
 }

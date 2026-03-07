@@ -23,17 +23,17 @@ export interface EmojiProps {
 }
 
 const SIZE_CLASS_MAP: Record<EmojiSize, string> = {
-  '10': styles.size10,
-  '12': styles.size12,
-  '16': styles.size16,
-  '20': styles.size20,
-  '24': styles.size24,
-  '28': styles.size28,
-  '32': styles.size32,
-  '40': styles.size40,
-  '52': styles.size52,
-  '64': styles.size64,
-  '104': styles.size104,
+  '10': styles['emoji--size-10'],
+  '12': styles['emoji--size-12'],
+  '16': styles['emoji--size-16'],
+  '20': styles['emoji--size-20'],
+  '24': styles['emoji--size-24'],
+  '28': styles['emoji--size-28'],
+  '32': styles['emoji--size-32'],
+  '40': styles['emoji--size-40'],
+  '52': styles['emoji--size-52'],
+  '64': styles['emoji--size-64'],
+  '104': styles['emoji--size-104'],
 }
 
 /**

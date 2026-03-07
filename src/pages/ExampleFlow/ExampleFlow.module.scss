@@ -1,10 +1,19 @@
-.page {
+@use '@/styles/tokens.scss' as *;
+@use '@/styles/mixins.scss' as *;
+
+// ---------------------------------------------------------------------------
+// Block
+// ---------------------------------------------------------------------------
+.example-flow {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.canvas {
+// ---------------------------------------------------------------------------
+// Elements
+// ---------------------------------------------------------------------------
+.example-flow__canvas {
   flex: 1;
   @include flex-center;
   flex-direction: column;
@@ -12,7 +21,7 @@
   padding: var(--spacing-xxxl);
 }
 
-.hint {
+.example-flow__hint {
   font-size: var(--font-size-100);
   color: var(--color-neutral-400);
   text-align: center;

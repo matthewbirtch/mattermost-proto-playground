@@ -1,14 +1,21 @@
 @use '@/styles/tokens.scss' as *;
 
+// ---------------------------------------------------------------------------
+// Block
+// ---------------------------------------------------------------------------
 .icon {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--center-channel-color);
 }
 
-.glyphArea {
+// ---------------------------------------------------------------------------
+// Elements
+// ---------------------------------------------------------------------------
+.icon__glyph-area {
   position: relative;
   display: flex;
   align-items: center;
@@ -24,119 +31,121 @@
   }
 }
 
-.glyphSvg {
+.icon__glyph {
   width: 100%;
   height: 100%;
   display: block;
   flex-shrink: 0;
 }
 
-// Size variants — map to design tokens
-.size10 {
+// ---------------------------------------------------------------------------
+// Size modifiers
+// ---------------------------------------------------------------------------
+.icon--size-10 {
   width: var(--icon-size-10);
   height: var(--icon-size-10);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-10);
     height: var(--icon-size-10);
   }
 }
 
-.size12 {
+.icon--size-12 {
   width: var(--icon-size-12);
   height: var(--icon-size-12);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-12);
     height: var(--icon-size-12);
   }
 }
 
-.size16 {
+.icon--size-16 {
   width: var(--icon-size-16);
   height: var(--icon-size-16);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-16);
     height: var(--icon-size-16);
   }
 }
 
-.size20 {
+.icon--size-20 {
   width: var(--icon-size-20);
   height: var(--icon-size-20);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-20);
     height: var(--icon-size-20);
   }
 }
 
-.size24 {
+.icon--size-24 {
   width: var(--icon-size-24);
   height: var(--icon-size-24);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-24);
     height: var(--icon-size-24);
   }
 }
 
-.size28 {
+.icon--size-28 {
   width: var(--icon-size-28);
   height: var(--icon-size-28);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-28);
     height: var(--icon-size-28);
   }
 }
 
-.size32 {
+.icon--size-32 {
   width: var(--icon-size-32);
   height: var(--icon-size-32);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-32);
     height: var(--icon-size-32);
   }
 }
 
-.size40 {
+.icon--size-40 {
   width: var(--icon-size-40);
   height: var(--icon-size-40);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-40);
     height: var(--icon-size-40);
   }
 }
 
-.size52 {
+.icon--size-52 {
   width: var(--icon-size-52);
   height: var(--icon-size-52);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-52);
     height: var(--icon-size-52);
   }
 }
 
-.size64 {
+.icon--size-64 {
   width: var(--icon-size-64);
   height: var(--icon-size-64);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-64);
     height: var(--icon-size-64);
   }
 }
 
-.size104 {
+.icon--size-104 {
   width: var(--icon-size-104);
   height: var(--icon-size-104);
 
-  .glyphArea {
+  .icon__glyph-area {
     width: var(--icon-size-104);
     height: var(--icon-size-104);
   }

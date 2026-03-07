@@ -24,6 +24,13 @@
   }
 }
 
+.glyphSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  flex-shrink: 0;
+}
+
 // Size variants — map to design tokens
 .size10 {
   width: var(--icon-size-10);

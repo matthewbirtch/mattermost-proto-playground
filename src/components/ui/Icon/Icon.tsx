@@ -1,12 +1,6 @@
 import type { ReactNode } from 'react'
+import EmoticonHappyOutlineIcon from '@mattermost/compass-icons/components/emoticon-happy-outline'
 import styles from './Icon.module.scss'
-
-/**
- * Default glyph: emoticon-happy-outline (F01F5).
- * SVG assets are served by Figma MCP when available (localhost:3845).
- */
-const DEFAULT_GLYPH_SRC =
-  'http://localhost:3845/assets/29a232f40ef63c78d28f5bb1c66826b8b8fb3df6.svg'
 
 export type IconSize =
   | '10'
@@ -24,7 +18,7 @@ export type IconSize =
 export interface IconProps {
   /** Optional CSS class name. */
   className?: string
-  /** Custom glyph (e.g. SVG or React node). When null/undefined, uses default emoticon-happy-outline. */
+  /** Icon content from @mattermost/compass-icons (e.g. <GlobeIcon size={16} />). When omitted, shows emoticon-happy-outline. */
   glyph?: ReactNode | null
   /** Size from the Mattermost icon scale. Default 24. */
   size?: IconSize
@@ -44,9 +38,22 @@ const SIZE_CLASS_MAP: Record<IconSize, string> = {
   '104': styles.size104,
 }
 
+const SIZE_PX_MAP: Record<IconSize, number> = {
+  '10': 10,
+  '12': 12,
+  '16': 16,
+  '20': 20,
+  '24': 24,
+  '28': 28,
+  '32': 32,
+  '40': 40,
+  '52': 52,
+  '64': 64,
+  '104': 104,
+}
+
 /**
- * Icon component — refactored v2.0 style with SVG glyphs and size scale.
- * To find the glyph name in dev mode, use the Glyph property in Figma.
+ * Icon wrapper using @mattermost/compass-icons. Import the icon you need and pass as glyph.
  *
  * @see https://compass.mattermost.com/29be2c109/p/19c648-iconography
  */
@@ -57,12 +64,17 @@ export default function Icon({
 }: IconProps) {
   const sizeClass = SIZE_CLASS_MAP[size]
   const rootClass = [styles.icon, sizeClass, className].filter(Boolean).join(' ')
+  const sizePx = SIZE_PX_MAP[size]
 
   const glyphContent =
     glyph !== undefined && glyph !== null ? (
       glyph
     ) : (
-      <img src={DEFAULT_GLYPH_SRC} alt="" aria-hidden />
+      <EmoticonHappyOutlineIcon
+        size={sizePx}
+        className={styles.glyphSvg}
+        aria-hidden
+      />
     )
 
   return (

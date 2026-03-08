@@ -1,5 +1,3 @@
-@use '@/styles/tokens.scss' as *;
-
 // ---------------------------------------------------------------------------
 // Block
 // ---------------------------------------------------------------------------
@@ -174,176 +172,180 @@
   // ---------------------------------------------------------------------------
   // Destructive + emphasis
   // ---------------------------------------------------------------------------
-  &#{&}--destructive#{&}--emphasis-primary {
-    background-color: var(--error-text);
-    color: var(--button-color);
-
-    &:hover:not(:disabled) {
+  &--destructive {
+    &.button--emphasis-primary {
       background-color: var(--error-text);
-    }
-    &:active:not(:disabled) {
-      background-color: var(--error-text);
-    }
-    &:disabled {
-      background-color: rgba(var(--center-channel-color-rgb), 0.08);
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-    }
-  }
+      color: var(--button-color);
 
-  &#{&}--destructive#{&}--emphasis-secondary {
-    color: var(--error-text);
-    border-color: var(--error-text);
+      &:hover:not(:disabled) {
+        background-color: var(--error-text);
+      }
+      &:active:not(:disabled) {
+        background-color: var(--error-text);
+      }
+      &:disabled {
+        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
+    }
 
-    &:hover:not(:disabled) {
+    &.button--emphasis-secondary {
+      color: var(--error-text);
+      border-color: var(--error-text);
+
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.08);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.16);
+      }
+      &:disabled {
+        border-color: rgba(var(--center-channel-color-rgb), 0.32);
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
+    }
+
+    &.button--emphasis-tertiary {
       background-color: rgba(var(--error-text-rgb), 0.08);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.16);
-    }
-    &:disabled {
-      border-color: rgba(var(--center-channel-color-rgb), 0.32);
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-    }
-  }
+      color: var(--error-text);
 
-  &#{&}--destructive#{&}--emphasis-tertiary {
-    background-color: rgba(var(--error-text-rgb), 0.08);
-    color: var(--error-text);
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.12);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.16);
+      }
+      &:disabled {
+        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
+    }
 
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.12);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.16);
-    }
-    &:disabled {
-      background-color: rgba(var(--center-channel-color-rgb), 0.08);
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-    }
-  }
+    &.button--emphasis-quaternary {
+      color: var(--error-text);
 
-  &#{&}--destructive#{&}--emphasis-quaternary {
-    color: var(--error-text);
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.08);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.16);
+      }
+      &:disabled {
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
+    }
 
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.08);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.16);
-    }
-    &:disabled {
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-    }
-  }
+    &.button--emphasis-link {
+      color: var(--error-text);
 
-  &#{&}--destructive#{&}--emphasis-link {
-    color: var(--error-text);
-
-    &:disabled {
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      &:disabled {
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
     }
   }
 
   // ---------------------------------------------------------------------------
   // Appearance inverted + emphasis
   // ---------------------------------------------------------------------------
-  &#{&}--appearance-inverted#{&}--emphasis-primary {
-    background-color: var(--sidebar-text);
-    color: var(--sidebar-bg);
+  &--appearance-inverted {
+    &.button--emphasis-primary {
+      background-color: var(--sidebar-text);
+      color: var(--sidebar-bg);
 
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.92);
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.92);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.88);
+      }
+      &:disabled {
+        background-color: rgba(var(--sidebar-text-rgb), 0.08);
+        color: rgba(var(--sidebar-text-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
+      }
     }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.88);
+
+    &.button--emphasis-secondary {
+      color: var(--sidebar-text);
+      border-color: var(--sidebar-text);
+
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.12);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.2);
+      }
+      &:disabled {
+        border-color: rgba(var(--center-channel-color-rgb), 0.32);
+        color: rgba(var(--center-channel-color-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
+      }
     }
-    &:disabled {
+
+    &.button--emphasis-tertiary {
       background-color: rgba(var(--sidebar-text-rgb), 0.08);
-      color: rgba(var(--sidebar-text-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
-    }
-  }
+      color: var(--sidebar-text);
 
-  &#{&}--appearance-inverted#{&}--emphasis-secondary {
-    color: var(--sidebar-text);
-    border-color: var(--sidebar-text);
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.12);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.16);
+      }
+      &:disabled {
+        background-color: rgba(var(--sidebar-text-rgb), 0.08);
+        color: rgba(var(--sidebar-text-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
+      }
+    }
 
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.12);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.2);
-    }
-    &:disabled {
-      border-color: rgba(var(--center-channel-color-rgb), 0.32);
-      color: rgba(var(--center-channel-color-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
-    }
-  }
+    &.button--emphasis-quaternary {
+      color: var(--sidebar-text);
 
-  &#{&}--appearance-inverted#{&}--emphasis-tertiary {
-    background-color: rgba(var(--sidebar-text-rgb), 0.08);
-    color: var(--sidebar-text);
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.12);
+      }
+      &:active:not(:disabled) {
+        background-color: rgba(var(--sidebar-text-rgb), 0.2);
+      }
+      &:disabled {
+        color: rgba(var(--sidebar-text-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--color-neutral-1100), 0 0 0 5px var(--color-neutral-0);
+      }
+    }
 
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.12);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.16);
-    }
-    &:disabled {
-      background-color: rgba(var(--sidebar-text-rgb), 0.08);
-      color: rgba(var(--sidebar-text-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
-    }
-  }
+    &.button--emphasis-link {
+      color: var(--sidebar-text);
 
-  &#{&}--appearance-inverted#{&}--emphasis-quaternary {
-    color: var(--sidebar-text);
-
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.12);
-    }
-    &:active:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.2);
-    }
-    &:disabled {
-      color: rgba(var(--sidebar-text-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--color-neutral-1100), 0 0 0 5px var(--color-neutral-0);
-    }
-  }
-
-  &#{&}--appearance-inverted#{&}--emphasis-link {
-    color: var(--sidebar-text);
-
-    &:disabled {
-      color: rgba(var(--sidebar-text-rgb), 0.32);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--color-neutral-1100), 0 0 0 5px var(--color-neutral-0);
+      &:disabled {
+        color: rgba(var(--sidebar-text-rgb), 0.32);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--color-neutral-1100), 0 0 0 5px var(--color-neutral-0);
+      }
     }
   }
 }

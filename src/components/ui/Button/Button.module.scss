@@ -174,7 +174,7 @@
   // ---------------------------------------------------------------------------
   // Destructive + emphasis
   // ---------------------------------------------------------------------------
-  #{&}--destructive#{&}--emphasis-primary {
+  &#{&}--destructive#{&}--emphasis-primary {
     background-color: var(--error-text);
     color: var(--button-color);
 
@@ -193,7 +193,7 @@
     }
   }
 
-  #{&}--destructive#{&}--emphasis-secondary {
+  &#{&}--destructive#{&}--emphasis-secondary {
     color: var(--error-text);
     border-color: var(--error-text);
 
@@ -212,7 +212,7 @@
     }
   }
 
-  #{&}--destructive#{&}--emphasis-tertiary {
+  &#{&}--destructive#{&}--emphasis-tertiary {
     background-color: rgba(var(--error-text-rgb), 0.08);
     color: var(--error-text);
 
@@ -231,7 +231,7 @@
     }
   }
 
-  #{&}--destructive#{&}--emphasis-quaternary {
+  &#{&}--destructive#{&}--emphasis-quaternary {
     color: var(--error-text);
 
     &:hover:not(:disabled) {
@@ -248,7 +248,7 @@
     }
   }
 
-  #{&}--destructive#{&}--emphasis-link {
+  &#{&}--destructive#{&}--emphasis-link {
     color: var(--error-text);
 
     &:disabled {
@@ -262,7 +262,7 @@
   // ---------------------------------------------------------------------------
   // Appearance inverted + emphasis
   // ---------------------------------------------------------------------------
-  #{&}--appearance-inverted#{&}--emphasis-primary {
+  &#{&}--appearance-inverted#{&}--emphasis-primary {
     background-color: var(--sidebar-text);
     color: var(--sidebar-bg);
 
@@ -281,7 +281,7 @@
     }
   }
 
-  #{&}--appearance-inverted#{&}--emphasis-secondary {
+  &#{&}--appearance-inverted#{&}--emphasis-secondary {
     color: var(--sidebar-text);
     border-color: var(--sidebar-text);
 
@@ -300,7 +300,7 @@
     }
   }
 
-  #{&}--appearance-inverted#{&}--emphasis-tertiary {
+  &#{&}--appearance-inverted#{&}--emphasis-tertiary {
     background-color: rgba(var(--sidebar-text-rgb), 0.08);
     color: var(--sidebar-text);
 
@@ -319,7 +319,7 @@
     }
   }
 
-  #{&}--appearance-inverted#{&}--emphasis-quaternary {
+  &#{&}--appearance-inverted#{&}--emphasis-quaternary {
     color: var(--sidebar-text);
 
     &:hover:not(:disabled) {
@@ -336,7 +336,7 @@
     }
   }
 
-  #{&}--appearance-inverted#{&}--emphasis-link {
+  &#{&}--appearance-inverted#{&}--emphasis-link {
     color: var(--sidebar-text);
 
     &:disabled {

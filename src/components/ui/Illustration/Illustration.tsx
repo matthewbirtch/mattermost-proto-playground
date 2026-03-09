@@ -30,13 +30,12 @@ export default function Illustration({
   'aria-label': ariaLabel,
 }: IllustrationProps) {
   const rootClass = [styles.illustration, className].filter(Boolean).join(' ')
-  const style = { width, height } as React.CSSProperties
   const hasLabel = ariaLabel !== undefined && ariaLabel !== ''
 
   return (
     <span
       className={rootClass}
-      style={Object.keys(style).length ? style : undefined}
+      style={{ width, height }}
       role={hasLabel ? 'img' : undefined}
       aria-label={hasLabel ? ariaLabel : undefined}
       aria-hidden={!hasLabel}

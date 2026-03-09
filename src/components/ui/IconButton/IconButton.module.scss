@@ -1,5 +1,3 @@
-@use '@/styles/tokens.scss' as *;
-
 // ---------------------------------------------------------------------------
 // Block
 // ---------------------------------------------------------------------------
@@ -30,7 +28,7 @@
     color: rgba(var(--center-channel-color-rgb), 0.75);
   }
 
-  &:active:not(:disabled):not(#{&}--toggled) {
+  &:active:not(:disabled):not(.icon-button--toggled) {
     background-color: rgba(var(--center-channel-color-rgb), 0.12);
   }
 
@@ -109,7 +107,7 @@
   // ---------------------------------------------------------------------------
   // Default style — toggled state
   // ---------------------------------------------------------------------------
-  #{&}--toggled {
+  &--toggled {
     background-color: var(--button-bg);
     color: var(--button-color);
 
@@ -135,29 +133,29 @@
     &:focus-visible {
       box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
     }
+
+    // Inverted + destructive
+    &.icon-button--destructive {
+      background-color: var(--error-text);
+      color: var(--button-color);
+
+      &:hover:not(:disabled) {
+        background-color: rgba(var(--error-text-rgb), 0.92);
+      }
+      &:active:not(:disabled),
+      &.icon-button--toggled {
+        background-color: rgba(var(--error-text-rgb), 0.84);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------
   // Destructive (Figma: Destructive = True)
   // ---------------------------------------------------------------------------
   &--destructive {
-    background-color: var(--error-text);
-    color: var(--button-color);
-
-    &:hover:not(:disabled) {
-      background-color: rgba(var(--error-text-rgb), 0.92);
-    }
-    &:active:not(:disabled),
-    &.icon-button--toggled {
-      background-color: rgba(var(--error-text-rgb), 0.84);
-    }
-    &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
-    }
-  }
-
-  // Inverted + destructive
-  #{&}--style-inverted#{&}--destructive {
     background-color: var(--error-text);
     color: var(--button-color);
 

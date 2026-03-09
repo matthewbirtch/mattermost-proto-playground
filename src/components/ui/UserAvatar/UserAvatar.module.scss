@@ -1,9 +1,7 @@
-@use '@/styles/tokens.scss' as *;
-
 // ---------------------------------------------------------------------------
 // Block — circular image container (Figma User Avatar, Type=Image only)
 // ---------------------------------------------------------------------------
-.userAvatar {
+.user-avatar {
   position: relative;
   flex-shrink: 0;
   border-radius: var(--radius-full);
@@ -39,7 +37,7 @@
       width: #{$size}px;
       height: #{$size}px;
 
-      .userAvatar__status {
+      .user-avatar__status {
         right: if($size <= 28, -1px, -2px);
         bottom: if($size <= 28, -1px, -2px);
       }

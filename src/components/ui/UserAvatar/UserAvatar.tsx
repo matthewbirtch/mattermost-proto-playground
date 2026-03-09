@@ -1,6 +1,7 @@
 import type { ImgHTMLAttributes } from 'react'
 import StatusBadge from '@/components/ui/StatusBadge/StatusBadge'
 import type { StatusBadgeSize } from '@/components/ui/StatusBadge/StatusBadge'
+import { toKebab } from '@/utils/string'
 import styles from './UserAvatar.module.scss'
 
 /** Figma User Avatar sizes (Image type only). */
@@ -32,8 +33,6 @@ export interface UserAvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement
   /** When true, shows online status badge (green dot with check). Figma: Status = On. */
   status?: boolean
 }
-
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
 /** Map UserAvatar size to StatusBadge size (Figma scale). */
 const USER_AVATAR_TO_BADGE_SIZE: Record<UserAvatarSize, StatusBadgeSize> = {
@@ -68,21 +67,21 @@ export default function UserAvatar({
   status = false,
   ...imgProps
 }: UserAvatarProps) {
-  const sizeClass = styles[`userAvatar--size-${toKebab(size)}`]
-  const rootClass = [styles.userAvatar, sizeClass, className].filter(Boolean).join(' ')
+  const sizeClass = styles[`user-avatar--size-${toKebab(size)}`]
+  const rootClass = [styles['user-avatar'], sizeClass, className].filter(Boolean).join(' ')
 
   return (
     <div className={rootClass} data-size={size}>
       <img
         {...imgProps}
         alt={alt}
-        className={styles.userAvatar__image}
+        className={styles['user-avatar__image']}
         src={src}
         width={Number(size)}
         height={Number(size)}
       />
       {status && (
-        <span className={styles.userAvatar__status}>
+        <span className={styles['user-avatar__status']}>
           <StatusBadge status="Online" size={USER_AVATAR_TO_BADGE_SIZE[size]} />
         </span>
       )}

@@ -1,5 +1,7 @@
 import type { InputHTMLAttributes } from 'react'
-import { useState } from 'react'
+import { useId } from 'react'
+import { useControllable } from '@/hooks/useControllable'
+import { toKebab } from '@/utils/string'
 import styles from './Switch.module.scss'
 
 export type SwitchSize = 'Small' | 'Medium' | 'Large'
@@ -17,8 +19,6 @@ export interface SwitchProps
   /** When true, primary label uses semi-bold (600) weight. Default: false. */
   semiBold?: boolean
 }
-
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
 /**
  * Switch component built on the native HTML checkbox.
@@ -45,17 +45,9 @@ export default function Switch({
   onChange,
   ...rest
 }: SwitchProps) {
-  const id = idProp ?? `switch-${Math.random().toString(36).slice(2, 9)}`
-  const isControlled = checked !== undefined
-  const [uncontrolledChecked, setUncontrolledChecked] = useState(
-    defaultChecked ?? false
-  )
-  const resolvedChecked = isControlled ? checked : uncontrolledChecked
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) setUncontrolledChecked(e.target.checked)
-    onChange?.(e)
-  }
+  const generatedId = useId()
+  const id = idProp ?? generatedId
+  const [resolvedChecked, handleChange] = useControllable(checked, defaultChecked, onChange)
 
   const sizeClass = styles[`switch--size-${toKebab(size)}`]
   const semiBoldClass = semiBold ? styles['switch--semi-bold'] : ''

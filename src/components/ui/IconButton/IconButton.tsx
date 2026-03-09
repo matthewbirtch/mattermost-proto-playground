@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { toKebab } from '@/utils/string'
 import styles from './IconButton.module.scss'
 
 export type IconButtonSize = 'X-Small' | 'Small' | 'Medium' | 'Large'
@@ -34,8 +35,6 @@ export const ICON_BUTTON_ICON_SIZES: Record<IconButtonSize, '12' | '16' | '20' |
   'Medium': '20',
   'Large': '24',
 }
-
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
 /**
  * Icon-only button matching Figma Icon Button variants.

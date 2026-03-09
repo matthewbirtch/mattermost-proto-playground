@@ -1,9 +1,8 @@
-import Icon from '@/components/ui/Icon/Icon'
-import type { IconSize } from '@/components/ui/Icon/Icon'
 import CheckCircleIcon from '@mattermost/compass-icons/components/check-circle'
 import CircleOutlineIcon from '@mattermost/compass-icons/components/circle-outline'
 import ClockIcon from '@mattermost/compass-icons/components/clock'
 import MinusCircleIcon from '@mattermost/compass-icons/components/minus-circle'
+import { toKebab } from '@/utils/string'
 import styles from './StatusBadge.module.scss'
 
 /** Figma Status Badge size. */
@@ -21,15 +20,13 @@ export interface StatusBadgeProps {
   status?: StatusBadgeStatus
 }
 
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
-
-/** Icon size (Icon component scale) per StatusBadge size — Figma. */
-const BADGE_TO_ICON_SIZE: Record<StatusBadgeSize, IconSize> = {
-  'XX-Small': '10',
-  'X-Small': '12',
-  'Small': '16',
-  'Medium': '20',
-  'Large': '32',
+/** Compass icon size in px per StatusBadge size — Figma. */
+const BADGE_ICON_SIZE_PX: Record<StatusBadgeSize, number> = {
+  'XX-Small': 10,
+  'X-Small': 12,
+  'Small': 16,
+  'Medium': 20,
+  'Large': 32,
 }
 
 /**
@@ -47,8 +44,7 @@ export default function StatusBadge({
   const statusClass = styles[`status-badge--status-${toKebab(status)}`]
   const rootClass = [styles['status-badge'], sizeClass, statusClass, className].filter(Boolean).join(' ')
 
-  const iconSize = BADGE_TO_ICON_SIZE[size]
-  const iconSizePx = Number(iconSize)
+  const iconSizePx = BADGE_ICON_SIZE_PX[size]
 
   const glyph =
     status === 'Online'
@@ -62,7 +58,7 @@ export default function StatusBadge({
   return (
     <span className={rootClass} role="img" aria-label={status}>
       <span className={styles['status-badge__glyph']}>
-        <Icon glyph={glyph} size={iconSize} />
+        {glyph}
       </span>
     </span>
   )

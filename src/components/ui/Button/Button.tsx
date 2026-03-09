@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import Icon from '@/components/ui/Icon/Icon'
 import type { IconSize } from '@/components/ui/Icon/Icon'
+import { toKebab } from '@/utils/string'
 import styles from './Button.module.scss'
 
 export type ButtonEmphasis =
@@ -39,8 +40,6 @@ const SIZE_ICON_MAP: Record<ButtonSize, IconSize> = {
   'Medium': '16',
   'Large': '20',
 }
-
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
 /**
  * Button component matching Figma/Compass variants.

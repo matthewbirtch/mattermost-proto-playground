@@ -1,5 +1,7 @@
 import type { InputHTMLAttributes } from 'react'
-import { useState } from 'react'
+import { useId } from 'react'
+import { useControllable } from '@/hooks/useControllable'
+import { toKebab } from '@/utils/string'
 import styles from './Radio.module.scss'
 
 export type RadioSize = 'Small' | 'Medium' | 'Large'
@@ -15,8 +17,6 @@ export interface RadioProps
   /** Label content. Rendered next to the radio. */
   children?: React.ReactNode
 }
-
-const toKebab = (s: string) => s.replace(/\s+/g, '-').toLowerCase()
 
 /**
  * Radio component built on the native HTML radio input.
@@ -41,17 +41,9 @@ export default function Radio({
   value,
   ...rest
 }: RadioProps) {
-  const id = idProp ?? `radio-${Math.random().toString(36).slice(2, 9)}`
-  const isControlled = checked !== undefined
-  const [uncontrolledChecked, setUncontrolledChecked] = useState(
-    defaultChecked ?? false
-  )
-  const resolvedChecked = isControlled ? checked : uncontrolledChecked
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) setUncontrolledChecked(e.target.checked)
-    onChange?.(e)
-  }
+  const generatedId = useId()
+  const id = idProp ?? generatedId
+  const [, handleChange] = useControllable(checked, defaultChecked, onChange)
 
   const sizeClass = styles[`radio--size-${toKebab(size)}`]
   const invalidClass = valid ? '' : styles['radio--invalid']

@@ -1,3 +1,4 @@
+import type { ElementType } from 'react'
 import CheckCircleIcon from '@mattermost/compass-icons/components/check-circle'
 import CircleOutlineIcon from '@mattermost/compass-icons/components/circle-outline'
 import ClockIcon from '@mattermost/compass-icons/components/clock'
@@ -29,6 +30,14 @@ const BADGE_ICON_SIZE_PX: Record<StatusBadgeSize, number> = {
   'Large': 32,
 }
 
+/** Compass icon component per status variant. */
+const GLYPH_COMPONENT: Record<StatusBadgeStatus, ElementType> = {
+  'Online':         CheckCircleIcon,
+  'Away':           ClockIcon,
+  'Do Not Disturb': MinusCircleIcon,
+  'Offline':        CircleOutlineIcon,
+}
+
 /**
  * Status badge (Online, Away, Do Not Disturb, Offline).
  * Matches Figma Status Badge v2.0.1. Uses Icon + @mattermost/compass-icons.
@@ -45,20 +54,12 @@ export default function StatusBadge({
   const rootClass = [styles['status-badge'], sizeClass, statusClass, className].filter(Boolean).join(' ')
 
   const iconSizePx = BADGE_ICON_SIZE_PX[size]
-
-  const glyph =
-    status === 'Online'
-      ? <CheckCircleIcon size={iconSizePx} />
-      : status === 'Away'
-        ? <ClockIcon size={iconSizePx} />
-        : status === 'Do Not Disturb'
-          ? <MinusCircleIcon size={iconSizePx} />
-          : <CircleOutlineIcon size={iconSizePx} />
+  const GlyphIcon = GLYPH_COMPONENT[status]
 
   return (
     <span className={rootClass} role="img" aria-label={status}>
       <span className={styles['status-badge__glyph']}>
-        {glyph}
+        <GlyphIcon size={iconSizePx} />
       </span>
     </span>
   )

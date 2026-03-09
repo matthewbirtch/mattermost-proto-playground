@@ -3,6 +3,7 @@ import { useRef, useEffect, useId } from 'react'
 import { useControllable } from '@/hooks/useControllable'
 import Icon from '@/components/ui/Icon/Icon'
 import type { IconSize } from '@/components/ui/Icon/Icon'
+import type { ElementType } from 'react'
 import CheckIcon from '@mattermost/compass-icons/components/check'
 import MinusIcon from '@mattermost/compass-icons/components/minus'
 import { toKebab } from '@/utils/string'
@@ -29,6 +30,12 @@ const CHECKBOX_ICON_SIZE: Record<CheckboxSize, IconSize> = {
   Small: '10',
   Medium: '12',
   Large: '16',
+}
+
+/** Compass icon component per checked/indeterminate state. */
+const ICON_COMPONENT: Record<'check' | 'minus', ElementType> = {
+  check: CheckIcon,
+  minus: MinusIcon,
 }
 
 /**
@@ -98,16 +105,14 @@ export default function Checkbox({
         {...rest}
       />
       <span className={styles['checkbox__box']}>
-        {showingIcon === 'minus' && (
-          <span key="minus" className={styles['checkbox__icon']}>
-            <Icon glyph={<MinusIcon size={iconSizePx} />} size={iconSize} />
-          </span>
-        )}
-        {showingIcon === 'check' && (
-          <span key="check" className={styles['checkbox__icon']}>
-            <Icon glyph={<CheckIcon size={iconSizePx} />} size={iconSize} />
-          </span>
-        )}
+        {showingIcon !== null && (() => {
+          const IconComponent = ICON_COMPONENT[showingIcon]
+          return (
+            <span key={showingIcon} className={styles['checkbox__icon']}>
+              <Icon glyph={<IconComponent size={iconSizePx} />} size={iconSize} />
+            </span>
+          )
+        })()}
       </span>
       {children != null && (
         <span className={styles['checkbox__label']}>{children}</span>

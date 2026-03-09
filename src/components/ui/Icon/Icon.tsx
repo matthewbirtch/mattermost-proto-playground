@@ -38,19 +38,6 @@ const SIZE_CLASS_MAP: Record<IconSize, string> = {
   '104': styles['icon--size-104'],
 }
 
-const SIZE_PX_MAP: Record<IconSize, number> = {
-  '10': 10,
-  '12': 12,
-  '16': 16,
-  '20': 20,
-  '24': 24,
-  '28': 28,
-  '32': 32,
-  '40': 40,
-  '52': 52,
-  '64': 64,
-  '104': 104,
-}
 
 /**
  * Icon wrapper using @mattermost/compass-icons. Import the icon you need and pass as glyph.
@@ -64,7 +51,7 @@ export default function Icon({
 }: IconProps) {
   const sizeClass = SIZE_CLASS_MAP[size]
   const rootClass = [styles.icon, sizeClass, className].filter(Boolean).join(' ')
-  const sizePx = SIZE_PX_MAP[size]
+  const sizePx = Number(size)
 
   const glyphContent =
     glyph !== undefined && glyph !== null ? (

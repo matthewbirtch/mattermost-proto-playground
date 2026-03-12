@@ -1,0 +1,221 @@
+// ---------------------------------------------------------------------------
+// Block — Text Input (Figma v2.0.1, Border=On only). Theme variables only.
+// ---------------------------------------------------------------------------
+.textInput {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+
+  // ---------------------------------------------------------------------------
+  // Wrapper (bordered container; has top space for floated label)
+  // ---------------------------------------------------------------------------
+  &__wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 4px;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+
+    .textInput:has(.textInput__input:not(:disabled)):hover & {
+      border-color: rgba(var(--center-channel-color-rgb), 0.24);
+    }
+
+
+    .textInput:has(.textInput__input:focus-visible) & {
+      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+    }
+
+    .textInput:has(.textInput__input:disabled) & {
+      border-color: rgba(var(--center-channel-color-rgb), 0.16);
+      background-color: var(--center-channel-bg);
+      opacity: 0.56;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Floating label
+  // ---------------------------------------------------------------------------
+  &__label {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    padding: 0 4px;
+    transform: translateY(-50%);
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    background-color: var(--center-channel-bg);
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 24px);
+    transition:
+      transform 150ms ease,
+      font-size 150ms ease,
+      color 150ms ease,
+      top 150ms ease;
+
+    .textInput--label-floated & {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
+      color: rgba(var(--center-channel-color-rgb), 0.64);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Inner row (leading icon + input + trailing icon)
+  // ---------------------------------------------------------------------------
+  &__inner {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__input {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    color: var(--center-channel-color);
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: rgba(var(--center-channel-color-rgb), 0.64);
+    }
+  }
+
+  &__leadingIcon,
+  &__trailingIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  &__leadingIcon {
+    margin-right: 8px;
+  }
+
+  &__trailingIcon {
+    margin-left: 8px;
+  }
+
+  &__counter {
+    margin-top: 4px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10px;
+    line-height: 14px;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers (fixed height; label floats within same height, no wrapper growth)
+  // ---------------------------------------------------------------------------
+  &--size-small {
+    .textInput__wrapper {
+      min-height: 32px;
+    }
+
+    .textInput__inner {
+      padding: 8px 12px;
+      min-height: 32px;
+    }
+
+    .textInput__input {
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    &.textInput--label-floated .textInput__label {
+      top: 4px;
+      transform: none;
+    }
+  }
+
+  &--size-medium {
+    .textInput__wrapper {
+      min-height: 40px;
+    }
+
+    .textInput__inner {
+      padding: 10px 12px;
+      min-height: 40px;
+    }
+
+    .textInput__input {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .textInput__label {
+      font-size: 14px;
+    }
+
+    &.textInput--label-floated .textInput__label {
+      top: 6px;
+      transform: none;
+    }
+  }
+
+  &--size-large {
+    .textInput__wrapper {
+      min-height: 48px;
+    }
+
+    .textInput__inner {
+      padding: 12px 12px;
+      min-height: 48px;
+    }
+
+    .textInput__input {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    &.textInput--label-floated .textInput__label {
+      top: 8px;
+      transform: none;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Invalid modifier
+  // ---------------------------------------------------------------------------
+  &--invalid {
+    .textInput__wrapper {
+      border-color: var(--error-text);
+    }
+
+    &:has(.textInput__input:focus-visible) .textInput__wrapper {
+      box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+    }
+
+    .textInput__label {
+      color: var(--error-text);
+    }
+  }
+
+}

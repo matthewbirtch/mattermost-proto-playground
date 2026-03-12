@@ -7,6 +7,7 @@ import StatusBadge from '@/components/ui/StatusBadge/StatusBadge'
 import Emoji from '@/components/ui/Emoji/Emoji'
 import Icon from '@/components/ui/Icon/Icon'
 import IconButton, { ICON_BUTTON_ICON_SIZES } from '@/components/ui/IconButton/IconButton'
+import TextInput from '@/components/ui/TextInput/TextInput'
 import Illustration from '@/components/ui/Illustration/Illustration'
 import GlobeIcon from '@mattermost/compass-icons/components/globe'
 import EmoticonHappyOutlineIcon from '@mattermost/compass-icons/components/emoticon-happy-outline'
@@ -175,6 +176,70 @@ export default function Components() {
             <Switch size="Medium" semiBold>Semi-bold label</Switch>
             <Switch size="Medium" disabled>Disabled unchecked</Switch>
             <Switch size="Medium" defaultChecked disabled>Disabled checked</Switch>
+          </div>
+        </div>
+      </section>
+
+      <section className={styles['components__section']}>
+        <h2 className={styles['components__section-title']}>Text Input</h2>
+        <p className={styles['components__subheading']} style={{ marginBottom: 'var(--spacing-m)' }}>
+          Figma Text Input v2.0.1 (Border=On). Floating label when <code>label</code> is provided: resting when empty/unfocused, floated when focused or has value. Theme variables only.
+        </p>
+        <div className={styles['components__button-block']}>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Sizes</span>
+            <TextInput size="Small" placeholder="Small" />
+            <TextInput size="Medium" placeholder="Medium" />
+            <TextInput size="Large" placeholder="Large" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>With / without label</span>
+            <TextInput label="Label" placeholder="Placeholder" />
+            <TextInput placeholder="No label" />
+            <TextInput label="With value" defaultValue="Some text" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Leading / trailing icons</span>
+            <TextInput
+              label="Search"
+              placeholder="Search..."
+              leadingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+            />
+            <TextInput
+              placeholder="Trailing only"
+              trailingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+            />
+            <TextInput
+              label="Both"
+              placeholder="Leading and trailing"
+              leadingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              trailingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+            />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Invalid</span>
+            <TextInput label="Error" invalid placeholder="Invalid state" />
+            <TextInput label="Error with value" invalid defaultValue="Invalid" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Character counter</span>
+            <TextInput
+              label="Description"
+              placeholder="Enter text..."
+              maxLength={100}
+              showCharacterCount
+            />
+            <TextInput
+              label="With value"
+              defaultValue="Already filled"
+              maxLength={50}
+              showCharacterCount
+            />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Disabled & read-only</span>
+            <TextInput label="Disabled" disabled placeholder="Disabled" />
+            <TextInput label="Read-only" readOnly defaultValue="Read only value" />
           </div>
         </div>
       </section>

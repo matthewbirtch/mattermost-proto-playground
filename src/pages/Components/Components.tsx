@@ -827,11 +827,31 @@ export default function Components() {
       <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Label Tag</h2>
         <div className={styles['components__button-row']}>
-          <span className={styles['components__instance-label']}>Examples</span>
-          <LabelTag label="Bot" />
-          <LabelTag label="APP" />
-          <LabelTag label="New" />
-          <LabelTag label="Beta" />
+          <span className={styles['components__instance-label']}>Types · X-Small</span>
+          <LabelTag label="Default" type="Default" />
+          <LabelTag label="Info" type="Info" />
+          <LabelTag label="Info Dim" type="Info Dim" />
+          <LabelTag label="Danger" type="Danger" />
+          <LabelTag label="Success" type="Success" />
+          <LabelTag label="Warning" type="Warning" />
+        </div>
+        <div className={styles['components__button-row']}>
+          <span className={styles['components__instance-label']}>Types · Small</span>
+          <LabelTag label="Default" type="Default" size="Small" />
+          <LabelTag label="Info" type="Info" size="Small" />
+          <LabelTag label="Info Dim" type="Info Dim" size="Small" />
+          <LabelTag label="Danger" type="Danger" size="Small" />
+          <LabelTag label="Success" type="Success" size="Small" />
+          <LabelTag label="Warning" type="Warning" size="Small" />
+        </div>
+        <div className={styles['components__button-row']}>
+          <span className={styles['components__instance-label']}>All Caps</span>
+          <LabelTag label="Tag" type="Default" casing="All Caps" />
+          <LabelTag label="Tag" type="Info" casing="All Caps" />
+          <LabelTag label="Tag" type="Info Dim" casing="All Caps" />
+          <LabelTag label="Tag" type="Danger" casing="All Caps" />
+          <LabelTag label="Tag" type="Success" casing="All Caps" />
+          <LabelTag label="Tag" type="Warning" casing="All Caps" />
         </div>
       </section>
 

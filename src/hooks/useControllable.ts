@@ -1,5 +1,5 @@
-import type { ChangeEvent } from 'react'
-import { useState } from 'react'
+import type { ChangeEvent } from 'react';
+import { useState } from 'react';
 
 /**
  * Handles the controlled/uncontrolled pattern for boolean inputs (checkbox, radio, switch).
@@ -16,15 +16,15 @@ export function useControllable(
   defaultValue: boolean | undefined,
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
 ): [boolean, (e: ChangeEvent<HTMLInputElement>) => void] {
-  const isControlled = controlled !== undefined
-  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? false)
+  const isControlled = controlled !== undefined;
+  const [uncontrolled, setUncontrolled] = useState(defaultValue ?? false);
 
-  const value = isControlled ? controlled! : uncontrolled
+  const value = isControlled ? controlled! : uncontrolled;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) setUncontrolled(e.target.checked)
-    onChange?.(e)
-  }
+    if (!isControlled) setUncontrolled(e.target.checked);
+    onChange?.(e);
+  };
 
-  return [value, handleChange]
+  return [value, handleChange];
 }

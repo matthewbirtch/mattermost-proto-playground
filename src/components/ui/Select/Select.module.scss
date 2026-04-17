@@ -1,0 +1,240 @@
+// ---------------------------------------------------------------------------
+// Block — Select (Figma v2.0.1). Full-featured form select with floating label.
+// ---------------------------------------------------------------------------
+.select {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+
+  // ---------------------------------------------------------------------------
+  // Wrapper (bordered container)
+  // ---------------------------------------------------------------------------
+  &__wrapper {
+    position: relative;
+    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: var(--radius-s);
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+
+    .select:has(.select__control:not(:disabled)):hover & {
+      border-color: rgba(var(--center-channel-color-rgb), 0.24);
+    }
+
+    .select:has(.select__control:focus-visible) & {
+      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+    }
+
+    .select:has(.select__control:disabled) & {
+      opacity: 0.56;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Floating label
+  // ---------------------------------------------------------------------------
+  &__label {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    padding: 0 4px;
+    transform: translateY(-50%);
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    background-color: var(--center-channel-bg);
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 24px);
+    transition:
+      transform 150ms ease,
+      font-size 150ms ease,
+      top 150ms ease;
+
+    .select--label-floated & {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Inner row (icon + select + trailing chevron)
+  // ---------------------------------------------------------------------------
+  &__inner {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &__leadingIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    pointer-events: none;
+  }
+
+  &__control {
+    flex: 1 1 0;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    color: var(--center-channel-color);
+    cursor: pointer;
+
+    // When empty / no value show placeholder color
+    &:invalid,
+    &[value=''],
+    option[value=''] {
+      color: rgba(var(--center-channel-color-rgb), 0.64);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: rgba(var(--center-channel-color-rgb), 0.64);
+    }
+  }
+
+  &__trailingIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    pointer-events: none;
+    margin-right: 4px;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers
+  // ---------------------------------------------------------------------------
+  &--size-small {
+    .select__wrapper {
+      min-height: 32px;
+    }
+
+    .select__inner {
+      padding: 8px 12px;
+      gap: var(--spacing-xs);
+    }
+
+    .select__control {
+      font-size: var(--font-size-75);
+      line-height: var(--line-height-75);
+    }
+
+    .select__trailingIcon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &.select--label-floated .select__label {
+      top: 4px;
+      transform: none;
+    }
+  }
+
+  &--size-medium {
+    .select__wrapper {
+      min-height: 40px;
+    }
+
+    .select__inner {
+      padding: 10px 16px;
+      gap: var(--spacing-s);
+    }
+
+    .select__control {
+      font-size: var(--font-size-100);
+      line-height: var(--line-height-100);
+    }
+
+    .select__label {
+      font-size: var(--font-size-100);
+    }
+
+    .select__trailingIcon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.select--label-floated .select__label {
+      top: 6px;
+      transform: none;
+    }
+  }
+
+  &--size-large {
+    .select__wrapper {
+      min-height: 48px;
+    }
+
+    .select__inner {
+      padding: 12px 16px;
+      gap: var(--spacing-s);
+    }
+
+    .select__control {
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-200);
+    }
+
+    .select__trailingIcon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &.select--label-floated .select__label {
+      top: 8px;
+      transform: none;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Invalid modifier
+  // ---------------------------------------------------------------------------
+  &--invalid {
+    .select__wrapper {
+      border-color: var(--error-text);
+    }
+
+    &:has(.select__control:focus-visible) .select__wrapper {
+      box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+    }
+
+    .select__label {
+      color: var(--error-text);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Leading icon offset
+  // ---------------------------------------------------------------------------
+  &--has-leading-icon {
+    .select__label {
+      left: 36px;
+    }
+  }
+}

@@ -46,3 +46,15 @@ Do **not** write `&--destructive&--emphasis-primary` — it will trigger a Sass 
 ```
 
 Keyframes and other global at-rules can stay at the top of the file; the rest of the component lives under the single block.
+
+## Button emphasis: use Primary sparingly
+
+`emphasis="Primary"` should appear **at most once per view** — it draws the eye and loses meaning if overused. Use `Secondary`, `Tertiary`, or `Link` for supporting actions. Only reach for `Primary` when one action clearly outranks all others on screen.
+
+## EmptyState: default button size is Medium
+
+When adding an `action` to `EmptyState`, omit the `size` prop unless a Figma spec requires a different size. `Button` defaults to `Medium`, which is the correct size for empty state actions.
+
+## Typography: prefer semibold over bold
+
+Use `var(--font-weight-semibold)` (600) wherever bold emphasis is needed. Do **not** use `var(--font-weight-bold)` (700) or `font-weight: bold` / `font-weight: 700` unless explicitly required by a Figma spec that specifies 700.

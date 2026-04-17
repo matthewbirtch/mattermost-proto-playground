@@ -1,21 +1,23 @@
-import type { InputHTMLAttributes } from 'react'
-import { useId } from 'react'
-import { useControllable } from '@/hooks/useControllable'
-import { toKebab } from '@/utils/string'
-import styles from './Radio.module.scss'
+import type { InputHTMLAttributes } from 'react';
+import { useId } from 'react';
+import { useControllable } from '@/hooks/useControllable';
+import { toKebab } from '@/utils/string';
+import styles from './Radio.module.scss';
 
-export type RadioSize = 'Small' | 'Medium' | 'Large'
+export type RadioSize = 'Small' | 'Medium' | 'Large';
 
-export interface RadioProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface RadioProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size' | 'type'
+> {
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** Size variant. Figma: Small (12px), Medium (16px), Large (20px). Default: Medium. */
-  size?: RadioSize
+  size?: RadioSize;
   /** When false, uses error/destructive styling (red when checked). Default: true. */
-  valid?: boolean
+  valid?: boolean;
   /** Label content. Rendered next to the radio. */
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 /**
@@ -41,16 +43,16 @@ export default function Radio({
   value,
   ...rest
 }: RadioProps) {
-  const generatedId = useId()
-  const id = idProp ?? generatedId
-  const [, handleChange] = useControllable(checked, defaultChecked, onChange)
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
+  const [, handleChange] = useControllable(checked, defaultChecked, onChange);
 
-  const sizeClass = styles[`radio--size-${toKebab(size)}`]
-  const invalidClass = valid ? '' : styles['radio--invalid']
+  const sizeClass = styles[`radio--size-${toKebab(size)}`];
+  const invalidClass = valid ? '' : styles['radio--invalid'];
 
   const rootClass = [styles.radio, sizeClass, invalidClass, className]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 
   return (
     <label className={rootClass} htmlFor={id}>
@@ -74,5 +76,5 @@ export default function Radio({
         <span className={styles['radio__label']}>{children}</span>
       )}
     </label>
-  )
+  );
 }

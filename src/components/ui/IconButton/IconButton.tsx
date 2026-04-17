@@ -1,40 +1,46 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { toKebab } from '@/utils/string'
-import styles from './IconButton.module.scss'
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { toKebab } from '@/utils/string';
+import styles from './IconButton.module.scss';
 
-export type IconButtonSize = 'X-Small' | 'Small' | 'Medium' | 'Large'
+export type IconButtonSize = 'X-Small' | 'Small' | 'Medium' | 'Large';
 
 /** Figma "Style": Default (light context) | Inverted (dark context). */
-export type IconButtonStyle = 'Default' | 'Inverted'
+export type IconButtonStyle = 'Default' | 'Inverted';
 
-export type IconButtonPadding = 'Default' | 'Compact'
+export type IconButtonPadding = 'Default' | 'Compact';
 
-export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'style'> {
+export interface IconButtonProps extends Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'style'
+> {
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** When true, uses destructive (danger) styling. Figma: Destructive. */
-  destructive?: boolean
+  destructive?: boolean;
   /** Icon to show (e.g. <Icon glyph={<GlobeIcon size={16} />} size="16" />). */
-  icon: ReactNode
+  icon: ReactNode;
   /** Padding variant. Figma: Padding = Default | Compact. */
-  padding?: IconButtonPadding
+  padding?: IconButtonPadding;
   /** When true, uses full border radius (pill). Figma: Rounded = On. */
-  rounded?: boolean
+  rounded?: boolean;
   /** Size variant. Figma: Size. Default: Medium. */
-  size?: IconButtonSize
+  size?: IconButtonSize;
   /** Default | Inverted. Figma: Style (for light vs dark backgrounds). */
-  style?: IconButtonStyle
+  style?: IconButtonStyle;
   /** When true, shows toggled/selected state. Figma: Toggled = On. */
-  toggled?: boolean
+  toggled?: boolean;
 }
 
 /** Icon size (px) per IconButton size. Use with Icon: size="12" | "16" | "20" | "24". */
-export const ICON_BUTTON_ICON_SIZES: Record<IconButtonSize, '12' | '16' | '20' | '24'> = {
+export const ICON_BUTTON_ICON_SIZES: Record<
+  IconButtonSize,
+  '12' | '16' | '20' | '24'
+> = {
   'X-Small': '12',
-  'Small': '16',
-  'Medium': '20',
-  'Large': '24',
-}
+  Small: '16',
+  Medium: '20',
+  Large: '24',
+};
 
 /**
  * Icon-only button matching Figma Icon Button variants.
@@ -57,14 +63,16 @@ export default function IconButton({
   'aria-label': ariaLabel,
   ...rest
 }: IconButtonProps) {
-  const sizeClass = styles[`icon-button--size-${toKebab(size)}`]
+  const sizeClass = styles[`icon-button--size-${toKebab(size)}`];
   const paddingClass =
-    padding === 'Compact' ? styles['icon-button--padding-compact'] : ''
+    padding === 'Compact' ? styles['icon-button--padding-compact'] : '';
   const styleClass =
-    style === 'Inverted' ? styles['icon-button--style-inverted'] : ''
-  const destructiveClass = destructive ? styles['icon-button--destructive'] : ''
-  const roundedClass = rounded ? styles['icon-button--rounded'] : ''
-  const toggledClass = toggled ? styles['icon-button--toggled'] : ''
+    style === 'Inverted' ? styles['icon-button--style-inverted'] : '';
+  const destructiveClass = destructive
+    ? styles['icon-button--destructive']
+    : '';
+  const roundedClass = rounded ? styles['icon-button--rounded'] : '';
+  const toggledClass = toggled ? styles['icon-button--toggled'] : '';
 
   const rootClass = [
     styles['icon-button'],
@@ -77,7 +85,7 @@ export default function IconButton({
     className,
   ]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 
   return (
     <button
@@ -92,5 +100,5 @@ export default function IconButton({
         {icon}
       </span>
     </button>
-  )
+  );
 }

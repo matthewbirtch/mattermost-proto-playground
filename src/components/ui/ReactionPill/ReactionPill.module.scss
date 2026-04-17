@@ -1,0 +1,139 @@
+.reaction-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 200px;
+  background-color: var(--calls-bg, #14213e);
+
+  &__inner {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxxs);
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    width: 100%;
+  }
+
+  &__emoji {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  &__label {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-semibold);
+    color: var(--button-color, white);
+    white-space: nowrap;
+  }
+
+  &__leading-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    flex-shrink: 0;
+    color: var(--button-color, white);
+  }
+
+  &__trailing-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    flex-shrink: 0;
+    color: var(--button-color, white);
+    opacity: 0.32;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers
+  // ---------------------------------------------------------------------------
+
+  &--size-small {
+    .reaction-pill__inner {
+      gap: 4px;
+      padding: 2px var(--spacing-s) 2px var(--spacing-xxxs);
+    }
+
+    .reaction-pill__emoji {
+      font-size: 12px;
+    }
+
+    .reaction-pill__label {
+      font-size: 10px;
+      line-height: var(--line-height-75);
+      letter-spacing: 0.1px;
+    }
+  }
+
+  &--size-medium {
+    .reaction-pill__inner {
+      gap: 5px;
+      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+    }
+
+    .reaction-pill__emoji {
+      font-size: 16px;
+    }
+
+    .reaction-pill__label {
+      font-size: var(--font-size-75);
+      line-height: var(--line-height-75);
+    }
+  }
+
+  &--size-large {
+    .reaction-pill__inner {
+      gap: 6px;
+      padding: 6px var(--spacing-l) 6px var(--spacing-s);
+    }
+
+    .reaction-pill__emoji {
+      font-size: 20px;
+    }
+
+    .reaction-pill__label {
+      font-size: var(--font-size-100);
+      line-height: var(--line-height-100);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Type modifiers
+  // ---------------------------------------------------------------------------
+
+  &--type-hand-raise {
+    background-color: var(--button-color, white);
+    border-radius: 20px;
+    overflow: hidden;
+
+    .reaction-pill__inner {
+      background-color: transparent;
+      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+    }
+
+    .reaction-pill__leading-icon {
+      color: var(--calls-bg, #14213e);
+    }
+
+    .reaction-pill__label {
+      color: var(--calls-bg, #14213e);
+      font-size: var(--font-size-75);
+      line-height: var(--line-height-75);
+    }
+  }
+
+  &--type-other {
+    .reaction-pill__inner {
+      gap: 5px;
+      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+    }
+
+    .reaction-pill__label {
+      font-size: var(--font-size-75);
+      line-height: var(--line-height-75);
+    }
+  }
+}

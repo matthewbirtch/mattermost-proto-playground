@@ -1,23 +1,25 @@
-import type { InputHTMLAttributes } from 'react'
-import { useId } from 'react'
-import { useControllable } from '@/hooks/useControllable'
-import { toKebab } from '@/utils/string'
-import styles from './Switch.module.scss'
+import type { InputHTMLAttributes } from 'react';
+import { useId } from 'react';
+import { useControllable } from '@/hooks/useControllable';
+import { toKebab } from '@/utils/string';
+import styles from './Switch.module.scss';
 
-export type SwitchSize = 'Small' | 'Medium' | 'Large'
+export type SwitchSize = 'Small' | 'Medium' | 'Large';
 
-export interface SwitchProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface SwitchProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'size' | 'type'
+> {
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** Size variant. Figma: Small (16px), Medium (20px), Large (24px). Default: Medium. */
-  size?: SwitchSize
+  size?: SwitchSize;
   /** Primary label content. Rendered to the left of the switch. */
-  children?: React.ReactNode
+  children?: React.ReactNode;
   /** Optional secondary label (e.g. description) below the primary label. */
-  secondaryLabel?: React.ReactNode
+  secondaryLabel?: React.ReactNode;
   /** When true, primary label uses semi-bold (600) weight. Default: false. */
-  semiBold?: boolean
+  semiBold?: boolean;
 }
 
 /**
@@ -45,13 +47,18 @@ export default function Switch({
   onChange,
   ...rest
 }: SwitchProps) {
-  const generatedId = useId()
-  const id = idProp ?? generatedId
-  const [resolvedChecked, handleChange] = useControllable(checked, defaultChecked, onChange)
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
+  const [resolvedChecked, handleChange] = useControllable(
+    checked,
+    defaultChecked,
+    onChange,
+  );
 
-  const sizeClass = styles[`switch--size-${toKebab(size)}`]
-  const semiBoldClass = semiBold ? styles['switch--semi-bold'] : ''
-  const secondaryClass = secondaryLabel != null ? styles['switch--with-secondary'] : ''
+  const sizeClass = styles[`switch--size-${toKebab(size)}`];
+  const semiBoldClass = semiBold ? styles['switch--semi-bold'] : '';
+  const secondaryClass =
+    secondaryLabel != null ? styles['switch--with-secondary'] : '';
 
   const rootClass = [
     styles.switch,
@@ -61,7 +68,7 @@ export default function Switch({
     className,
   ]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 
   return (
     <label className={rootClass} htmlFor={id}>
@@ -94,5 +101,5 @@ export default function Switch({
         <span className={styles['switch__knob']} />
       </span>
     </label>
-  )
+  );
 }

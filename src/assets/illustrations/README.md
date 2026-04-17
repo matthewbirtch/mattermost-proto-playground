@@ -14,9 +14,11 @@ Illustrations from Figma live here as `.svg` files and are used as React compone
    ```
 4. SVGs are written to this folder. Use them as:
    ```tsx
-   import MyIllustration from '@/assets/illustrations/my-illustration.svg?react'
-   import { Illustration } from '@/components/ui/Illustration'
-   <Illustration aria-label="Description"><MyIllustration /></Illustration>
+   import MyIllustration from '@/assets/illustrations/my-illustration.svg?react';
+   import { Illustration } from '@/components/ui/Illustration';
+   <Illustration aria-label="Description">
+     <MyIllustration />
+   </Illustration>;
    ```
 
 ### Option 2: Manual export from Figma

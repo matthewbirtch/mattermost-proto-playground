@@ -146,7 +146,9 @@ $checkbox-icon-duration: 150ms;
   }
 
   // Hover invalid unchecked — red border emphasis
-  &:has(&__input:not(:disabled)):hover#{&}--invalid &__input:not(:checked) ~ &__box {
+  &:has(&__input:not(:disabled)):hover#{&}--invalid
+    &__input:not(:checked)
+    ~ &__box {
     border-color: var(--error-text);
   }
 

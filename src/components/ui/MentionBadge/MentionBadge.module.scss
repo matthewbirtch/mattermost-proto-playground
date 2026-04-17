@@ -1,0 +1,57 @@
+// ---------------------------------------------------------------------------
+// Block — Figma Mention Badge v2.0.1
+// ---------------------------------------------------------------------------
+.mention-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-m);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-bold); // Figma explicitly specifies weight 700
+  white-space: nowrap;
+
+  // Default location: Sidebar
+  background-color: var(--mention-bg);
+  color: var(--mention-color);
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers (Figma: Small, Medium, Large)
+  // ---------------------------------------------------------------------------
+  &--size-small {
+    font-size: var(--font-size-25); // 10px
+    line-height: 11px;
+    padding: 1px 4px;
+  }
+
+  &--size-medium {
+    font-size: var(--font-size-50); // 11px
+    line-height: var(--line-height-50); // 16px
+    letter-spacing: 0.22px;
+    padding: 2px 5px;
+  }
+
+  &--size-large {
+    font-size: var(--font-size-75); // 12px
+    line-height: 15px;
+    padding: 2px 5px;
+    border-radius: 10px;
+  }
+
+  // Single-digit extra horizontal padding (size + wide compound modifier)
+  #{&}--size-small#{&}--wide { padding-inline: 5px; }
+  #{&}--size-medium#{&}--wide { padding-inline: 7px; }
+  #{&}--size-large#{&}--wide { padding-inline: 8px; }
+
+  // ---------------------------------------------------------------------------
+  // Location modifiers (Figma: Sidebar default, Menu Item, Icon Button)
+  // ---------------------------------------------------------------------------
+  &--location-menu-item {
+    background-color: rgba(var(--center-channel-color-rgb), 0.48);
+    color: var(--center-channel-bg);
+  }
+
+  &--location-icon-button {
+    background-color: var(--sidebar-text-active-border);
+    color: var(--button-color);
+  }
+}

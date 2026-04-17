@@ -1,0 +1,54 @@
+.progress-bar {
+  position: relative;
+  width: 100%;
+  background-color: rgba(var(--center-channel-color-rgb), 0.16);
+  overflow: hidden;
+
+  // ---------------------------------------------------------------------------
+  // Size modifiers
+  // ---------------------------------------------------------------------------
+  &--size-small {
+    height: 4px;
+    border-radius: 2px;
+
+    .progress-bar__fill {
+      border-radius: 2px;
+    }
+  }
+
+  &--size-large {
+    height: 8px;
+    border-radius: 4px;
+
+    .progress-bar__fill {
+      border-radius: 4px;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fill element
+  // ---------------------------------------------------------------------------
+  &__fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: width 200ms ease;
+
+    &--default {
+      background-color: var(--button-bg);
+    }
+
+    &--success {
+      background-color: var(--online-indicator);
+    }
+
+    &--warning {
+      background-color: var(--away-indicator);
+    }
+
+    &--danger {
+      background-color: var(--error-text);
+    }
+  }
+}

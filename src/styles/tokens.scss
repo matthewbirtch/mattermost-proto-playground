@@ -321,12 +321,12 @@
   // ============================================================
   // Elevations (W3C design tokens format)
   // ============================================================
-  --elevation-1: 0 2px 3px 0 #00000014;   // Subtle - hover, small dropdowns
-  --elevation-2: 0 4px 6px 0 #0000001F;   // Low - buttons, chips, small cards
-  --elevation-3: 0 6px 14px 0 #0000001F;  // Medium - cards, menus, tooltips
-  --elevation-4: 0 8px 24px 0 #0000001F;  // High - modals, popovers, floating panels
-  --elevation-5: 0 12px 32px 0 #0000001F; // Higher - dialogs, drawers
-  --elevation-6: 0 20px 32px 0 #0000001F; // Highest - full-screen overlays
+  --elevation-1: 0 2px 3px 0 #00000014; // Subtle - hover, small dropdowns
+  --elevation-2: 0 4px 6px 0 #0000001f; // Low - buttons, chips, small cards
+  --elevation-3: 0 6px 14px 0 #0000001f; // Medium - cards, menus, tooltips
+  --elevation-4: 0 8px 24px 0 #0000001f; // High - modals, popovers, floating panels
+  --elevation-5: 0 12px 32px 0 #0000001f; // Higher - dialogs, drawers
+  --elevation-6: 0 20px 32px 0 #0000001f; // Highest - full-screen overlays
 
   // ============================================================
   // Icon sizes (Mattermost Icon component scale)
@@ -342,6 +342,14 @@
   --icon-size-52: 52px;
   --icon-size-64: 64px;
   --icon-size-104: 104px;
+
+  // ============================================================
+  // Attachment Card file-type accent colors
+  // ============================================================
+  --attachment-blue: var(--color-blue-300);     // word, image, video, audio
+  --attachment-green: var(--color-green-600);   // excel
+  --attachment-red: var(--color-red-500);       // pdf
+  --attachment-orange: var(--color-orange-500); // powerpoint
 
   // ============================================================
   // Z-index

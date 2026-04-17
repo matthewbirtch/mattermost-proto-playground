@@ -1,45 +1,45 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import Icon from '@/components/ui/Icon/Icon'
-import type { IconSize } from '@/components/ui/Icon/Icon'
-import { toKebab } from '@/utils/string'
-import styles from './Button.module.scss'
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import Icon from '@/components/ui/Icon/Icon';
+import type { IconSize } from '@/components/ui/Icon/Icon';
+import { toKebab } from '@/utils/string';
+import styles from './Button.module.scss';
 
 export type ButtonEmphasis =
   | 'Primary'
   | 'Secondary'
   | 'Tertiary'
   | 'Quaternary'
-  | 'Link'
+  | 'Link';
 
-export type ButtonSize = 'X-Small' | 'Small' | 'Medium' | 'Large'
+export type ButtonSize = 'X-Small' | 'Small' | 'Medium' | 'Large';
 
-export type ButtonAppearance = 'Default' | 'Inverted'
+export type ButtonAppearance = 'Default' | 'Inverted';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Default | Inverted (for use on dark backgrounds). Maps to Figma "Style". */
-  appearance?: ButtonAppearance
+  appearance?: ButtonAppearance;
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** Button label. */
-  children: React.ReactNode
+  children: React.ReactNode;
   /** When true, uses destructive (danger) styling. */
-  destructive?: boolean
+  destructive?: boolean;
   /** Visual emphasis. Default: Primary. */
-  emphasis?: ButtonEmphasis
+  emphasis?: ButtonEmphasis;
   /** Leading icon (e.g. <Icon glyph={<SomeIcon size={16} />} size="16" />). Icon size should match button size. */
-  leadingIcon?: ReactNode
+  leadingIcon?: ReactNode;
   /** Size variant. Default: Medium. */
-  size?: ButtonSize
+  size?: ButtonSize;
   /** Trailing icon. */
-  trailingIcon?: ReactNode
+  trailingIcon?: ReactNode;
 }
 
 const SIZE_ICON_MAP: Record<ButtonSize, IconSize> = {
   'X-Small': '12',
-  'Small': '16',
-  'Medium': '16',
-  'Large': '20',
-}
+  Small: '16',
+  Medium: '16',
+  Large: '20',
+};
 
 /**
  * Button component matching Figma/Compass variants.
@@ -60,11 +60,12 @@ export default function Button({
   type = 'button',
   ...rest
 }: ButtonProps) {
-  const iconSize = SIZE_ICON_MAP[size]
-  const emphasisClass = styles[`button--emphasis-${toKebab(emphasis)}`]
-  const sizeClass = styles[`button--size-${toKebab(size)}`]
-  const appearanceClass = appearance === 'Inverted' ? styles['button--appearance-inverted'] : ''
-  const destructiveClass = destructive ? styles['button--destructive'] : ''
+  const iconSize = SIZE_ICON_MAP[size];
+  const emphasisClass = styles[`button--emphasis-${toKebab(emphasis)}`];
+  const sizeClass = styles[`button--size-${toKebab(size)}`];
+  const appearanceClass =
+    appearance === 'Inverted' ? styles['button--appearance-inverted'] : '';
+  const destructiveClass = destructive ? styles['button--destructive'] : '';
 
   const rootClass = [
     styles.button,
@@ -75,15 +76,10 @@ export default function Button({
     className,
   ]
     .filter(Boolean)
-    .join(' ')
+    .join(' ');
 
   return (
-    <button
-      className={rootClass}
-      type={type}
-      disabled={disabled}
-      {...rest}
-    >
+    <button className={rootClass} type={type} disabled={disabled} {...rest}>
       {leadingIcon != null ? (
         <span className={styles['button__icon-slot']} aria-hidden>
           {typeof leadingIcon === 'boolean' ? (
@@ -104,5 +100,5 @@ export default function Button({
         </span>
       ) : null}
     </button>
-  )
+  );
 }

@@ -10,7 +10,11 @@
   border-radius: var(--radius-s);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
   background-color: transparent;
   color: rgba(var(--center-channel-color-rgb), 0.64);
 
@@ -112,7 +116,9 @@
     color: var(--button-color);
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--button-bg);
+      box-shadow:
+        0 0 0 3px var(--center-channel-bg),
+        0 0 0 5px var(--button-bg);
     }
   }
 
@@ -131,7 +137,9 @@
       background-color: rgba(var(--sidebar-text-rgb), 0.88);
     }
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sidebar-bg), 0 0 0 5px var(--button-bg);
+      box-shadow:
+        0 0 0 3px var(--sidebar-bg),
+        0 0 0 5px var(--button-bg);
     }
 
     // Inverted + destructive
@@ -147,7 +155,9 @@
         background-color: rgba(var(--error-text-rgb), 0.84);
       }
       &:focus-visible {
-        box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+        box-shadow:
+          0 0 0 3px var(--center-channel-bg),
+          0 0 0 5px var(--error-text);
       }
     }
   }
@@ -167,7 +177,9 @@
       background-color: rgba(var(--error-text-rgb), 0.84);
     }
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--center-channel-bg), 0 0 0 5px var(--error-text);
+      box-shadow:
+        0 0 0 3px var(--center-channel-bg),
+        0 0 0 5px var(--error-text);
     }
   }
 }

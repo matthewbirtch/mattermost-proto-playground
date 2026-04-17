@@ -85,7 +85,8 @@
       background-color: var(--button-bg);
     }
 
-    .switch:has(.switch__input:not(:disabled)):hover &:has(.switch__input:checked) {
+    .switch:has(.switch__input:not(:disabled)):hover
+      &:has(.switch__input:checked) {
       background-color: var(--button-bg);
     }
 

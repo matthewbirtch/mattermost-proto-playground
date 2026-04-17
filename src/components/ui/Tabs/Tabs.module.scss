@@ -1,0 +1,99 @@
+// ---------------------------------------------------------------------------
+// Block
+// ---------------------------------------------------------------------------
+.tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  // ---------------------------------------------------------------------------
+  // Elements
+  // ---------------------------------------------------------------------------
+  &__tab-list {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xxs);
+  }
+
+  &__tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    border-radius: var(--radius-s);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 150ms ease;
+
+    &:hover:not(&--active) {
+      background-color: rgba(var(--center-channel-color-rgb), 0.08);
+    }
+
+    &--active {
+      background-color: rgba(var(--link-color-rgb), 0.08);
+
+      .tabs__tab-label {
+        color: var(--link-color);
+      }
+
+      .tabs__count-badge {
+        background-color: rgba(var(--link-color-rgb), 0.12);
+        color: var(--link-color);
+      }
+    }
+  }
+
+  &__tab-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-s);
+    font-size: var(--font-size-100);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-100);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    white-space: nowrap;
+    transition: color 150ms ease;
+  }
+
+  &__count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5px var(--spacing-xxs);
+    border-radius: 8px;
+    background-color: rgba(var(--center-channel-color-rgb), 0.08);
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    line-height: 11px;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    flex-shrink: 0;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+
+    &--active {
+      background-color: rgba(var(--link-color-rgb), 0.12);
+      color: var(--link-color);
+    }
+  }
+
+  &__unread-badge {
+    position: absolute;
+    top: var(--spacing-xxs);
+    right: var(--spacing-xxs);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--mention-bg);
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xxs);
+    flex-shrink: 0;
+  }
+}

@@ -26,7 +26,6 @@
       border-color: rgba(var(--center-channel-color-rgb), 0.24);
     }
 
-
     .textInput:has(.textInput__input:focus-visible) & {
       box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
     }
@@ -217,5 +216,4 @@
       color: var(--error-text);
     }
   }
-
 }

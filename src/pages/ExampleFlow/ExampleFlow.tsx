@@ -1,4 +1,4 @@
-import styles from './ExampleFlow.module.scss'
+import styles from './ExampleFlow.module.scss';
 
 // ----------------------------------------------------------------
 // ExampleFlow — a starter template for a prototype page.
@@ -20,5 +20,5 @@ export default function ExampleFlow() {
         </p>
       </div>
     </div>
-  )
+  );
 }

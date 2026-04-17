@@ -1,8 +1,8 @@
-import type { ImgHTMLAttributes } from 'react'
-import StatusBadge from '@/components/ui/StatusBadge/StatusBadge'
-import type { StatusBadgeSize } from '@/components/ui/StatusBadge/StatusBadge'
-import { toKebab } from '@/utils/string'
-import styles from './UserAvatar.module.scss'
+import type { ImgHTMLAttributes } from 'react';
+import StatusBadge from '@/components/ui/StatusBadge/StatusBadge';
+import type { StatusBadgeSize } from '@/components/ui/StatusBadge/StatusBadge';
+import { toKebab } from '@/utils/string';
+import styles from './UserAvatar.module.scss';
 
 /** Figma User Avatar sizes (Image type only). */
 export type UserAvatarSize =
@@ -19,19 +19,22 @@ export type UserAvatarSize =
   | '72'
   | '80'
   | '96'
-  | '120'
+  | '120';
 
-export interface UserAvatarProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt' | 'width' | 'height'> {
+export interface UserAvatarProps extends Omit<
+  ImgHTMLAttributes<HTMLImageElement>,
+  'src' | 'alt' | 'width' | 'height'
+> {
   /** Alt text for the avatar image. */
-  alt: string
+  alt: string;
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** Image URL for the avatar. */
-  src: string
+  src: string;
   /** Size variant. Figma: Size. Default: 48. */
-  size?: UserAvatarSize
+  size?: UserAvatarSize;
   /** When true, shows online status badge (green dot with check). Figma: Status = On. */
-  status?: boolean
+  status?: boolean;
 }
 
 /** Map UserAvatar size to StatusBadge size (Figma scale). */
@@ -50,7 +53,7 @@ const USER_AVATAR_TO_BADGE_SIZE: Record<UserAvatarSize, StatusBadgeSize> = {
   '80': 'Medium',
   '96': 'Large',
   '120': 'Large',
-}
+};
 
 /**
  * User avatar (image only). Matches Figma User Avatar — Image type.
@@ -67,8 +70,10 @@ export default function UserAvatar({
   status = false,
   ...imgProps
 }: UserAvatarProps) {
-  const sizeClass = styles[`user-avatar--size-${toKebab(size)}`]
-  const rootClass = [styles['user-avatar'], sizeClass, className].filter(Boolean).join(' ')
+  const sizeClass = styles[`user-avatar--size-${toKebab(size)}`];
+  const rootClass = [styles['user-avatar'], sizeClass, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={rootClass} data-size={size}>
@@ -86,5 +91,5 @@ export default function UserAvatar({
         </span>
       )}
     </div>
-  )
+  );
 }

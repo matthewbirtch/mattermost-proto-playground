@@ -1,17 +1,17 @@
-import type { ReactNode } from 'react'
-import styles from './Illustration.module.scss'
+import type { ReactNode } from 'react';
+import styles from './Illustration.module.scss';
 
 export interface IllustrationProps {
   /** SVG component from an illustration import (e.g. from `@/assets/illustrations/name.svg?react`). */
-  children: ReactNode
+  children: ReactNode;
   /** Optional CSS class name. */
-  className?: string
+  className?: string;
   /** Optional inline width (e.g. "100%", "320px"). */
-  width?: string
+  width?: string;
   /** Optional inline height. */
-  height?: string
+  height?: string;
   /** Accessible label; set to empty string for decorative only. */
-  'aria-label'?: string
+  'aria-label'?: string;
 }
 
 /**
@@ -29,8 +29,8 @@ export default function Illustration({
   height,
   'aria-label': ariaLabel,
 }: IllustrationProps) {
-  const rootClass = [styles.illustration, className].filter(Boolean).join(' ')
-  const hasLabel = ariaLabel !== undefined && ariaLabel !== ''
+  const rootClass = [styles.illustration, className].filter(Boolean).join(' ');
+  const hasLabel = ariaLabel !== undefined && ariaLabel !== '';
 
   return (
     <span
@@ -42,5 +42,5 @@ export default function Illustration({
     >
       {children}
     </span>
-  )
+  );
 }

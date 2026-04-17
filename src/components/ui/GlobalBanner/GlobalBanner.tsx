@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Button from '@/components/ui/Button/Button';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import Icon from '@/components/ui/Icon/Icon';
+import CloseIcon from '@mattermost/compass-icons/components/close';
 import styles from './GlobalBanner.module.scss';
 
 export type GlobalBannerType = 'General' | 'Warning' | 'Danger' | 'Info' | 'Success';
@@ -69,7 +70,7 @@ export default function GlobalBanner({
           aria-label="Dismiss"
           size="Small"
           style="Inverted"
-          icon={<Icon size="16" />}
+          icon={<Icon glyph={<CloseIcon size={16} />} size="16" />}
           onClick={onDismiss}
         />
       )}

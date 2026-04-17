@@ -31,13 +31,13 @@ export default function MentionBadge({
   size = 'Small',
 }: MentionBadgeProps) {
   const displayText = count > 99 ? '99+' : String(count);
-  const isSingleDigit = displayText.length === 1;
+  const digitCount = displayText.length; // 1, 2, or 3 (for "99+")
 
   const rootClass = [
     styles['mention-badge'],
     styles[`mention-badge--size-${toKebab(size)}`],
+    styles[`mention-badge--digits-${digitCount}`],
     location !== 'Sidebar' ? styles[`mention-badge--location-${toKebab(location)}`] : '',
-    isSingleDigit ? styles['mention-badge--wide'] : '',
     className,
   ]
     .filter(Boolean)

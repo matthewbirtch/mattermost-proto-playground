@@ -52,12 +52,12 @@ export default function FeatureDiscoveryPanel({
           <div className={styles['feature-discovery-panel__actions']}>
             {primaryAction != null && (
               <div className={styles['feature-discovery-panel__action']}>
-                <Button {...primaryAction} />
+                <Button size="Medium" {...primaryAction} />
               </div>
             )}
             {secondaryAction != null && (
               <div className={styles['feature-discovery-panel__action']}>
-                <Button {...secondaryAction} />
+                <Button size="Medium" {...secondaryAction} />
               </div>
             )}
           </div>

@@ -67,6 +67,7 @@ import BellOffOutlineIcon from '@mattermost/compass-icons/components/bell-off-ou
 import TrashCanOutlineIcon from '@mattermost/compass-icons/components/trash-can-outline';
 import LinkVariantIcon from '@mattermost/compass-icons/components/link-variant';
 import AICopilotIllustration from '@/assets/illustrations/ai-copilot-intro.svg?react';
+import GroupsIllustration from '@/assets/illustrations/groups.svg?react';
 import SearchIllustration from '@/assets/illustrations/search.svg?react';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
@@ -608,13 +609,24 @@ export default function Components() {
         <h2 className={styles['components__section-title']}>Feature Discovery Panel</h2>
         <div className={styles['components__button-block']}>
           <div className={styles['components__button-row']}>
-            <span className={styles['components__instance-label']}>Professional</span>
+            <span className={styles['components__instance-label']}>With illustration</span>
+            <FeatureDiscoveryPanel
+              skuLabel="PROFESSIONAL"
+              title="Synchronize your Active Directory/LDAP groups"
+              description="Use AD/LDAP groups to organize and apply actions to multiple users at once. Manage team and channel memberships, permissions, and more."
+              primaryAction={{ children: 'Contact sales' }}
+              secondaryAction={{ emphasis: 'Tertiary', children: 'Learn more' }}
+              illustration={{ children: <GroupsIllustration />, width: '276px', height: '170px', 'aria-label': 'Groups illustration' }}
+            />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Text only</span>
             <FeatureDiscoveryPanel
               skuLabel="PROFESSIONAL"
               title="Unlock advanced reporting"
               description="Get deeper insights into your workspace with advanced analytics and custom dashboards available on the Professional plan."
-              primaryAction={{ size: 'Small', children: 'Upgrade now' }}
-              secondaryAction={{ size: 'Small', emphasis: 'Tertiary', children: 'Learn more' }}
+              primaryAction={{ children: 'Upgrade now' }}
+              secondaryAction={{ emphasis: 'Tertiary', children: 'Learn more' }}
             />
           </div>
           <div className={styles['components__button-row']}>
@@ -623,7 +635,7 @@ export default function Components() {
               skuLabel={null}
               title="Enable compliance exports"
               description="Configure automated message exports for regulatory compliance."
-              primaryAction={{ size: 'Small', children: 'Enable' }}
+              primaryAction={{ children: 'Enable' }}
             />
           </div>
         </div>
@@ -852,6 +864,12 @@ export default function Components() {
           <LabelTag label="Tag" type="Danger" casing="All Caps" />
           <LabelTag label="Tag" type="Success" casing="All Caps" />
           <LabelTag label="Tag" type="Warning" casing="All Caps" />
+        </div>
+        <div className={styles['components__button-row']}>
+          <span className={styles['components__instance-label']}>With icon</span>
+          <LabelTag label="PROFESSIONAL" type="Default" casing="All Caps" leadingIcon={<GlobeIcon size={10} />} />
+          <LabelTag label="Info" type="Info" leadingIcon={<GlobeIcon size={10} />} />
+          <LabelTag label="Success" type="Success" size="Small" leadingIcon={<GlobeIcon size={12} />} />
         </div>
       </section>
 

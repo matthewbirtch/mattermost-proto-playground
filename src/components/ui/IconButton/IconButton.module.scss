@@ -126,15 +126,19 @@
   // Style = Inverted (Figma: for dark backgrounds)
   // ---------------------------------------------------------------------------
   &--style-inverted {
-    background-color: var(--sidebar-text);
-    color: var(--sidebar-bg);
+    background-color: transparent;
+    color: rgba(var(--sidebar-text-rgb), 0.64);
 
     &:hover:not(:disabled) {
-      background-color: rgba(var(--sidebar-text-rgb), 0.92);
+      background-color: rgba(var(--sidebar-text-rgb), 0.08);
+      color: var(--sidebar-text);
     }
-    &:active:not(:disabled),
+    &:active:not(:disabled):not(.icon-button--toggled) {
+      background-color: rgba(var(--sidebar-text-rgb), 0.12);
+    }
     &.icon-button--toggled {
-      background-color: rgba(var(--sidebar-text-rgb), 0.88);
+      background-color: var(--sidebar-text);
+      color: var(--sidebar-bg);
     }
     &:focus-visible {
       box-shadow:

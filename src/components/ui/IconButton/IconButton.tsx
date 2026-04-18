@@ -36,10 +36,10 @@ export const ICON_BUTTON_ICON_SIZES: Record<
   IconButtonSize,
   '12' | '16' | '20' | '24'
 > = {
-  'X-Small': '14',
-  Small: '18',
-  Medium: '24',
-  Large: '32',
+  'X-Small': '12',
+  Small: '16',
+  Medium: '20',
+  Large: '24',
 };
 
 /**

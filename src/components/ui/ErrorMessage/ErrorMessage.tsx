@@ -19,7 +19,7 @@ export default function ErrorMessage({ className = '', message }: ErrorMessagePr
   return (
     <div className={rootClass} role="alert">
       <span className={styles['error-message__icon']} aria-hidden>
-        <Icon size="14" glyph={<AlertCircleOutlineIcon size={14} />} />
+        <Icon size="12" glyph={<AlertCircleOutlineIcon />} />
       </span>
       <span className={styles['error-message__text']}>{message}</span>
     </div>

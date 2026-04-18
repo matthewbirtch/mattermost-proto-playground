@@ -17,7 +17,7 @@ export interface IconButtonProps extends Omit<
   className?: string;
   /** When true, uses destructive (danger) styling. Figma: Destructive. */
   destructive?: boolean;
-  /** Icon to show (e.g. <Icon glyph={<GlobeIcon size={16} />} size="16" />). */
+  /** Icon to show. Size the glyph via SVG_SIZE_MAP: e.g. `<Icon glyph={<GlobeIcon size={SVG_SIZE_MAP['16']} />} size="16" />`. */
   icon: ReactNode;
   /** Padding variant. Figma: Padding = Default | Compact. */
   padding?: IconButtonPadding;
@@ -36,15 +36,15 @@ export const ICON_BUTTON_ICON_SIZES: Record<
   IconButtonSize,
   '12' | '16' | '20' | '24'
 > = {
-  'X-Small': '12',
-  Small: '16',
-  Medium: '20',
-  Large: '24',
+  'X-Small': '14',
+  Small: '18',
+  Medium: '24',
+  Large: '32',
 };
 
 /**
  * Icon-only button matching Figma Icon Button variants.
- * Pass icon e.g. <Icon glyph={<GlobeIcon size={20} />} size="20" /> — use ICON_BUTTON_ICON_SIZES[size] for the Icon size.
+ * Pass icon e.g. <Icon glyph={<GlobeIcon size={SVG_SIZE_MAP['20']} />} size="20" /> — use ICON_BUTTON_ICON_SIZES[size] for the Icon container size.
  * Accessible via aria-label.
  *
  * @see https://compass.mattermost.com (Icon Button)

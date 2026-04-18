@@ -20,28 +20,26 @@
   &--size-small {
     font-size: var(--font-size-25); // 10px
     line-height: 11px;
-    padding: 1px 4px;
+    padding: 0.5px 4.5px; // same for all digit counts
   }
 
   &--size-medium {
     font-size: var(--font-size-50); // 11px
     line-height: var(--line-height-50); // 16px
     letter-spacing: 0.22px;
-    padding: 2px 5px;
+    padding: 0 var(--_mb-px-m, 5.5px); // no vertical padding; fallback = digits-2
   }
 
   &--size-large {
     font-size: var(--font-size-75); // 12px
     line-height: 15px;
-    padding: 2px 6px; // base = digits-2
+    padding: 1.5px var(--_mb-px-l, 5.5px); // fallback = digits-2
     border-radius: 10px;
   }
 
   // Per-digit-count horizontal padding — Small is same for all digit counts
-  #{&}--size-medium#{&}--digits-1 { padding-inline: 7px; }
-  #{&}--size-medium#{&}--digits-3 { padding-inline: 4px; }
-  #{&}--size-large#{&}--digits-1  { padding-inline: 8px; }
-  #{&}--size-large#{&}--digits-3  { padding-inline: 5px; }
+  &--digits-1 { --_mb-px-m: 6.5px; --_mb-px-l: 7.5px; }
+  &--digits-3 { --_mb-px-m: 4.5px; --_mb-px-l: 4px; }
 
   // ---------------------------------------------------------------------------
   // Location modifiers (Figma: Sidebar default, Menu Item, Icon Button)

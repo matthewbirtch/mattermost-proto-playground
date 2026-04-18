@@ -228,12 +228,12 @@ export default function Components() {
             </span>
             <Button>Primary</Button>
             <Button
-              leadingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              leadingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
             >
               With leading icon
             </Button>
             <Button
-              trailingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              trailingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
             >
               With trailing icon
             </Button>
@@ -662,7 +662,7 @@ export default function Components() {
             <span className={styles['components__instance-label']}>
               16, Globe
             </span>
-            <Icon glyph={<GlobeIcon size={16} />} size="16" />
+            <Icon glyph={<GlobeIcon />} size="16" />
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>
@@ -674,13 +674,13 @@ export default function Components() {
             <span className={styles['components__instance-label']}>
               32, Emoticon
             </span>
-            <Icon glyph={<EmoticonHappyOutlineIcon size={32} />} size="32" />
+            <Icon glyph={<EmoticonHappyOutlineIcon />} size="32" />
           </div>
           <div className={styles['components__instance']}>
             <span className={styles['components__instance-label']}>
               40, Globe
             </span>
-            <Icon glyph={<GlobeIcon size={40} />} size="40" />
+            <Icon glyph={<GlobeIcon />} size="40" />
           </div>
         </div>
       </section>
@@ -696,7 +696,7 @@ export default function Components() {
               aria-label="Icon button"
               icon={
                 <Icon
-                  glyph={<GlobeIcon size={20} />}
+                  glyph={<GlobeIcon />}
                   size={ICON_BUTTON_ICON_SIZES.Medium}
                 />
               }
@@ -706,22 +706,22 @@ export default function Components() {
             <span className={styles['components__instance-label']}>Sizes</span>
             <IconButton
               aria-label="X-Small"
-              icon={<Icon glyph={<GlobeIcon size={12} />} size="12" />}
+              icon={<Icon glyph={<GlobeIcon />} size="12" />}
               size="X-Small"
             />
             <IconButton
               aria-label="Small"
-              icon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              icon={<Icon glyph={<GlobeIcon />} size="16" />}
               size="Small"
             />
             <IconButton
               aria-label="Medium"
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
               size="Medium"
             />
             <IconButton
               aria-label="Large"
-              icon={<Icon glyph={<GlobeIcon size={24} />} size="24" />}
+              icon={<Icon glyph={<GlobeIcon />} size="24" />}
               size="Large"
             />
           </div>
@@ -731,18 +731,18 @@ export default function Components() {
             </span>
             <IconButton
               aria-label="Compact"
-              icon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              icon={<Icon glyph={<GlobeIcon />} size="16" />}
               padding="Compact"
               size="Small"
             />
             <IconButton
               aria-label="Rounded"
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
               rounded
             />
             <IconButton
               aria-label="Toggled"
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
               toggled
             />
           </div>
@@ -753,12 +753,12 @@ export default function Components() {
             <IconButton
               aria-label="Destructive"
               destructive
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
             />
             <IconButton
               aria-label="Disabled"
               disabled
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
             />
           </div>
           <div
@@ -772,7 +772,7 @@ export default function Components() {
             </span>
             <IconButton
               aria-label="Inverted icon button"
-              icon={<Icon glyph={<GlobeIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
               style="Inverted"
             />
           </div>
@@ -894,19 +894,19 @@ export default function Components() {
       <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Mention Badge</h2>
         <div className={styles['components__button-block']}>
-          <div className={styles['components__button-row']}>
+          <div className={`${styles['components__button-row']} ${styles['components__button-row--inverted-bg']}`}>
             <span className={styles['components__instance-label']}>Sidebar</span>
             <MentionBadge count={1} location="Sidebar" size="Small" />
             <MentionBadge count={22} location="Sidebar" size="Small" />
             <MentionBadge count={100} location="Sidebar" size="Small" />
           </div>
-          <div className={styles['components__button-row']}>
+          <div className={`${styles['components__button-row']} ${styles['components__button-row--inverted-bg']}`}>
             <span className={styles['components__instance-label']}>Sidebar Medium</span>
             <MentionBadge count={1} location="Sidebar" size="Medium" />
             <MentionBadge count={22} location="Sidebar" size="Medium" />
             <MentionBadge count={100} location="Sidebar" size="Medium" />
           </div>
-          <div className={styles['components__button-row']}>
+          <div className={`${styles['components__button-row']} ${styles['components__button-row--inverted-bg']}`}>
             <span className={styles['components__instance-label']}>Sidebar Large</span>
             <MentionBadge count={1} location="Sidebar" size="Large" />
             <MentionBadge count={22} location="Sidebar" size="Large" />
@@ -1638,17 +1638,17 @@ export default function Components() {
             <TextInput
               label="Search"
               placeholder="Search..."
-              leadingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              leadingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
             />
             <TextInput
               placeholder="Trailing only"
-              trailingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              trailingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
             />
             <TextInput
               label="Both"
               placeholder="Leading and trailing"
-              leadingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
-              trailingIcon={<Icon glyph={<GlobeIcon size={16} />} size="16" />}
+              leadingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
+              trailingIcon={<Icon glyph={<GlobeIcon />} size="16" />}
             />
           </div>
           <div className={styles['components__button-row']}>

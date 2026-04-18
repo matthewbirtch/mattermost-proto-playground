@@ -1,14 +1,16 @@
 import React from 'react';
 import Button from '@/components/ui/Button/Button';
+import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { Modal } from '@/components/ui/Modal';
 import Post from '@/components/ui/Post/Post';
 import Divider from '@/components/ui/Divider/Divider';
+import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
 import styles from './Patterns.module.scss';
 
-const REMAINING_PATTERNS = ['Channel Header', 'Channel Sidebar', 'Profile Popover'];
+const REMAINING_PATTERNS = ['Channel Sidebar', 'Profile Popover'];
 
 // ── Modal demo ────────────────────────────────────────────────────────────────
 
@@ -76,6 +78,51 @@ export default function Patterns() {
       <section className={styles['patterns__section']}>
         <h2 className={styles['patterns__section-title']}>Modal</h2>
         <ModalDemo />
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Channel Header</h2>
+        <div className={styles['patterns__channel-header-demo']}>
+          <p className={styles['patterns__variant-label']}>Channel</p>
+          <ChannelHeader type="Channel" name="UX Design" memberCount={48} pinnedCount={1} />
+          <p className={styles['patterns__variant-label']}>Channel — favorited, muted</p>
+          <ChannelHeader type="Channel" name="UX Design" memberCount={48} pinnedCount={1} favorited muted />
+          <p className={styles['patterns__variant-label']}>Bot</p>
+          <ChannelHeader
+            type="Bot"
+            name="Todo"
+            avatarSrc={avatarLeonard}
+            description="Created by the Todo Plugin"
+            pinnedCount={1}
+          />
+          <p className={styles['patterns__variant-label']}>DM</p>
+          <ChannelHeader
+            type="DM"
+            name="Aiko Tan"
+            avatarSrc={avatarAikoTan}
+            avatarStatus
+            pinnedCount={1}
+          />
+          <p className={styles['patterns__variant-label']}>GM</p>
+          <ChannelHeader
+            type="GM"
+            name="Aiko Tan, Arjun Patel, Daniel Okoro"
+            memberCount={4}
+            pinnedCount={1}
+          />
+          <p className={styles['patterns__variant-label']}>Threads</p>
+          <ChannelHeader
+            type="Threads"
+            name="Followed Threads"
+            description="Threads you're participating in will automatically show here"
+          />
+          <p className={styles['patterns__variant-label']}>Drafts</p>
+          <ChannelHeader
+            type="Drafts"
+            name="Drafts"
+            description="Any messages you've started will show here"
+          />
+        </div>
       </section>
 
       <section className={styles['patterns__section']}>

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import CloseIcon from '@mattermost/compass-icons/components/close';
 import Button from '@/components/ui/Button/Button';
 import Checkbox from '@/components/ui/Checkbox/Checkbox';
 import IconButton from '@/components/ui/IconButton/IconButton';
@@ -90,7 +91,7 @@ export default function PopoverNotice({
           className={styles['popover-notice__close']}
           aria-label="Close"
           size="Small"
-          icon={<Icon size="16" />}
+          icon={<Icon size="16" glyph={<CloseIcon />} />}
           onClick={onClose}
         />
       )}

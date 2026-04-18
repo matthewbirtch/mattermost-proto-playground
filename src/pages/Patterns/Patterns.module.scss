@@ -54,6 +54,25 @@
     font-style: italic;
   }
 
+  // ── Channel Header demo ─────────────────────────────────────
+  &__channel-header-demo {
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: var(--radius-m);
+    background-color: var(--center-channel-bg);
+    overflow: hidden;
+
+    .patterns__variant-label {
+      padding: var(--spacing-xs) var(--spacing-m);
+      margin: 0;
+      background-color: rgba(var(--center-channel-color-rgb), 0.04);
+      border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+
+      &:first-child {
+        border-top: none;
+      }
+    }
+  }
+
   // ── Post demo ───────────────────────────────────────────────
   &__post-demo {
     max-width: 600px;

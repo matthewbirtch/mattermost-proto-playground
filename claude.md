@@ -55,6 +55,12 @@ Keyframes and other global at-rules can stay at the top of the file; the rest of
 
 When adding an `action` to `EmptyState`, omit the `size` prop unless a Figma spec requires a different size. `Button` defaults to `Medium`, which is the correct size for empty state actions.
 
+## Routing new additions: Patterns page vs Components page
+
+When adding a new component to the playground, check the Figma file name:
+- File name contains **"Patterns"** → add to `src/pages/Patterns/Patterns.tsx`
+- File name contains **"Component"** → add to `src/pages/Components/Components.tsx`
+
 ## Building new components: reuse existing components first
 
 When building a new component, audit the elements it needs before writing any new code. If an existing component in `src/components/` already covers an element — especially when its name matches what Figma uses — use it directly rather than reimplementing it. Only build a new sub-component when nothing suitable exists.

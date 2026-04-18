@@ -142,7 +142,7 @@ export default function AttachmentCard({
                 className={styles['attachment-card__icon']}
                 style={iconColor ? { color: iconColor } : undefined}
               >
-                <Icon glyph={<FileIcon size={40} />} size="40" />
+                <Icon glyph={<FileIcon />} size="40" />
               </div>
             )}
 
@@ -178,7 +178,7 @@ export default function AttachmentCard({
               {(isUploaded || isUploading) && (
                 <IconButton
                   size="Small"
-                  icon={<Icon glyph={<CloseIcon size={16} />} size="16" />}
+                  icon={<Icon glyph={<CloseIcon />} size="16" />}
                   aria-label={isUploading ? 'Cancel upload' : 'Remove attachment'}
                   onClick={onRemove}
                 />
@@ -187,13 +187,13 @@ export default function AttachmentCard({
                 <>
                   <IconButton
                     size="Small"
-                    icon={<Icon glyph={<DotsVerticalIcon size={16} />} size="16" />}
+                    icon={<Icon glyph={<DotsVerticalIcon />} size="16" />}
                     aria-label="More options"
                     onClick={onMore}
                   />
                   <IconButton
                     size="Small"
-                    icon={<Icon glyph={<DownloadOutlineIcon size={16} />} size="16" />}
+                    icon={<Icon glyph={<DownloadOutlineIcon />} size="16" />}
                     aria-label="Download"
                     onClick={onDownload}
                   />

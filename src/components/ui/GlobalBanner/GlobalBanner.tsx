@@ -70,7 +70,7 @@ export default function GlobalBanner({
           aria-label="Dismiss"
           size="Small"
           style="Inverted"
-          icon={<Icon glyph={<CloseIcon size={16} />} size="16" />}
+          icon={<Icon glyph={<CloseIcon />} size="16" />}
           onClick={onDismiss}
         />
       )}

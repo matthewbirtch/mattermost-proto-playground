@@ -37,9 +37,9 @@ export default function MoreUnreadsBanner({
     <button className={rootClass} type="button" onClick={onClick}>
       <span className={styles['more-unreads-banner__icon']} aria-hidden>
         {direction === 'Up' ? (
-          <Icon size="12" glyph={<ArrowUpIcon size={12} />} />
+          <Icon size="12" glyph={<ArrowUpIcon />} />
         ) : (
-          <Icon size="12" glyph={<ArrowDownIcon size={12} />} />
+          <Icon size="12" glyph={<ArrowDownIcon />} />
         )}
       </span>
       <span className={styles['more-unreads-banner__label']}>More unreads</span>

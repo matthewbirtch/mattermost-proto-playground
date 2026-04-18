@@ -82,7 +82,7 @@ export default function ImagePreview({
               onClick={onCopyLink}
               aria-label="Copy link"
             >
-              <Icon size="16" glyph={<LinkVariantIcon size={16} />} />
+              <Icon size="16" glyph={<LinkVariantIcon />} />
             </button>
           )}
           {onDownload != null && (
@@ -92,7 +92,7 @@ export default function ImagePreview({
               onClick={onDownload}
               aria-label="Download"
             >
-              <Icon size="16" glyph={<DownloadOutlineIcon size={16} />} />
+              <Icon size="16" glyph={<DownloadOutlineIcon />} />
             </button>
           )}
         </div>
@@ -105,7 +105,7 @@ export default function ImagePreview({
             onClick={onToggleCollapse}
             aria-label="Collapse image preview"
           >
-            <Icon size="16" glyph={<ChevronDownIcon size={16} />} />
+            <Icon size="16" glyph={<ChevronDownIcon />} />
           </button>
         )}
       </div>

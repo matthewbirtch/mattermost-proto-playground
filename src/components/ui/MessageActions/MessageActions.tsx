@@ -72,7 +72,7 @@ export default function MessageActions({
           <IconButton
             aria-label="Add reaction"
             size="Small"
-            icon={<Icon size="16" glyph={<EmoticonPlusOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<EmoticonPlusOutlineIcon />} />}
           />
         </>
       )}
@@ -82,7 +82,7 @@ export default function MessageActions({
         <IconButton
           aria-label="More actions"
           size="Small"
-          icon={<Icon size="16" glyph={<DotsHorizontalIcon size={16} />} />}
+          icon={<Icon size="16" glyph={<DotsHorizontalIcon />} />}
         />
       )}
 
@@ -92,27 +92,27 @@ export default function MessageActions({
           <IconButton
             aria-label="Save message"
             size="Small"
-            icon={<Icon size="16" glyph={<BookmarkOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<BookmarkOutlineIcon />} />}
           />
           <IconButton
             aria-label="AI actions"
             size="Small"
-            icon={<Icon size="16" glyph={<CreationOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<CreationOutlineIcon />} />}
           />
           <IconButton
             aria-label="Plugin actions"
             size="Small"
-            icon={<Icon size="16" glyph={<AppsIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<AppsIcon />} />}
           />
           <IconButton
             aria-label="Reply in thread"
             size="Small"
-            icon={<Icon size="16" glyph={<ReplyOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<ReplyOutlineIcon />} />}
           />
           <IconButton
             aria-label="More actions"
             size="Small"
-            icon={<Icon size="16" glyph={<DotsHorizontalIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<DotsHorizontalIcon />} />}
           />
         </>
       )}
@@ -122,7 +122,7 @@ export default function MessageActions({
         <IconButton
           aria-label="More actions"
           size="Small"
-          icon={<Icon size="16" glyph={<DotsHorizontalIcon size={16} />} />}
+          icon={<Icon size="16" glyph={<DotsHorizontalIcon />} />}
         />
       )}
 
@@ -132,12 +132,12 @@ export default function MessageActions({
           <IconButton
             aria-label="Save message"
             size="Small"
-            icon={<Icon size="16" glyph={<BookmarkOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<BookmarkOutlineIcon />} />}
           />
           <IconButton
             aria-label="Reply in thread"
             size="Small"
-            icon={<Icon size="16" glyph={<ReplyOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<ReplyOutlineIcon />} />}
           />
           <button type="button" className={styles['message-actions__jump']} aria-label="Jump to message">
             Jump

@@ -69,7 +69,7 @@ export default function MenuItem({
             <span className={styles['menu-item__leading-visual']}>
               {leadingVisual ?? (
                 <Icon
-                  glyph={<EmoticonHappyOutlineIcon size={16} />}
+                  glyph={<EmoticonHappyOutlineIcon />}
                   size="16"
                 />
               )}
@@ -106,7 +106,7 @@ export default function MenuItem({
           <div className={styles['menu-item__right']}>
             <span className={styles['menu-item__trailing-visual']}>
               {trailingVisual ?? (
-                <Icon glyph={<CheckIcon size={16} />} size="16" />
+                <Icon glyph={<CheckIcon />} size="16" />
               )}
             </span>
           </div>

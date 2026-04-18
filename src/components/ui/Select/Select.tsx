@@ -113,7 +113,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
               {children}
             </select>
             <span className={styles.select__trailingIcon} aria-hidden>
-              <Icon size="12" glyph={<ChevronDownIcon size={12} />} />
+              <Icon size="12" glyph={<ChevronDownIcon />} />
             </span>
           </div>
         </div>

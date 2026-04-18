@@ -43,7 +43,7 @@ export default function AppShell() {
           {!isHome ? (
             <IconButton
               aria-label="Back to home"
-              icon={<Icon glyph={<ArrowLeftIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<ArrowLeftIcon />} size="20" />}
               onClick={() => navigate('/')}
             />
           ) : (
@@ -52,7 +52,7 @@ export default function AppShell() {
           <div ref={pickerRef} className={styles['app-shell__theme-picker']}>
             <IconButton
               aria-label="Switch theme"
-              icon={<Icon glyph={<PaletteOutlineIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<PaletteOutlineIcon />} size="20" />}
               toggled={open}
               onClick={() => setOpen((o) => !o)}
             />

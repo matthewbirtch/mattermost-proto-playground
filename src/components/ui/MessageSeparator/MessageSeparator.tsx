@@ -61,7 +61,7 @@ export default function MessageSeparator({
             aria-label="Summarize new messages with AI"
           >
             <span className={styles['message-separator__summarize-icon']} aria-hidden>
-              <Icon size="12" glyph={<CreationOutlineIcon size={12} />} />
+              <Icon size="12" glyph={<CreationOutlineIcon />} />
             </span>
             Summarize
           </button>

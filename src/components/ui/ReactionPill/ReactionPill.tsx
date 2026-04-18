@@ -62,7 +62,7 @@ export default function ReactionPill({
         {type === 'Hand Raise' && (
           <>
             <span className={styles['reaction-pill__leading-icon']} aria-hidden>
-              <Icon size="12" glyph={<HandRightOutlineIcon size={12} />} />
+              <Icon size="12" glyph={<HandRightOutlineIcon />} />
             </span>
             <span className={styles['reaction-pill__label']}>{label} Raised Hand</span>
           </>
@@ -72,11 +72,11 @@ export default function ReactionPill({
         {type === 'Other' && (
           <>
             <span className={styles['reaction-pill__leading-icon']} aria-hidden>
-              <Icon size="12" glyph={<MicrophoneOffIcon size={12} />} />
+              <Icon size="12" glyph={<MicrophoneOffIcon />} />
             </span>
             <span className={styles['reaction-pill__label']}>{message}</span>
             <span className={styles['reaction-pill__trailing-icon']} aria-hidden>
-              <Icon size="12" glyph={<CloseCircleIcon size={12} />} />
+              <Icon size="12" glyph={<CloseCircleIcon />} />
             </span>
           </>
         )}

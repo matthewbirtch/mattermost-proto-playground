@@ -48,10 +48,10 @@ export default function RecordingPill({
             <Spinner size={12} aria-label="Initializing recording" />
           )}
           {state === 'Recording' && (
-            <Icon size="12" glyph={<RecordCircleOutlineIcon size={12} />} />
+            <Icon size="12" glyph={<RecordCircleOutlineIcon />} />
           )}
           {state === 'Hover' && (
-            <Icon size="12" glyph={<RecordSquareOutlineIcon size={12} />} />
+            <Icon size="12" glyph={<RecordSquareOutlineIcon />} />
           )}
         </span>
         <span className={styles['recording-pill__label']}>REC</span>

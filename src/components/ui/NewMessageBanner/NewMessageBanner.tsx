@@ -50,7 +50,7 @@ export default function NewMessageBanner({
       >
         <span className={styles['new-message-banner__left']}>
           <span className={styles['new-message-banner__icon']} aria-hidden>
-            <Icon size="16" glyph={<ArrowDownIcon size={16} />} />
+            <Icon size="16" glyph={<ArrowDownIcon />} />
           </span>
           <span className={styles['new-message-banner__jump-label']}>
             {type === 'JumpToUnreads' ? 'Jump to unreads' : 'New replies'}
@@ -67,7 +67,7 @@ export default function NewMessageBanner({
           onClick={onDismiss}
           aria-label="Dismiss"
         >
-          <Icon size="16" glyph={<CloseIcon size={16} />} />
+          <Icon size="16" glyph={<CloseIcon />} />
         </button>
       )}
     </div>

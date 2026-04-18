@@ -205,13 +205,13 @@ export default function DateRangePicker({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleToggle(); }}
       >
         <span className={styles.dateRangePicker__calendarIcon} aria-hidden>
-          <Icon size="16" glyph={<CalendarOutlineIcon size={16} />} />
+          <Icon size="16" glyph={<CalendarOutlineIcon />} />
         </span>
         <span className={styles.dateRangePicker__value}>
           {displayValue || 'mm/dd/yyyy'}
         </span>
         <span className={styles.dateRangePicker__chevron} aria-hidden>
-          <Icon size="16" glyph={<ChevronDownIcon size={16} />} />
+          <Icon size="16" glyph={<ChevronDownIcon />} />
         </span>
       </div>
 
@@ -232,7 +232,7 @@ export default function DateRangePicker({
               <Button
                 emphasis="Quaternary"
                 size="Small"
-                leadingIcon={<Icon size="16" glyph={<CalendarOutlineIcon size={16} />} />}
+                leadingIcon={<Icon size="16" glyph={<CalendarOutlineIcon />} />}
                 onClick={handleToday}
               >
                 Today
@@ -241,14 +241,14 @@ export default function DateRangePicker({
                 <IconButton
                   size="Medium"
                   padding="Compact"
-                  icon={<Icon size={ICON_BUTTON_ICON_SIZES['Medium']} glyph={<ChevronLeftIcon size={20} />} />}
+                  icon={<Icon size={ICON_BUTTON_ICON_SIZES['Medium']} glyph={<ChevronLeftIcon />} />}
                   onClick={handlePrevMonth}
                   aria-label="Previous month"
                 />
                 <IconButton
                   size="Medium"
                   padding="Compact"
-                  icon={<Icon size={ICON_BUTTON_ICON_SIZES['Medium']} glyph={<ChevronRightIcon size={20} />} />}
+                  icon={<Icon size={ICON_BUTTON_ICON_SIZES['Medium']} glyph={<ChevronRightIcon />} />}
                   onClick={handleNextMonth}
                   aria-label="Next month"
                 />

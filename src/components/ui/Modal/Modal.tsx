@@ -62,7 +62,7 @@ export default function Modal({
           {showBackButton && (
             <IconButton
               aria-label="Go back"
-              icon={<Icon glyph={<ArrowLeftIcon size={20} />} size="20" />}
+              icon={<Icon glyph={<ArrowLeftIcon />} size="20" />}
               onClick={onBack}
             />
           )}
@@ -76,7 +76,7 @@ export default function Modal({
         <IconButton
           aria-label="Close"
           className={styles['modal__close']}
-          icon={<Icon glyph={<CloseIcon size={20} />} size="20" />}
+          icon={<Icon glyph={<CloseIcon />} size="20" />}
           onClick={onClose}
         />
       </div>

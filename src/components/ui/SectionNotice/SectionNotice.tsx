@@ -35,11 +35,11 @@ export interface SectionNoticeProps {
 }
 
 const DEFAULT_ICONS: Record<SectionNoticeType, ReactNode> = {
-  Info: <Icon size="20" glyph={<InformationOutlineIcon size={20} />} />,
-  Warning: <Icon size="20" glyph={<AlertOutlineIcon size={20} />} />,
-  Danger: <Icon size="20" glyph={<AlertCircleOutlineIcon size={20} />} />,
-  Success: <Icon size="20" glyph={<CheckCircleOutlineIcon size={20} />} />,
-  Hint: <Icon size="20" glyph={<InformationOutlineIcon size={20} />} />,
+  Info: <Icon size="20" glyph={<InformationOutlineIcon />} />,
+  Warning: <Icon size="20" glyph={<AlertOutlineIcon />} />,
+  Danger: <Icon size="20" glyph={<AlertCircleOutlineIcon />} />,
+  Success: <Icon size="20" glyph={<CheckCircleOutlineIcon />} />,
+  Hint: <Icon size="20" glyph={<InformationOutlineIcon />} />,
 };
 
 /**
@@ -114,7 +114,7 @@ export default function SectionNotice({
           className={styles['section-notice__dismiss']}
           aria-label="Dismiss"
           size="Small"
-          icon={<Icon size="16" glyph={<CloseIcon size={16} />} />}
+          icon={<Icon size="16" glyph={<CloseIcon />} />}
           onClick={onDismiss}
         />
       )}

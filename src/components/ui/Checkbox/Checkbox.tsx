@@ -100,7 +100,6 @@ export default function Checkbox({
     .join(' ');
 
   const iconSize = CHECKBOX_ICON_SIZE[size];
-  const iconSizePx = Number(iconSize);
 
   return (
     <label className={rootClass} htmlFor={id}>
@@ -123,7 +122,7 @@ export default function Checkbox({
             return (
               <span key={showingIcon} className={styles['checkbox__icon']}>
                 <Icon
-                  glyph={<IconComponent size={iconSizePx} />}
+                  glyph={<IconComponent />}
                   size={iconSize}
                 />
               </span>

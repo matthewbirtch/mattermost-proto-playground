@@ -75,7 +75,7 @@ export default function MessageReactions({
           aria-label="Acknowledge message"
         >
           <span className={styles['message-reactions__ack-icon']} aria-hidden>
-            <Icon size="16" glyph={<CheckCircleIcon size={16} />} />
+            <Icon size="16" glyph={<CheckCircleIcon />} />
           </span>
           {acknowledgeCount > 0 && (
             <span className={styles['message-reactions__ack-count']}>{acknowledgeCount}</span>
@@ -113,7 +113,7 @@ export default function MessageReactions({
             aria-label="Add reaction"
             size="Small"
             onClick={onAddReaction}
-            icon={<Icon size="16" glyph={<EmoticonPlusOutlineIcon size={16} />} />}
+            icon={<Icon size="16" glyph={<EmoticonPlusOutlineIcon />} />}
           />
         )}
       </div>

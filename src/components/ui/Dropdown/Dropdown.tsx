@@ -76,7 +76,7 @@ export default function Dropdown({
         <span className={styles.dropdown__label}>{children}</span>
       </span>
       <span className={styles.dropdown__chevron} aria-hidden>
-        <Icon size="12" glyph={<ChevronDownIcon size={12} />} />
+        <Icon size="12" glyph={<ChevronDownIcon />} />
       </span>
     </Button>
   );

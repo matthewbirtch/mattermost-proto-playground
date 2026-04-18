@@ -106,7 +106,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
           )}
           <div className={styles.searchInput__inner}>
             <span className={styles.searchInput__searchIcon} aria-hidden>
-              <Icon size="16" glyph={<MagnifyIcon size={16} />} />
+              <Icon size="16" glyph={<MagnifyIcon />} />
             </span>
             <input
               ref={ref}
@@ -130,7 +130,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
                 aria-label="Clear search"
                 tabIndex={-1}
               >
-                <Icon size="16" glyph={<CloseCircleIcon size={16} />} />
+                <Icon size="16" glyph={<CloseCircleIcon />} />
               </button>
             )}
           </div>

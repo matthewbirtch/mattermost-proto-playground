@@ -93,7 +93,7 @@ export default function CallParticipantAvatar({
             ].join(' ')}
             aria-label="Muted"
           >
-            <Icon size="16" glyph={<MicrophoneOffIcon size={16} />} />
+            <Icon size="16" glyph={<MicrophoneOffIcon />} />
           </span>
         )}
         {muteState === 'unmuted' && (
@@ -104,7 +104,7 @@ export default function CallParticipantAvatar({
             ].join(' ')}
             aria-label="Unmuted"
           >
-            <Icon size="16" glyph={<MicrophoneIcon size={16} />} />
+            <Icon size="16" glyph={<MicrophoneIcon />} />
           </span>
         )}
         {reaction != null && reaction !== '' && (
@@ -126,7 +126,7 @@ export default function CallParticipantAvatar({
             ].join(' ')}
             aria-label="Raised hand"
           >
-            <Icon size="16" glyph={<HandRightIcon size={16} />} />
+            <Icon size="16" glyph={<HandRightIcon />} />
           </span>
         )}
       </div>

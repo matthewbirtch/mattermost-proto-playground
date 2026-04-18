@@ -119,7 +119,7 @@ export default function ThreadFooter({
             onClick={onReply}
             aria-label={`${replyCount} repl${replyCount === 1 ? 'y' : 'ies'}`}
             leadingIcon={
-              <Icon size="12" glyph={<ReplyOutlineIcon size={12} />} />
+              <Icon size="12" glyph={<ReplyOutlineIcon />} />
             }
           >
             <span className={styles['thread-footer__btn-label']}>

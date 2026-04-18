@@ -15,7 +15,7 @@ export interface TextInputProps extends Omit<
   invalid?: boolean;
   /** Floating label content. When provided, label floats on focus or when value is non-empty. */
   label?: ReactNode;
-  /** Leading icon (e.g. <Icon glyph={<SearchIcon size={16} />} size="16" />). */
+  /** Leading icon (e.g. <Icon glyph={<SearchIcon />} size="16" />). */
   leadingIcon?: ReactNode;
   /** Max length for the input; used with showCharacterCount for counter. */
   maxLength?: number;

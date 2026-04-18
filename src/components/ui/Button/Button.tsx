@@ -26,7 +26,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   destructive?: boolean;
   /** Visual emphasis. Default: Primary. */
   emphasis?: ButtonEmphasis;
-  /** Leading icon (e.g. <Icon glyph={<SomeIcon size={16} />} size="16" />). Icon size should match button size. */
+  /** Leading icon (e.g. <Icon glyph={<SomeIcon />} size="16" />). Icon size should match button size. */
   leadingIcon?: ReactNode;
   /** Size variant. Default: Medium. */
   size?: ButtonSize;

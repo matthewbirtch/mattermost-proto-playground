@@ -317,43 +317,6 @@
 
   // ── Animation ─────────────────────────────────────────────────────────────
 
-  &__section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-l);
-    padding-bottom: var(--spacing-xs);
-    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
-
-    .foundations__section-title {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-  }
-
-  &__replay-btn {
-    font-size: var(--font-size-75);
-    font-family: var(--font-family-body);
-    font-weight: var(--font-weight-semibold);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    background: none;
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    border-radius: var(--radius-s);
-    padding: var(--spacing-xxxs) var(--spacing-xs);
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: color var(--duration-quick) var(--ease-transition),
-                border-color var(--duration-quick) var(--ease-transition),
-                background-color var(--duration-quick) var(--ease-transition);
-
-    &:hover {
-      color: var(--center-channel-color);
-      border-color: rgba(var(--center-channel-color-rgb), 0.32);
-      background-color: rgba(var(--center-channel-color-rgb), 0.06);
-    }
-  }
-
   &__anim-rows {
     display: flex;
     flex-direction: column;
@@ -412,7 +375,7 @@
   }
 
   &__anim-track {
-    flex: 1;
+    flex: 0 0 160px;
     height: 4px;
     background-color: rgba(var(--center-channel-color-rgb), 0.08);
     border-radius: 2px;

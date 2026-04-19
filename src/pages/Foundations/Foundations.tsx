@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import PlayOutlineIcon from '@mattermost/compass-icons/components/play-outline';
+import Icon from '@/components/ui/Icon/Icon';
+import IconButton, { ICON_BUTTON_ICON_SIZES } from '@/components/ui/IconButton/IconButton';
 import styles from './Foundations.module.scss';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -167,7 +170,9 @@ const EASINGS = [
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Foundations() {
-  const [playKey, setPlayKey] = useState(0);
+  const [playKeys, setPlayKeys] = useState<Record<string, number>>({});
+  const replay = (token: string) =>
+    setPlayKeys((prev) => ({ ...prev, [token]: (prev[token] ?? 0) + 1 }));
 
   return (
     <div className={styles.foundations}>
@@ -341,15 +346,7 @@ export default function Foundations() {
 
       {/* ── Animation ── */}
       <section className={styles['foundations__section']}>
-        <div className={styles['foundations__section-header']}>
-          <h2 className={styles['foundations__section-title']}>Animation</h2>
-          <button
-            className={styles['foundations__replay-btn']}
-            onClick={() => setPlayKey((k) => k + 1)}
-          >
-            ↻ Replay
-          </button>
-        </div>
+        <h2 className={styles['foundations__section-title']}>Animation</h2>
         <p className={styles['foundations__section-desc']}>
           Always use animation tokens — never hard-code durations or easing keywords directly.
         </p>
@@ -366,14 +363,21 @@ export default function Foundations() {
               </div>
               <div className={styles['foundations__anim-track']}>
                 <span
-                  key={playKey}
+                  key={playKeys[token] ?? 0}
                   className={styles['foundations__anim-dot']}
                   style={{
                     animationDuration: `var(${token})`,
                     animationTimingFunction: 'var(--ease-transition)',
+                    animationPlayState: playKeys[token] !== undefined ? 'running' : 'paused',
                   }}
                 />
               </div>
+              <IconButton
+                icon={<Icon glyph={<PlayOutlineIcon />} size={ICON_BUTTON_ICON_SIZES['Small']} />}
+                size="Small"
+                aria-label={`Play ${name} duration`}
+                onClick={() => replay(token)}
+              />
             </div>
           ))}
         </div>
@@ -390,14 +394,21 @@ export default function Foundations() {
               </div>
               <div className={styles['foundations__anim-track']}>
                 <span
-                  key={playKey}
+                  key={playKeys[token] ?? 0}
                   className={styles['foundations__anim-dot']}
                   style={{
                     animationDuration: 'var(--duration-moderate)',
                     animationTimingFunction: `var(${token})`,
+                    animationPlayState: playKeys[token] !== undefined ? 'running' : 'paused',
                   }}
                 />
               </div>
+              <IconButton
+                icon={<Icon glyph={<PlayOutlineIcon />} size={ICON_BUTTON_ICON_SIZES['Small']} />}
+                size="Small"
+                aria-label={`Play ${name} easing`}
+                onClick={() => replay(token)}
+              />
             </div>
           ))}
         </div>

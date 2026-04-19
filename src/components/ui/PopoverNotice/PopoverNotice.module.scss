@@ -19,7 +19,7 @@
     display: flex;
     gap: var(--spacing-l);
     align-items: flex-start;
-    padding: var(--spacing-xxl);
+    padding: var(--spacing-xl);
     width: 100%;
   }
 
@@ -29,6 +29,11 @@
     flex-shrink: 0;
     color: var(--center-channel-color);
     margin-top: 2px;
+
+    &--info    { color: var(--color-info); }
+    &--success { color: var(--color-success); }
+    &--warning { color: var(--color-warning); }
+    &--danger  { color: var(--color-danger); }
   }
 
   &__body {

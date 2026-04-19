@@ -92,6 +92,25 @@ transition: opacity var(--duration-quick) var(--ease-entrance);
 transition: opacity var(--duration-quick) var(--ease-exit);
 ```
 
+## Semantic color tokens
+
+For info/success/warning/danger states, always use the semantic tokens from `tokens.scss` — never raw palette tokens (e.g. `--color-blue-400`) or Mattermost theme vars (e.g. `--error-text`, `--away-indicator`).
+
+| Semantic token | RGB counterpart | Value |
+|---|---|---|
+| `--color-info` | `--color-info-rgb` | `--color-blue-400` |
+| `--color-success` | `--color-success-rgb` | `--color-green-500` |
+| `--color-warning` | `--color-warning-rgb` | `--color-yellow-600` |
+| `--color-danger` | `--color-danger-rgb` | `--color-red-500` |
+
+Use the `-rgb` counterpart when you need `rgba()`:
+
+```scss
+color: var(--color-danger);
+background-color: rgba(var(--color-warning-rgb), 0.04);
+border-color: rgba(var(--color-warning-rgb), 0.16);
+```
+
 ## Typography: prefer semibold over bold
 
 Use `var(--font-weight-semibold)` (600) wherever bold emphasis is needed. Do **not** use `var(--font-weight-bold)` (700) or `font-weight: bold` / `font-weight: 700` unless explicitly required by a Figma spec that specifies 700.

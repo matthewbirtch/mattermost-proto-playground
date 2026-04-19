@@ -36,8 +36,8 @@ export interface SectionNoticeProps {
 
 const DEFAULT_ICONS: Record<SectionNoticeType, ReactNode> = {
   Info: <Icon size="20" glyph={<InformationOutlineIcon />} />,
-  Warning: <Icon size="20" glyph={<AlertOutlineIcon />} />,
-  Danger: <Icon size="20" glyph={<AlertCircleOutlineIcon />} />,
+  Warning: <Icon size="20" glyph={<AlertCircleOutlineIcon />} />,
+  Danger: <Icon size="20" glyph={<AlertOutlineIcon />} />,
   Success: <Icon size="20" glyph={<CheckCircleOutlineIcon />} />,
   Hint: <Icon size="20" glyph={<InformationOutlineIcon />} />,
 };

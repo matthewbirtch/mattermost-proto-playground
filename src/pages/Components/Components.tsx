@@ -61,6 +61,7 @@ import UserAvatarGroup from '@/components/ui/UserAvatarGroup/UserAvatarGroup';
 import GlobeIcon from '@mattermost/compass-icons/components/globe';
 import EmoticonHappyOutlineIcon from '@mattermost/compass-icons/components/emoticon-happy-outline';
 import StarOutlineIcon from '@mattermost/compass-icons/components/star-outline';
+import LightbulbOutlineIcon from '@mattermost/compass-icons/components/lightbulb-outline';
 import StarIcon from '@mattermost/compass-icons/components/star';
 import BellOutlineIcon from '@mattermost/compass-icons/components/bell-outline';
 import BellOffOutlineIcon from '@mattermost/compass-icons/components/bell-off-outline';
@@ -1177,6 +1178,52 @@ export default function Components() {
             </PopoverNotice>
           </div>
           <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Info</span>
+            <PopoverNotice
+              title="Keyboard shortcut updated"
+              variant="info"
+              onClose={() => {}}
+            >
+              The quick switcher is now opened with <kbd>Ctrl+K</kbd>.
+            </PopoverNotice>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Success</span>
+            <PopoverNotice
+              title="Changes saved"
+              variant="success"
+              onClose={() => {}}
+              actions={[{ label: 'Got it', emphasis: 'primary' }]}
+            >
+              Your notification preferences have been updated.
+            </PopoverNotice>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Warning</span>
+            <PopoverNotice
+              title="Session expiring soon"
+              variant="warning"
+              onClose={() => {}}
+              actions={[
+                { label: 'Stay signed in', emphasis: 'primary' },
+                { label: 'Dismiss', emphasis: 'tertiary' },
+              ]}
+            >
+              You will be signed out in 5 minutes due to inactivity.
+            </PopoverNotice>
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Danger</span>
+            <PopoverNotice
+              title="Permission required"
+              variant="danger"
+              onClose={() => {}}
+              actions={[{ label: 'Review permissions', emphasis: 'primary' }]}
+            >
+              You don't have access to post in this channel.
+            </PopoverNotice>
+          </div>
+          <div className={styles['components__button-row']}>
             <span className={styles['components__instance-label']}>With checkbox</span>
             <PopoverNotice
               title="New feature available"
@@ -1373,7 +1420,7 @@ export default function Components() {
           <SectionNotice type="Warning" title="Your session will expire soon." description="Save your work before the session ends." primaryButtonLabel="Extend session" onPrimaryAction={() => {}} />
           <SectionNotice type="Danger" title="This action cannot be undone." description="Deleting this workspace will permanently remove all data." primaryButtonLabel="Delete" onPrimaryAction={() => {}} secondaryButtonLabel="Cancel" onSecondaryAction={() => {}} />
           <SectionNotice type="Success" title="Configuration saved successfully." onDismiss={() => {}} />
-          <SectionNotice type="Hint" title="Tip: You can drag and drop files to upload them." onDismiss={() => {}} />
+          <SectionNotice type="Hint" title="Tip: You can drag and drop files to upload them." icon={<Icon size="20" glyph={<LightbulbOutlineIcon />} />} onDismiss={() => {}} />
         </div>
       </section>
 

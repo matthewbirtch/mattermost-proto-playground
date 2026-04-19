@@ -1,6 +1,8 @@
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import styles from './UserAvatarGroup.module.scss';
 
+export type UserAvatarGroupSize = '20' | '24' | '28' | '32' | '40' | '48' | '56' | '64' | '72';
+
 export interface UserAvatarGroupItem {
   /** Unique key for the list item. */
   key: string;
@@ -15,6 +17,8 @@ export interface UserAvatarGroupProps {
   avatars: UserAvatarGroupItem[];
   /** Maximum number of avatars to show before showing the overflow count. Default: 3. */
   max?: number;
+  /** Avatar size in px. Matches Figma Avatar Group size options. Default: '20'. */
+  size?: UserAvatarGroupSize;
   /** Optional CSS class name. */
   className?: string;
 }
@@ -30,11 +34,16 @@ export default function UserAvatarGroup({
   avatars,
   className = '',
   max = 3,
+  size = '20',
 }: UserAvatarGroupProps) {
   const visible = avatars.slice(0, max);
   const overflow = avatars.length - visible.length;
 
-  const rootClass = [styles['user-avatar-group'], className]
+  const rootClass = [
+    styles['user-avatar-group'],
+    size !== '20' ? styles[`user-avatar-group--size-${size}`] : '',
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 
@@ -46,7 +55,7 @@ export default function UserAvatarGroup({
           className={styles['user-avatar-group__item']}
           title={avatar.name}
         >
-          <UserAvatar src={avatar.src} alt={avatar.name} size="20" />
+          <UserAvatar src={avatar.src} alt={avatar.name} size={size} />
         </span>
       ))}
       {overflow > 0 && (

@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import MentionBadge from '../MentionBadge/MentionBadge';
 import styles from './TeamAvatar.module.scss';
 
 export type TeamAvatarSize = '24' | '28' | '32' | '40' | '48' | '56' | '64' | '72' | '96' | '120';
@@ -79,9 +80,7 @@ export default function TeamAvatar({
       </div>
       <span className={styles['team-avatar__ring']} aria-hidden='true' />
       {showBadge && (
-        <span className={styles['team-avatar__badge']} aria-label={`${badge} unread mentions`}>
-          {badge}
-        </span>
+        <MentionBadge count={badge!} size='Medium' className={styles['team-avatar__badge']} />
       )}
     </div>
   );

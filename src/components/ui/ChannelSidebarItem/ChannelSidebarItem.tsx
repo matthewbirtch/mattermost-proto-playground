@@ -177,7 +177,7 @@ export default function ChannelSidebarItem({
           </div>
         )}
         {hasMentionBadge && (
-          <MentionBadge count={mentionCount ?? 1} location="Sidebar" />
+          <MentionBadge count={mentionCount ?? 1} location="Sidebar" size="Medium" />
         )}
         {isChannelOrDM && (
           <span className={styles['channel-sidebar-item__menu-button']}>

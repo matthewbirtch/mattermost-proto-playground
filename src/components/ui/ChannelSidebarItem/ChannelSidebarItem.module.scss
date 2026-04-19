@@ -12,7 +12,7 @@
   }
 
   &:hover {
-    background: var(--sidebar-text-hover-bg);
+    background: rgba(var(--sidebar-text-rgb), 0.08);
 
     .channel-sidebar-item__menu-button {
       display: contents;
@@ -135,7 +135,7 @@
   // ── Modifiers ──────────────────────────────────────────────
 
   &--active {
-    background: var(--sidebar-text-hover-bg);
+    background: rgba(var(--sidebar-text-rgb), 0.12);
 
     .channel-sidebar-item__left {
       padding-left: var(--spacing-l);

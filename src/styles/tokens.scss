@@ -329,6 +329,15 @@
   --elevation-6: 0 20px 32px 0 #0000001f; // Highest - full-screen overlays
 
   // ============================================================
+  // Animation
+  // ============================================================
+  --duration-quick:    150ms;
+  --duration-moderate: 300ms;
+  --ease-transition:   ease-in-out; // element already on screen
+  --ease-entrance:     ease-out;    // element entering
+  --ease-exit:         ease-in;     // element leaving
+
+  // ============================================================
   // Icon sizes (Mattermost Icon component scale)
   // ============================================================
   --icon-size-10: 10px;

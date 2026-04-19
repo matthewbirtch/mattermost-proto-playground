@@ -133,6 +133,22 @@
     }
   }
 
+  // ── Message Input demo ──────────────────────────────────────
+  &__message-input-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-l);
+    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    padding: var(--spacing-l);
+
+    .patterns__variant-label {
+      margin-bottom: 0;
+    }
+  }
+
   &__body-text {
     font-family: var(--font-family-body);
     font-size: var(--font-size-100);

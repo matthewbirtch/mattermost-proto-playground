@@ -7,6 +7,14 @@
   background: var(--sidebar-bg);
   overflow: hidden;
 
+  &__sidebar-icon-button {
+    background: rgba(var(--sidebar-text-rgb), 0.08) !important;
+
+    &:hover {
+      background: rgba(var(--sidebar-text-rgb), 0.12) !important;
+    }
+  }
+
   // ── Header ─────────────────────────────────────────────────
   &__header {
     display: flex;
@@ -48,51 +56,13 @@
     color: var(--sidebar-text);
   }
 
-  &__header-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--sidebar-text-8);
-    color: var(--sidebar-text);
-    cursor: pointer;
-    border: none;
-    padding: 0;
-
-    &:hover {
-      background: var(--sidebar-text-hover-bg);
-    }
-  }
-
   // ── Navigator ───────────────────────────────────────────────
   &__navigator {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xxxxs);
+    gap: var(--spacing-xxxs);
     padding: 0 var(--spacing-l) var(--spacing-l);
     flex-shrink: 0;
-  }
-
-  &__filter-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-s);
-    background: var(--sidebar-text-8);
-    color: var(--sidebar-text);
-    cursor: pointer;
-    border: none;
-    padding: 0;
-
-    &:hover {
-      background: var(--sidebar-text-hover-bg);
-    }
   }
 
   &__find-channels {
@@ -101,9 +71,9 @@
     flex: 1;
     gap: var(--spacing-xs);
     min-width: 0;
-    padding: var(--spacing-xxxs) var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
     border-radius: var(--radius-s);
-    background: var(--sidebar-text-8);
+    background: rgba(var(--sidebar-text-rgb), 0.08);
     cursor: text;
   }
 
@@ -173,7 +143,7 @@
     }
 
     &--has-action {
-      padding-right: var(--spacing-xs);
+      padding-right: var(--spacing-l);
     }
   }
 
@@ -205,27 +175,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  &__category-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: var(--radius-s);
-    color: var(--sidebar-text);
-    opacity: 0.75;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    padding: 0;
-
-    &:hover {
-      opacity: 1;
-      background: var(--sidebar-text-hover-bg);
-    }
   }
 
   // ── More unreads banners ────────────────────────────────────

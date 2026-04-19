@@ -4,6 +4,8 @@ import MagnifyIcon from '@mattermost/compass-icons/components/magnify';
 import FilterVariantIcon from '@mattermost/compass-icons/components/filter-variant';
 import ChannelSidebarItem from '@/components/ui/ChannelSidebarItem/ChannelSidebarItem';
 import MoreUnreadsBanner from '@/components/ui/MoreUnreadsBanner/MoreUnreadsBanner';
+import IconButton from '@/components/ui/IconButton/IconButton';
+import Icon from '@/components/ui/Icon/Icon';
 import styles from './ChannelsSidebar.module.scss';
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -17,13 +19,15 @@ function SidebarHeader({ teamName }: { teamName: string }) {
           <ChevronDownIcon size={16} />
         </span>
       </div>
-      <button
-        type="button"
-        className={styles['channels-sidebar__header-button']}
+      <IconButton
         aria-label="Add channels"
-      >
-        <PlusIcon size={16} />
-      </button>
+        size="Small"
+        style="Inverted"
+        padding="Compact"
+        rounded
+        icon={<Icon size="16" glyph={<PlusIcon />} />}
+        className={styles['channels-sidebar__sidebar-icon-button']}
+      />
     </div>
   );
 }
@@ -32,13 +36,14 @@ function SidebarNavigator({ showFilter = false }: { showFilter?: boolean }) {
   return (
     <div className={styles['channels-sidebar__navigator']}>
       {showFilter && (
-        <button
-          type="button"
-          className={styles['channels-sidebar__filter-button']}
+        <IconButton
           aria-label="Filter channels"
-        >
-          <FilterVariantIcon size={16} />
-        </button>
+          size="Small"
+          style="Inverted"
+          padding="Compact"
+          icon={<Icon size="16" glyph={<FilterVariantIcon />} />}
+          className={styles['channels-sidebar__sidebar-icon-button']}
+        />
       )}
       <div className={styles['channels-sidebar__find-channels']}>
         <span className={styles['channels-sidebar__find-channels-icon']}>
@@ -74,13 +79,12 @@ function SidebarCategory({ label, showChevron = true, showPlusButton = false }: 
         <span className={styles['channels-sidebar__category-label']}>{label}</span>
       </div>
       {showPlusButton && (
-        <button
-          type="button"
-          className={styles['channels-sidebar__category-action']}
+        <IconButton
           aria-label={`New ${label.toLowerCase()}`}
-        >
-          <PlusIcon size={12} />
-        </button>
+          size="X-Small"
+          style="Inverted"
+          icon={<Icon size="12" glyph={<PlusIcon />} />}
+        />
       )}
     </div>
   );

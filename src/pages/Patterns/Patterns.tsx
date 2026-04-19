@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@/components/ui/Button/Button';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
+import MessageInput from '@/components/ui/MessageInput';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { Modal } from '@/components/ui/Modal';
 import Post from '@/components/ui/Post/Post';
@@ -188,6 +189,20 @@ export default function Patterns() {
               avatarEthanBrooks={avatarEthanBrooks}
             />
           </div>
+        </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Message Input</h2>
+        <div className={styles['patterns__message-input-demo']}>
+          <p className={styles['patterns__variant-label']}>Default</p>
+          <MessageInput placeholder="Message #ux-design…" />
+          <p className={styles['patterns__variant-label']}>With priority indicator</p>
+          <MessageInput placeholder="Message #ux-design…" showPriorityIndicator />
+          <p className={styles['patterns__variant-label']}>With attachments</p>
+          <MessageInput placeholder="Message #ux-design…" showAttachments />
+          <p className={styles['patterns__variant-label']}>With priority + attachments</p>
+          <MessageInput placeholder="Message #ux-design…" showPriorityIndicator showAttachments />
         </div>
       </section>
 

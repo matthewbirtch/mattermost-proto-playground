@@ -65,6 +65,33 @@ When adding a new component to the playground, check the Figma file name:
 
 When building a new component, audit the elements it needs before writing any new code. If an existing component in `src/components/` already covers an element — especially when its name matches what Figma uses — use it directly rather than reimplementing it. Only build a new sub-component when nothing suitable exists.
 
+## Animation: easing and duration
+
+Always use the animation tokens from `tokens.scss` — never hard-code durations or easing keywords directly.
+
+| Scenario | Easing token | Duration token |
+|---|---|---|
+| Element already on screen, small movement | `--ease-transition` | `--duration-quick` |
+| Element already on screen, large movement | `--ease-transition` | `--duration-moderate` |
+| Entrance (element entering the screen) | `--ease-entrance` | `--duration-quick` |
+| Exit (element leaving the screen) | `--ease-exit` | `--duration-quick` |
+
+**"Large movement"** means the element travels a significant distance across the viewport — e.g. a panel sliding in from off-screen. A button hover shift or a toolbar expanding a fixed height are small movements.
+
+```scss
+// Small on-screen transition (e.g. hover state, short expand)
+transition: opacity var(--duration-quick) var(--ease-transition);
+
+// Large on-screen transition (e.g. panel sliding across the view)
+transition: transform var(--duration-moderate) var(--ease-transition);
+
+// Entrance
+transition: opacity var(--duration-quick) var(--ease-entrance);
+
+// Exit
+transition: opacity var(--duration-quick) var(--ease-exit);
+```
+
 ## Typography: prefer semibold over bold
 
 Use `var(--font-weight-semibold)` (600) wherever bold emphasis is needed. Do **not** use `var(--font-weight-bold)` (700) or `font-weight: bold` / `font-weight: 700` unless explicitly required by a Figma spec that specifies 700.

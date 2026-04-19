@@ -1,3 +1,8 @@
+@keyframes foundations-slide {
+  from { left: 0; }
+  to   { left: calc(100% - 10px); }
+}
+
 .foundations {
   max-width: 960px;
   margin: 0 auto;
@@ -308,6 +313,123 @@
     font-size: var(--font-size-200);
     color: var(--center-channel-color);
     flex: 1;
+  }
+
+  // ── Animation ─────────────────────────────────────────────────────────────
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-l);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+
+    .foundations__section-title {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
+  &__replay-btn {
+    font-size: var(--font-size-75);
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-semibold);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    background: none;
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: var(--radius-s);
+    padding: var(--spacing-xxxs) var(--spacing-xs);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color var(--duration-quick) var(--ease-transition),
+                border-color var(--duration-quick) var(--ease-transition),
+                background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      color: var(--center-channel-color);
+      border-color: rgba(var(--center-channel-color-rgb), 0.32);
+      background-color: rgba(var(--center-channel-color-rgb), 0.06);
+    }
+  }
+
+  &__anim-rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__anim-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-m) 0;
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.06);
+
+    &:first-child {
+      border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.06);
+    }
+  }
+
+  &__anim-meta {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-m);
+    flex-shrink: 0;
+    width: 460px;
+  }
+
+  &__anim-name {
+    font-size: var(--font-size-75);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+    width: 72px;
+    flex-shrink: 0;
+  }
+
+  &__anim-token {
+    font-size: 10px;
+    font-family: var(--font-family-mono);
+    color: var(--center-channel-color);
+    opacity: 0.56;
+    flex-shrink: 0;
+    width: 148px;
+  }
+
+  &__anim-value {
+    font-size: var(--font-size-75);
+    color: var(--center-channel-color);
+    opacity: 0.48;
+    font-family: var(--font-family-mono);
+    flex-shrink: 0;
+    width: 80px;
+  }
+
+  &__anim-desc {
+    font-size: var(--font-size-75);
+    color: var(--center-channel-color);
+    opacity: 0.48;
+  }
+
+  &__anim-track {
+    flex: 1;
+    height: 4px;
+    background-color: rgba(var(--center-channel-color-rgb), 0.08);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  &__anim-dot {
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--button-bg);
+    animation-name: foundations-slide;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
   }
 
   // ── Shape ─────────────────────────────────────────────────────────────────

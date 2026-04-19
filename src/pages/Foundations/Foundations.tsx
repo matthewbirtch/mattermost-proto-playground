@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styles from './Foundations.module.scss';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -152,9 +153,22 @@ const FONT_FAMILIES = [
   { name: 'Mono', token: '--font-family-mono', value: 'Menlo' },
 ];
 
+const DURATIONS = [
+  { name: 'Quick', token: '--duration-quick', value: '150ms', desc: 'Default — hover states, small reveals' },
+  { name: 'Moderate', token: '--duration-moderate', value: '300ms', desc: 'Large movements — panels, drawers' },
+];
+
+const EASINGS = [
+  { name: 'Transition', token: '--ease-transition', value: 'ease-in-out', desc: 'Element already on screen' },
+  { name: 'Entrance', token: '--ease-entrance', value: 'ease-out', desc: 'Element entering the screen' },
+  { name: 'Exit', token: '--ease-exit', value: 'ease-in', desc: 'Element leaving the screen' },
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Foundations() {
+  const [playKey, setPlayKey] = useState(0);
+
   return (
     <div className={styles.foundations}>
       <header className={styles['foundations__header']}>
@@ -320,6 +334,70 @@ export default function Foundations() {
               >
                 The quick brown fox jumps over the lazy dog
               </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Animation ── */}
+      <section className={styles['foundations__section']}>
+        <div className={styles['foundations__section-header']}>
+          <h2 className={styles['foundations__section-title']}>Animation</h2>
+          <button
+            className={styles['foundations__replay-btn']}
+            onClick={() => setPlayKey((k) => k + 1)}
+          >
+            ↻ Replay
+          </button>
+        </div>
+        <p className={styles['foundations__section-desc']}>
+          Always use animation tokens — never hard-code durations or easing keywords directly.
+        </p>
+
+        <h3 className={styles['foundations__subsection-title']}>Duration</h3>
+        <div className={styles['foundations__anim-rows']}>
+          {DURATIONS.map(({ name, token, value, desc }) => (
+            <div key={name} className={styles['foundations__anim-row']}>
+              <div className={styles['foundations__anim-meta']}>
+                <span className={styles['foundations__anim-name']}>{name}</span>
+                <code className={styles['foundations__anim-token']}>{token}</code>
+                <span className={styles['foundations__anim-value']}>{value}</span>
+                <span className={styles['foundations__anim-desc']}>{desc}</span>
+              </div>
+              <div className={styles['foundations__anim-track']}>
+                <span
+                  key={playKey}
+                  className={styles['foundations__anim-dot']}
+                  style={{
+                    animationDuration: `var(${token})`,
+                    animationTimingFunction: 'var(--ease-transition)',
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h3 className={styles['foundations__subsection-title']}>Easing</h3>
+        <div className={styles['foundations__anim-rows']}>
+          {EASINGS.map(({ name, token, value, desc }) => (
+            <div key={name} className={styles['foundations__anim-row']}>
+              <div className={styles['foundations__anim-meta']}>
+                <span className={styles['foundations__anim-name']}>{name}</span>
+                <code className={styles['foundations__anim-token']}>{token}</code>
+                <span className={styles['foundations__anim-value']}>{value}</span>
+                <span className={styles['foundations__anim-desc']}>{desc}</span>
+              </div>
+              <div className={styles['foundations__anim-track']}>
+                <span
+                  key={playKey}
+                  className={styles['foundations__anim-dot']}
+                  style={{
+                    animationDuration: 'var(--duration-moderate)',
+                    animationTimingFunction: `var(${token})`,
+                  }}
+                />
+              </div>
             </div>
           ))}
         </div>

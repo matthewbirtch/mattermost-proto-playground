@@ -5,12 +5,18 @@ import TextInput from '@/components/ui/TextInput/TextInput';
 import { Modal } from '@/components/ui/Modal';
 import Post from '@/components/ui/Post/Post';
 import Divider from '@/components/ui/Divider/Divider';
+import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
+import avatarArjunPatel from '@/assets/avatars/Arjun Patel.png';
+import avatarDariusCole from '@/assets/avatars/Darius Cole.png';
+import avatarDavidLiang from '@/assets/avatars/David Liang.png';
+import avatarEmmaNovak from '@/assets/avatars/Emma Novak.png';
+import avatarEthanBrooks from '@/assets/avatars/Ethan Brooks.png';
 import styles from './Patterns.module.scss';
 
-const REMAINING_PATTERNS = ['Channel Sidebar', 'Profile Popover'];
+const REMAINING_PATTERNS = ['Profile Popover'];
 
 // ── Modal demo ────────────────────────────────────────────────────────────────
 
@@ -150,6 +156,38 @@ export default function Patterns() {
               You have 3 unread messages in #general.
             </p>
           </Post>
+        </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Channel Sidebar</h2>
+        <div className={styles['patterns__sidebar-demo']}>
+          <div>
+            <p className={styles['patterns__variant-label']}>Unreads category Off</p>
+            <ChannelsSidebar
+              showFilter
+              avatarAikoTan={avatarAikoTan}
+              avatarArjunPatel={avatarArjunPatel}
+              avatarDanielOkoro={avatarDanielle}
+              avatarDariusCole={avatarDariusCole}
+              avatarDavidLiang={avatarDavidLiang}
+              avatarEmmaNovak={avatarEmmaNovak}
+              avatarEthanBrooks={avatarEthanBrooks}
+            />
+          </div>
+          <div>
+            <p className={styles['patterns__variant-label']}>Unreads category On</p>
+            <ChannelsSidebar
+              showUnreadsCategory
+              avatarAikoTan={avatarAikoTan}
+              avatarArjunPatel={avatarArjunPatel}
+              avatarDanielOkoro={avatarDanielle}
+              avatarDariusCole={avatarDariusCole}
+              avatarDavidLiang={avatarDavidLiang}
+              avatarEmmaNovak={avatarEmmaNovak}
+              avatarEthanBrooks={avatarEthanBrooks}
+            />
+          </div>
         </div>
       </section>
 

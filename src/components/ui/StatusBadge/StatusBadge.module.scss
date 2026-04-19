@@ -79,21 +79,21 @@
   // ---------------------------------------------------------------------------
   &--status-online {
     color: var(--online-indicator);
-    background-color: var(--center-channel-bg);
+    background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 
   &--status-away {
     color: var(--away-indicator);
-    background-color: var(--center-channel-bg);
+    background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 
   &--status-do-not-disturb {
     color: var(--dnd-indicator);
-    background-color: var(--center-channel-bg);
+    background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 
   &--status-offline {
     color: rgba(var(--center-channel-color-rgb), 0.32);
-    background-color: var(--center-channel-bg);
+    background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 }

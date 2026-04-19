@@ -32,56 +32,6 @@
     flex-shrink: 0;
   }
 
-  &__avatar {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  &__avatar-img {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-  }
-
-  &__avatar-placeholder {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgba(var(--center-channel-color-rgb), 0.16);
-    color: var(--center-channel-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-75);
-    font-weight: var(--font-weight-semibold);
-    flex-shrink: 0;
-  }
-
-  &__meta {
-    display: flex;
-    gap: var(--spacing-xs);
-    align-items: center;
-  }
-
-  &__author {
-    font-size: var(--font-size-100);
-    font-weight: var(--font-weight-semibold);
-    line-height: 20px;
-    color: var(--center-channel-color);
-    white-space: nowrap;
-  }
-
-  &__timestamp {
-    font-size: var(--font-size-75);
-    font-weight: var(--font-weight-regular);
-    line-height: 16px;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-    white-space: nowrap;
-  }
-
   &__body {
     display: flex;
     flex-direction: column;

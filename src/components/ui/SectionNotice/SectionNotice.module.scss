@@ -21,7 +21,7 @@
     justify-content: center;
     flex-shrink: 0;
     color: var(--link-color);
-    padding-top: 2px; // visual alignment with first line of text
+
   }
 
   &__body {
@@ -58,8 +58,8 @@
 
   &__dismiss {
     position: absolute;
-    top: 9px;
-    right: 9px;
+    top: 6px;
+    right: 6px;
   }
 
   // ---------------------------------------------------------------------------

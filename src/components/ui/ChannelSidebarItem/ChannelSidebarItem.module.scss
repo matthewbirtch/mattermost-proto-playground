@@ -7,8 +7,16 @@
   cursor: pointer;
   user-select: none;
 
+  &__menu-button {
+    display: none;
+  }
+
   &:hover {
     background: var(--sidebar-text-hover-bg);
+
+    .channel-sidebar-item__menu-button {
+      display: contents;
+    }
   }
 
   &:focus-visible {
@@ -39,9 +47,12 @@
     flex-shrink: 0;
     padding: 4px;
     color: var(--sidebar-text);
+    opacity: 0.64;
 
     &--dm {
       padding: 2px;
+      opacity: 1;
+      --status-badge-bg: var(--sidebar-bg);
     }
   }
 
@@ -129,10 +140,18 @@
     .channel-sidebar-item__left {
       padding-left: var(--spacing-l);
     }
+
+    .channel-sidebar-item__name {
+      opacity: 1;
+    }
   }
 
   &--status-unread,
   &--status-mention {
+    .channel-sidebar-item__icon-container {
+      opacity: 1;
+    }
+
     .channel-sidebar-item__name {
       font-weight: var(--font-weight-semibold);
       opacity: 1;

@@ -65,7 +65,6 @@
     }
 
     .radio__input:disabled ~ & {
-      background-color: rgba(var(--center-channel-color-rgb), 0.32);
       border-color: rgba(var(--center-channel-color-rgb), 0.16);
     }
   }

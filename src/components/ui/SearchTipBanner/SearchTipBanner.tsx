@@ -1,4 +1,7 @@
 import type { ReactNode } from 'react';
+import IconButton from '@/components/ui/IconButton/IconButton';
+import Icon from '@/components/ui/Icon/Icon';
+import CloseIcon from '@mattermost/compass-icons/components/close';
 import styles from './SearchTipBanner.module.scss';
 
 export interface ShortcutKey {
@@ -50,14 +53,12 @@ export default function SearchTipBanner({
         )}
       </div>
       {onDismiss != null && (
-        <button
-          type="button"
-          className={styles['search-tip-banner__dismiss']}
-          onClick={onDismiss}
+        <IconButton
           aria-label="Dismiss tip"
-        >
-          <span aria-hidden>×</span>
-        </button>
+          size="Small"
+          icon={<Icon size="16" glyph={<CloseIcon />} />}
+          onClick={onDismiss}
+        />
       )}
     </div>
   );

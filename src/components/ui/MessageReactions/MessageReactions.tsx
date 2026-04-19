@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from 'react';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import Icon from '@/components/ui/Icon/Icon';
-import CheckCircleIcon from '@mattermost/compass-icons/components/check-circle';
+import CheckCircleOutlineIcon from '@mattermost/compass-icons/components/check-circle-outline';
 import EmoticonPlusOutlineIcon from '@mattermost/compass-icons/components/emoticon-plus-outline';
 import styles from './MessageReactions.module.scss';
 
@@ -75,12 +75,13 @@ export default function MessageReactions({
           aria-label="Acknowledge message"
         >
           <span className={styles['message-reactions__ack-icon']} aria-hidden>
-            <Icon size="16" glyph={<CheckCircleIcon />} />
+            <Icon size="16" glyph={<CheckCircleOutlineIcon />} />
           </span>
-          {acknowledgeCount > 0 && (
+          {currentUserAcknowledged ? (
             <span className={styles['message-reactions__ack-count']}>{acknowledgeCount}</span>
+          ) : (
+            <span className={styles['message-reactions__ack-label']}>Acknowledge</span>
           )}
-          <span className={styles['message-reactions__ack-label']}>Acknowledge</span>
         </button>
       )}
 

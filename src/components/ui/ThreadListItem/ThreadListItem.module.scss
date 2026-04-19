@@ -40,14 +40,9 @@
   }
 
   &__unread-badge {
-    display: block;
     position: absolute;
     top: 6px;
     left: -4px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--mention-highlight-bg);
   }
 
   &__post-body {
@@ -81,6 +76,10 @@
     gap: var(--spacing-xs);
     align-items: center;
     overflow: hidden;
+
+    :global(.label-tag) {
+      align-self: center;
+    }
   }
 
   &__author {
@@ -90,27 +89,6 @@
     color: var(--center-channel-color);
     white-space: nowrap;
     flex-shrink: 0;
-  }
-
-  &__channel-tag {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    padding: 0 var(--spacing-xxxxs, 4px);
-  }
-
-  &__channel-label {
-    display: inline-flex;
-    align-items: center;
-    background-color: rgba(var(--center-channel-color-rgb), 0.08);
-    border-radius: var(--radius-s);
-    padding: 0 var(--spacing-xxxxs, 4px);
-    font-size: 10px;
-    font-weight: var(--font-weight-semibold);
-    line-height: 16px;
-    letter-spacing: 0.1px;
-    color: var(--center-channel-color);
-    white-space: nowrap;
   }
 
   &__timestamp {

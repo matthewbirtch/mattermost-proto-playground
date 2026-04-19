@@ -70,6 +70,7 @@ import AICopilotIllustration from '@/assets/illustrations/ai-copilot-intro.svg?r
 import GroupsIllustration from '@/assets/illustrations/groups.svg?react';
 import SearchIllustration from '@/assets/illustrations/search.svg?react';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
+import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
 import avatarMarco from '@/assets/avatars/Marco Rinaldi.png';
 import avatarEmma from '@/assets/avatars/Emma Novak.png';
@@ -1043,7 +1044,16 @@ export default function Components() {
             />
           </div>
           <div className={styles['components__button-row']}>
-            <span className={styles['components__instance-label']}>With acknowledge</span>
+            <span className={styles['components__instance-label']}>Acknowledge — unclicked</span>
+            <MessageReactions
+              reactions={[]}
+              acknowledged
+              acknowledgeCount={0}
+              currentUserAcknowledged={false}
+            />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Acknowledge — clicked</span>
             <MessageReactions
               reactions={[]}
               acknowledged
@@ -1135,7 +1145,7 @@ export default function Components() {
         <div className={styles['components__button-block']}>
           <div className={styles['components__button-row']}>
             <span className={styles['components__instance-label']}>Default</span>
-            <PermalinkPreview />
+            <PermalinkPreview avatarSrc={avatarLeonard} />
           </div>
           <div className={styles['components__button-row']}>
             <span className={styles['components__instance-label']}>With avatar</span>
@@ -1565,16 +1575,48 @@ export default function Components() {
 
       <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Team Avatar</h2>
-        <div className={styles['components__button-block']}>
+        <div className={`${styles['components__button-block']} ${styles['components__button-block--sidebar-header-bg']}`}>
           <div className={styles['components__button-row']}>
-            <span className={styles['components__instance-label']}>States</span>
-            <TeamAvatar src={avatarLeonard} alt="Core Team" state="Default" />
-            <TeamAvatar src={avatarDanielle} alt="Design Team" state="Active" />
+            <span className={styles['components__instance-label']}>Default — Image (hover to preview)</span>
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="24" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="32" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="40" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="48" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="56" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="64" />
           </div>
           <div className={styles['components__button-row']}>
-            <span className={styles['components__instance-label']}>With badge</span>
-            <TeamAvatar src={avatarMarco} alt="Enterprise Team" badge={5} />
-            <TeamAvatar src={avatarEmma} alt="Platform Team" badge={99} />
+            <span className={styles['components__instance-label']}>Active — Image</span>
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="24" state="Active" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="32" state="Active" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="40" state="Active" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="48" state="Active" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="56" state="Active" />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="64" state="Active" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Default — Fallback (hover to preview)</span>
+            <TeamAvatar initials="Ac" alt="Core Team" size="24" />
+            <TeamAvatar initials="Ac" alt="Core Team" size="32" />
+            <TeamAvatar initials="Ac" alt="Core Team" size="40" />
+            <TeamAvatar initials="Ac" alt="Core Team" size="48" />
+            <TeamAvatar initials="Ac" alt="Core Team" size="56" />
+            <TeamAvatar initials="Ac" alt="Core Team" size="64" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Active — Fallback</span>
+            <TeamAvatar initials="Ac" alt="Design Team" size="24" state="Active" />
+            <TeamAvatar initials="Ac" alt="Design Team" size="32" state="Active" />
+            <TeamAvatar initials="Ac" alt="Design Team" size="40" state="Active" />
+            <TeamAvatar initials="Ac" alt="Design Team" size="48" state="Active" />
+            <TeamAvatar initials="Ac" alt="Design Team" size="56" state="Active" />
+            <TeamAvatar initials="Ac" alt="Design Team" size="64" state="Active" />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>Badge</span>
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="32" badge={1} />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="40" badge={5} />
+            <TeamAvatar src={avatarStaffTeam} alt="Staff Team" size="56" badge={99} />
           </div>
         </div>
       </section>
@@ -1745,7 +1787,7 @@ export default function Components() {
       <section className={styles['components__section']}>
         <h2 className={styles['components__section-title']}>Toast Banner</h2>
         <div className={styles['components__button-block']}>
-          <ToastBanner message="Link copied to clipboard." type="Default" onDismiss={() => {}} />
+          <ToastBanner message="Link copied to clipboard." type="General" onDismiss={() => {}} />
           <ToastBanner message="Message saved successfully." type="Success" onDismiss={() => {}} />
           <ToastBanner message="Failed to send message. Please try again." type="Danger" actionLabel="Retry" onAction={() => {}} onDismiss={() => {}} />
           <ToastBanner message="Your session will expire in 5 minutes." type="Warning" onDismiss={() => {}} />

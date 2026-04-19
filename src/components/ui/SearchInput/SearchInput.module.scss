@@ -25,12 +25,18 @@
     }
 
     .searchInput:has(.searchInput__input:focus-visible) & {
-      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 1px var(--button-bg);
     }
 
     .searchInput:has(.searchInput__input:disabled) & {
       opacity: 0.56;
     }
+  }
+
+  // Hide placeholder while the floating label is in the resting position to prevent overlap.
+  &:has(.searchInput__label):not(&--label-floated) .searchInput__input::placeholder {
+    color: transparent;
   }
 
   // ---------------------------------------------------------------------------
@@ -174,8 +180,10 @@
     }
 
     &.searchInput--label-floated .searchInput__label {
-      top: 4px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -210,8 +218,10 @@
     }
 
     &.searchInput--label-floated .searchInput__label {
-      top: 6px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -247,8 +257,10 @@
     }
 
     &.searchInput--label-floated .searchInput__label {
-      top: 8px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 }

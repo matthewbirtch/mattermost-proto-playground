@@ -1,76 +1,82 @@
 import type { ReactNode } from 'react';
+import AlertCircleOutlineIcon from '@mattermost/compass-icons/components/alert-circle-outline';
+import AlertOutlineIcon from '@mattermost/compass-icons/components/alert-outline';
+import CheckIcon from '@mattermost/compass-icons/components/check';
+import CloseIcon from '@mattermost/compass-icons/components/close';
+import InformationOutlineIcon from '@mattermost/compass-icons/components/information-outline';
 import Button from '@/components/ui/Button/Button';
-import IconButton from '@/components/ui/IconButton/IconButton';
 import Icon from '@/components/ui/Icon/Icon';
+import IconButton from '@/components/ui/IconButton/IconButton';
 import styles from './ToastBanner.module.scss';
 
-export type ToastBannerType = 'Default' | 'Info' | 'Success' | 'Warning' | 'Danger';
+export type ToastBannerType = 'General' | 'Info' | 'Success' | 'Warning' | 'Danger';
 
 export interface ToastBannerProps {
-  /** Optional CSS class name. */
   className?: string;
-  /** Message text shown in the banner. */
   message: string;
-  /** Optional type for color-coding. Default: Default. */
   type?: ToastBannerType;
-  /** Optional leading icon slot. */
-  leadingIcon?: ReactNode;
-  /** Optional action button label. When provided, onAction should also be set. */
   actionLabel?: string;
-  /** Callback when the action button is clicked. */
   onAction?: () => void;
-  /** Called when the dismiss (×) button is clicked. */
   onDismiss?: () => void;
 }
 
-/**
- * Toast Banner — floating notification at the bottom of the viewport.
- * Confirms actions with brief messages. Supports undo, dismiss, leading icon.
- * Color-coded by type.
- */
+const TYPE_ICONS: Record<ToastBannerType, ReactNode> = {
+  General: <AlertCircleOutlineIcon />,
+  Info: <InformationOutlineIcon />,
+  Success: <CheckIcon />,
+  Danger: <AlertOutlineIcon />,
+  Warning: <AlertCircleOutlineIcon />,
+};
+
 export default function ToastBanner({
   className = '',
   message,
-  type = 'Default',
-  leadingIcon,
+  type = 'General',
   actionLabel,
   onAction,
   onDismiss,
 }: ToastBannerProps) {
-  const typeClass = type !== 'Default' ? styles[`toast-banner--type-${type.toLowerCase()}`] : '';
-
+  const typeClass = styles[`toast-banner--type-${type.toLowerCase()}`];
   const rootClass = [styles['toast-banner'], typeClass, className]
     .filter(Boolean)
     .join(' ');
 
+  const showActions = actionLabel != null || onDismiss != null;
+
   return (
     <div className={rootClass} role="status" aria-live="polite">
       <div className={styles['toast-banner__content']}>
-        {leadingIcon != null && (
-          <span className={styles['toast-banner__icon']} aria-hidden>
-            {leadingIcon}
-          </span>
-        )}
+        <span className={styles['toast-banner__icon']} aria-hidden>
+          <Icon glyph={TYPE_ICONS[type]} size="16" />
+        </span>
         <span className={styles['toast-banner__message']}>{message}</span>
-        {actionLabel != null && (
-          <Button
-            className={styles['toast-banner__action']}
-            emphasis="Primary"
-            size="Small"
-            onClick={onAction}
-          >
-            {actionLabel}
-          </Button>
-        )}
       </div>
-      {onDismiss != null && (
-        <IconButton
-          className={styles['toast-banner__dismiss']}
-          aria-label="Dismiss"
-          size="Small"
-          icon={<Icon size="16" />}
-          onClick={onDismiss}
-        />
+      {showActions && (
+        <div className={styles['toast-banner__actions']}>
+          {actionLabel != null && (
+            <Button
+              appearance={type === 'Warning' ? 'Default' : 'Inverted'}
+              emphasis="Tertiary"
+              size="X-Small"
+              className={[
+                styles['toast-banner__action-btn'],
+                type === 'Warning' ? styles['toast-banner__action-btn--warning'] : '',
+              ].filter(Boolean).join(' ')}
+              onClick={onAction}
+            >
+              {actionLabel}
+            </Button>
+          )}
+          {onDismiss != null && (
+            <IconButton
+              aria-label="Dismiss"
+              size="Small"
+              style={type === 'Warning' ? 'Default' : 'Inverted'}
+              icon={<Icon glyph={<CloseIcon />} size="16" />}
+              onClick={onDismiss}
+            />
+          )}
+        </div>
       )}
     </div>
   );

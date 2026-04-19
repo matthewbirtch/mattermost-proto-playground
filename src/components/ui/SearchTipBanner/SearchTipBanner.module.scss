@@ -45,32 +45,4 @@
     white-space: nowrap;
   }
 
-  &__dismiss {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: var(--spacing-xs);
-    font-size: var(--font-size-200);
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-s);
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: background-color 150ms ease, color 150ms ease;
-
-    &:hover {
-      background-color: rgba(var(--center-channel-color-rgb), 0.08);
-      color: var(--center-channel-color);
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow:
-        0 0 0 3px var(--center-channel-bg),
-        0 0 0 5px var(--link-color);
-    }
-  }
 }

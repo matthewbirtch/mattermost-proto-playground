@@ -1,31 +1,50 @@
-// ---------------------------------------------------------------------------
-// Block — rounded-square team/workspace avatar (Figma Team Avatar v3.0.0)
-// ---------------------------------------------------------------------------
 .team-avatar {
   position: relative;
+  display: inline-flex;
+  width: var(--_ta-size);
+  height: var(--_ta-size);
   flex-shrink: 0;
-  display: inline-block;
-  width: 40px;
-  height: 40px;
+  cursor: pointer;
+
+  &__inner {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--_ta-default-r);
+    overflow: hidden;
+    transition: inset 0.25s ease, border-radius 0.25s ease;
+  }
 
   &__image {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: var(--radius-m);
   }
 
-  // Active state: outer stroke ring
+  &__fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--sidebar-text-rgb), 0.16);
+    color: var(--sidebar-text, white);
+    font-family: Metropolis, sans-serif;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--_ta-font-size);
+    line-height: 1;
+    user-select: none;
+  }
+
   &__ring {
     position: absolute;
     inset: 0;
-    border-radius: var(--radius-m);
-    border: 3px solid var(--sidebar-text-active-border, var(--color-blue-300));
+    border-radius: var(--_ta-outer-r);
     pointer-events: none;
+    border: var(--_ta-border-w) solid transparent;
+    transition: border-color 0.25s ease;
   }
 
-  // Mention/unread badge (top-right)
   &__badge {
     position: absolute;
     top: -2px;
@@ -36,24 +55,37 @@
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
-    background-color: var(--mention-bg, #ffffff);
-    color: var(--mention-color, var(--color-indigo-500));
-    border: 2px solid var(--sidebar-header-bg, var(--color-indigo-500));
-    border-radius: var(--radius-m);
-    font-size: var(--font-size-75);
+    background-color: var(--mention-bg, white);
+    color: var(--mention-color, #1e325c);
+    border: 2px solid var(--sidebar-header-bg, #192a4d);
+    border-radius: 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
     font-weight: var(--font-weight-semibold);
-    line-height: 1;
+    line-height: 16px;
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
 
-  // Active modifier
-  &--active {
-    .team-avatar__image {
-      border-radius: var(--radius-s);
+  &:hover {
+    .team-avatar__inner {
+      inset: var(--_ta-inset);
+      border-radius: var(--_ta-inner-r);
     }
 
     .team-avatar__ring {
-      border-radius: var(--radius-s);
+      border-color: rgba(var(--sidebar-text-rgb), 0.16);
+    }
+  }
+
+  &--active {
+    .team-avatar__inner {
+      inset: var(--_ta-inset);
+      border-radius: var(--_ta-inner-r);
+    }
+
+    .team-avatar__ring {
+      border-color: var(--sidebar-text-active-border, #5d89ea);
     }
   }
 }

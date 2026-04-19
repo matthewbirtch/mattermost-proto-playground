@@ -130,3 +130,13 @@
   padding: var(--spacing-l);
   border-radius: var(--radius-m);
 }
+
+.components__button-block--sidebar-header-bg {
+  background-color: var(--sidebar-header-bg);
+  padding: var(--spacing-l);
+  border-radius: var(--radius-m);
+
+  .components__instance-label {
+    color: var(--sidebar-text-72, rgba(255, 255, 255, 0.72));
+  }
+}

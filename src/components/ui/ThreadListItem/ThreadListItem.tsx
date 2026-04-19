@@ -1,3 +1,5 @@
+import LabelTag from '../LabelTag/LabelTag';
+import UnreadBadge from '../UnreadBadge/UnreadBadge';
 import styles from './ThreadListItem.module.scss';
 
 export interface ThreadListItemProps {
@@ -55,7 +57,7 @@ export default function ThreadListItem({
           <div className={styles['thread-list-item__post-content']}>
             <div className={styles['thread-list-item__unread-dot']}>
               {badge === 'Unread' && (
-                <span className={styles['thread-list-item__unread-badge']} aria-label="Unread" />
+                <UnreadBadge className={styles['thread-list-item__unread-badge']} />
               )}
             </div>
             <div className={styles['thread-list-item__post-body']}>
@@ -63,9 +65,7 @@ export default function ThreadListItem({
                 <div className={styles['thread-list-item__name-row']}>
                   <div className={styles['thread-list-item__name-group']}>
                     <span className={styles['thread-list-item__author']}>{authorName}</span>
-                    <span className={styles['thread-list-item__channel-tag']}>
-                      <span className={styles['thread-list-item__channel-label']}>{channelLabel}</span>
-                    </span>
+                    <LabelTag label={channelLabel} casing="All Caps" />
                   </div>
                   <span className={styles['thread-list-item__timestamp']}>{timestamp}</span>
                 </div>

@@ -1,10 +1,12 @@
+import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
+import MessageHeader from '@/components/ui/MessageHeader/MessageHeader';
 import styles from './PermalinkPreview.module.scss';
 
 export interface PermalinkPreviewProps {
   /** Sender's display name. */
   authorName?: string;
   /** Avatar image src. */
-  avatarSrc?: string;
+  avatarSrc: string;
   /** Timestamp label. */
   timestamp?: string;
   /** The quoted message body text. */
@@ -35,26 +37,8 @@ export default function PermalinkPreview({
       <div className={styles['permalink-preview__card']}>
         <div className={styles['permalink-preview__message']}>
           <div className={styles['permalink-preview__header']}>
-            <div className={styles['permalink-preview__avatar']}>
-              {avatarSrc ? (
-                <img
-                  src={avatarSrc}
-                  alt={authorName}
-                  className={styles['permalink-preview__avatar-img']}
-                />
-              ) : (
-                <div
-                  className={styles['permalink-preview__avatar-placeholder']}
-                  aria-hidden="true"
-                >
-                  {authorName.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
-            <div className={styles['permalink-preview__meta']}>
-              <span className={styles['permalink-preview__author']}>{authorName}</span>
-              <span className={styles['permalink-preview__timestamp']}>{timestamp}</span>
-            </div>
+            <UserAvatar src={avatarSrc} alt={authorName} size="24" />
+            <MessageHeader username={authorName} timestamp={timestamp} />
           </div>
           <div className={styles['permalink-preview__body']}>
             <p className={styles['permalink-preview__text']}>{messageText}</p>

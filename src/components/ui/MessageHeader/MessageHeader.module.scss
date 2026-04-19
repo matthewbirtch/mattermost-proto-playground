@@ -3,6 +3,10 @@
   align-items: center;
   gap: var(--spacing-xxs);
 
+  > * {
+    align-self: center;
+  }
+
   &__username {
     font-family: var(--font-family-body);
     font-size: var(--font-size-100);

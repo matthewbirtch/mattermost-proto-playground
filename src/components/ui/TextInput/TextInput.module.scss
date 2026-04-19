@@ -27,7 +27,8 @@
     }
 
     .textInput:has(.textInput__input:focus-visible) & {
-      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 1px var(--button-bg);
     }
 
     .textInput:has(.textInput__input:disabled) & {
@@ -62,7 +63,8 @@
       transform 150ms ease,
       font-size 150ms ease,
       color 150ms ease,
-      top 150ms ease;
+      top 150ms ease,
+      left 150ms ease;
 
     .textInput--label-floated & {
       top: 0;
@@ -149,8 +151,10 @@
     }
 
     &.textInput--label-floated .textInput__label {
-      top: 4px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -160,7 +164,7 @@
     }
 
     .textInput__inner {
-      padding: 10px 12px;
+      padding: 10px 16px;
       min-height: 40px;
     }
 
@@ -171,11 +175,14 @@
 
     .textInput__label {
       font-size: 14px;
+      left: 12px;
     }
 
     &.textInput--label-floated .textInput__label {
-      top: 6px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -185,7 +192,7 @@
     }
 
     .textInput__inner {
-      padding: 12px 12px;
+      padding: 12px 16px;
       min-height: 48px;
     }
 
@@ -194,10 +201,51 @@
       line-height: 24px;
     }
 
-    &.textInput--label-floated .textInput__label {
-      top: 8px;
-      transform: none;
+    .textInput__label {
+      font-size: 16px;
+      line-height: 24px;
+      left: 12px;
     }
+
+    &.textInput--label-floated .textInput__label {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Leading icon: offset resting label; reset left when floated
+  // ---------------------------------------------------------------------------
+  &--has-leading-icon {
+    .textInput__label {
+      left: 32px; // Small: 12px padding + 16px icon + 8px gap − 4px label-padding
+    }
+
+    &.textInput--label-floated .textInput__label {
+      left: 8px;
+    }
+
+    &.textInput--size-medium,
+    &.textInput--size-large {
+      .textInput__label {
+        left: 36px; // 16px padding + 16px icon + 8px gap − 4px label-padding
+      }
+
+      &.textInput--label-floated .textInput__label {
+        left: 12px;
+      }
+    }
+  }
+
+  &:has(.textInput__input:focus-visible) .textInput__label {
+    color: var(--button-bg);
+  }
+
+  // Hide placeholder while the floating label is in the resting position to prevent overlap.
+  &:has(.textInput__label):not(&--label-floated) .textInput__input::placeholder {
+    color: transparent;
   }
 
   // ---------------------------------------------------------------------------
@@ -209,10 +257,15 @@
     }
 
     &:has(.textInput__input:focus-visible) .textInput__wrapper {
-      box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+      border-color: var(--error-text);
+      box-shadow: 0 0 0 1px var(--error-text);
     }
 
     .textInput__label {
+      color: var(--error-text);
+    }
+
+    &:has(.textInput__input:focus-visible) .textInput__label {
       color: var(--error-text);
     }
   }

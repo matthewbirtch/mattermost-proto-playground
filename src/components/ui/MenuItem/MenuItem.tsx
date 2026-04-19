@@ -104,7 +104,7 @@ export default function MenuItem({
         </div>
         {trailingElement && (
           <div className={styles['menu-item__right']}>
-            <span className={styles['menu-item__trailing-visual']}>
+            <span className={[styles['menu-item__trailing-visual'], !trailingVisual ? styles['menu-item__trailing-visual--check'] : ''].filter(Boolean).join(' ')}>
               {trailingVisual ?? (
                 <Icon glyph={<CheckIcon />} size="16" />
               )}

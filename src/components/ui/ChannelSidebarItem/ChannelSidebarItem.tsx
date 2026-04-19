@@ -5,8 +5,10 @@ import SendOutlineIcon from '@mattermost/compass-icons/components/send-outline';
 import ChartLineIcon from '@mattermost/compass-icons/components/chart-line';
 import CircleMultipleOutlineIcon from '@mattermost/compass-icons/components/circle-multiple-outline';
 import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
+import DotsVerticalIcon from '@mattermost/compass-icons/components/dots-vertical';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import MentionBadge from '@/components/ui/MentionBadge/MentionBadge';
+import IconButton from '@/components/ui/IconButton/IconButton';
 import styles from './ChannelSidebarItem.module.scss';
 
 export type ChannelSidebarItemLeadingVisual =
@@ -113,6 +115,7 @@ export default function ChannelSidebarItem({
 }: ChannelSidebarItemProps) {
   const isDM = leadingVisual === 'Direct Message';
   const hasMentionBadge = status === 'Mention';
+  const isChannelOrDM = ['Public', 'Private', 'Group Message', 'Direct Message'].includes(leadingVisual);
 
   const rootClass = [
     styles['channel-sidebar-item'],
@@ -175,6 +178,17 @@ export default function ChannelSidebarItem({
         )}
         {hasMentionBadge && (
           <MentionBadge count={mentionCount ?? 1} location="Sidebar" />
+        )}
+        {isChannelOrDM && (
+          <span className={styles['channel-sidebar-item__menu-button']}>
+            <IconButton
+              size="X-Small"
+              style="Inverted"
+              icon={<DotsVerticalIcon size={12} />}
+              aria-label="Channel options"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </span>
         )}
       </div>
     </div>

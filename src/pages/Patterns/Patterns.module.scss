@@ -121,6 +121,18 @@
     gap: var(--spacing-l);
   }
 
+  // ── Channel Sidebar demo ────────────────────────────────────
+  &__sidebar-demo {
+    display: flex;
+    gap: var(--spacing-xxxl);
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    .patterns__variant-label {
+      margin-bottom: var(--spacing-xs);
+    }
+  }
+
   &__body-text {
     font-family: var(--font-family-body);
     font-size: var(--font-size-100);

@@ -24,7 +24,8 @@
     }
 
     .textArea:has(.textArea__input:focus-visible) & {
-      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 1px var(--button-bg);
     }
 
     .textArea:has(.textArea__input:disabled) & {
@@ -128,6 +129,8 @@
 
     &.textArea--label-floated .textArea__label {
       top: 0;
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -146,6 +149,8 @@
 
     &.textArea--label-floated .textArea__label {
       top: 0;
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -158,13 +163,25 @@
 
     .textArea__label {
       top: 12px;
+      left: 12px;
       font-size: var(--font-size-200);
       line-height: var(--line-height-200);
     }
 
     &.textArea--label-floated .textArea__label {
       top: 0;
+      font-size: 10px;
+      line-height: 14px;
     }
+  }
+
+  &:has(.textArea__input:focus-visible) .textArea__label {
+    color: var(--button-bg);
+  }
+
+  // Hide placeholder while the floating label is in the resting position to prevent overlap.
+  &:has(.textArea__label):not(&--label-floated) .textArea__input::placeholder {
+    color: transparent;
   }
 
   // ---------------------------------------------------------------------------
@@ -176,10 +193,15 @@
     }
 
     &:has(.textArea__input:focus-visible) .textArea__wrapper {
-      box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+      border-color: var(--error-text);
+      box-shadow: 0 0 0 1px var(--error-text);
     }
 
     .textArea__label {
+      color: var(--error-text);
+    }
+
+    &:has(.textArea__input:focus-visible) .textArea__label {
       color: var(--error-text);
     }
   }

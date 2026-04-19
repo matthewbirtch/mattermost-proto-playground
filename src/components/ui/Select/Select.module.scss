@@ -24,7 +24,8 @@
     }
 
     .select:has(.select__control:focus-visible) & {
-      box-shadow: 0 0 0 2px rgba(var(--button-bg-rgb), 0.56);
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 1px var(--button-bg);
     }
 
     .select:has(.select__control:disabled) & {
@@ -56,7 +57,8 @@
     transition:
       transform 150ms ease,
       font-size 150ms ease,
-      top 150ms ease;
+      top 150ms ease,
+      left 150ms ease;
 
     .select--label-floated & {
       top: 0;
@@ -151,8 +153,10 @@
     }
 
     &.select--label-floated .select__label {
-      top: 4px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -173,6 +177,7 @@
 
     .select__label {
       font-size: var(--font-size-100);
+      left: 12px;
     }
 
     .select__trailingIcon svg {
@@ -181,8 +186,10 @@
     }
 
     &.select--label-floated .select__label {
-      top: 6px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
   }
 
@@ -201,15 +208,32 @@
       line-height: var(--line-height-200);
     }
 
+    .select__label {
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-200);
+      left: 12px;
+    }
+
     .select__trailingIcon svg {
       width: 16px;
       height: 16px;
     }
 
     &.select--label-floated .select__label {
-      top: 8px;
-      transform: none;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 10px;
+      line-height: 14px;
     }
+  }
+
+  &:has(.select__control:focus-visible) .select__label {
+    color: var(--button-bg);
+  }
+
+  // Hide control text while the floating label is in the resting position to prevent overlap.
+  &:has(.select__label):not(&--label-floated) .select__control {
+    color: transparent;
   }
 
   // ---------------------------------------------------------------------------
@@ -221,20 +245,40 @@
     }
 
     &:has(.select__control:focus-visible) .select__wrapper {
-      box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+      border-color: var(--error-text);
+      box-shadow: 0 0 0 1px var(--error-text);
     }
 
     .select__label {
       color: var(--error-text);
     }
+
+    &:has(.select__control:focus-visible) .select__label {
+      color: var(--error-text);
+    }
   }
 
   // ---------------------------------------------------------------------------
-  // Leading icon offset
+  // Leading icon: offset resting label; reset left when floated
   // ---------------------------------------------------------------------------
   &--has-leading-icon {
     .select__label {
-      left: 36px;
+      left: 32px; // Small: 12px padding + 16px icon + 8px gap − 4px label-padding
+    }
+
+    &.select--label-floated .select__label {
+      left: 8px;
+    }
+
+    &.select--size-medium,
+    &.select--size-large {
+      .select__label {
+        left: 38px; // 16px padding + 16px icon + 10px gap − 4px label-padding
+      }
+
+      &.select--label-floated .select__label {
+        left: 12px;
+      }
     }
   }
 }

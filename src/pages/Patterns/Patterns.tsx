@@ -94,38 +94,30 @@ export default function Patterns() {
         <h2 className={styles['patterns__section-title']}>Global Header</h2>
         <div className={styles['patterns__global-header-demo']}>
           <p className={styles['patterns__variant-label']}>Channels</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Channels"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Channels"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Channels — with Upgrade</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Channels"
-              showUpgradeButton
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Channels"
+            showUpgradeButton
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Playbooks</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Playbooks"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Playbooks"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Boards</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Boards"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Boards"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
         </div>
       </section>
 

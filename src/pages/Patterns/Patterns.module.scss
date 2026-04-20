@@ -62,11 +62,6 @@
     gap: var(--spacing-xs);
   }
 
-  &__global-header-canvas {
-    border-radius: var(--radius-m);
-    overflow: hidden;
-  }
-
   // ── Channel Header demo ─────────────────────────────────────
   &__channel-header-demo {
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);

@@ -118,14 +118,17 @@ export default function ChannelSidebarItem({
   onClick,
 }: ChannelSidebarItemProps) {
   const isDM = leadingVisual === 'Direct Message';
-  const hasMentionBadge = status === 'Mention';
+  const isDrafts = leadingVisual === 'Drafts';
+  const effectiveStatus = isDrafts && status === 'Unread' ? 'Read' : status;
+  const hasMentionBadge = effectiveStatus === 'Mention';
   const isChannelOrDM = ['Public', 'Private', 'Group Message', 'Direct Message'].includes(leadingVisual);
 
   const rootClass = [
     styles['channel-sidebar-item'],
     active ? styles['channel-sidebar-item--active'] : '',
     muted ? styles['channel-sidebar-item--muted'] : '',
-    styles[`channel-sidebar-item--status-${status.toLowerCase()}`],
+    styles[`channel-sidebar-item--status-${effectiveStatus.toLowerCase()}`],
+    isDrafts ? styles['channel-sidebar-item--drafts'] : '',
     className,
   ].filter(Boolean).join(' ');
 
@@ -181,7 +184,9 @@ export default function ChannelSidebarItem({
           </div>
         )}
         {hasMentionBadge && (
-          <MentionBadge count={mentionCount ?? 1} location="Sidebar" size="Medium" />
+          <span className={styles['channel-sidebar-item__mention-badge']}>
+            <MentionBadge count={mentionCount ?? 1} location="Sidebar" size="Medium" />
+          </span>
         )}
         {isChannelOrDM && (
           <span className={styles['channel-sidebar-item__menu-button']}>

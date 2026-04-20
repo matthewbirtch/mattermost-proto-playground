@@ -17,6 +17,10 @@
     .channel-sidebar-item__menu-button {
       display: contents;
     }
+
+    .channel-sidebar-item__mention-badge {
+      display: none;
+    }
   }
 
   &:focus-visible {
@@ -120,7 +124,7 @@
     justify-content: flex-end;
     flex-shrink: 0;
     gap: var(--spacing-xxxxs);
-    padding-right: 18px;
+    padding-right: var(--spacing-l);
     color: var(--sidebar-text);
   }
 
@@ -154,6 +158,30 @@
 
     .channel-sidebar-item__name {
       font-weight: var(--font-weight-semibold);
+      opacity: 1;
+    }
+  }
+
+  &--drafts {
+    .channel-sidebar-item__icon-container {
+      opacity: 0.64;
+    }
+
+    .channel-sidebar-item__name {
+      font-weight: var(--font-weight-regular);
+      opacity: 0.72;
+    }
+
+    .channel-sidebar-item__mention-badge > :global(*) {
+      background-color: transparent;
+      color: var(--sidebar-text);
+      padding-left: 0;
+      padding-right: var(--spacing-xxs);
+    }
+  }
+
+  &--drafts#{&}--active {
+    .channel-sidebar-item__name {
       opacity: 1;
     }
   }

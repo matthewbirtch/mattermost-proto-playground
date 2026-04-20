@@ -142,7 +142,7 @@ export default function AttachmentCard({
                 className={styles['attachment-card__icon']}
                 style={iconColor ? { color: iconColor } : undefined}
               >
-                <Icon glyph={<FileIcon />} size="40" />
+                <Icon glyph={<FileIcon size={40} />} size="40" />
               </div>
             )}
 

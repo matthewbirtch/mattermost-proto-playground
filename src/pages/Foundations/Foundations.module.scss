@@ -5,6 +5,7 @@
 
 .foundations {
   max-width: 960px;
+  width: 100%;
   margin: 0 auto;
   padding: var(--spacing-xxxxl) var(--spacing-xxxl);
 
@@ -388,7 +389,7 @@
     left: 0;
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background-color: var(--button-bg);
     animation-name: foundations-slide;
     animation-fill-mode: forwards;

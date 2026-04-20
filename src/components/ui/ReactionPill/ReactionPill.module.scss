@@ -1,7 +1,7 @@
 .reaction-pill {
   display: inline-flex;
   align-items: center;
-  border-radius: 200px;
+  border-radius: var(--radius-full);
   background-color: var(--calls-bg, var(--color-indigo-600));
 
   &__inner {

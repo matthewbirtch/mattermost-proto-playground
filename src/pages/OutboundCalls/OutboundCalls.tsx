@@ -196,13 +196,14 @@ function formatRecentDuration(sec: number): string {
 
 // ── Scene switcher ─────────────────────────────────────────────────────────
 
-type SceneId = 'channel' | 'dm' | 'dialer' | 'rhs';
+type SceneId = 'channel' | 'dm' | 'dialer' | 'rhs' | 'team-sidebar';
 
 const SCENES: { id: SceneId; label: string }[] = [
   { id: 'channel', label: 'Channel' },
   { id: 'dm', label: 'Direct message' },
   { id: 'dialer', label: 'Dialer' },
   { id: 'rhs', label: 'Right sidebar' },
+  { id: 'team-sidebar', label: 'Team sidebar' },
 ];
 
 function SceneSwitcher({
@@ -1564,6 +1565,9 @@ export default function OutboundCalls() {
                 { id: 'design', name: 'Design', initials: 'De', unread: true },
                 { id: 'acme', name: 'Acme', initials: 'Ac', mentions: 3 },
               ]}
+              showDialPad={scene === 'team-sidebar'}
+              dialPadActive={!!call && keypadOpen}
+              onDialPadClick={openDialpadWidget}
             />
           </div>
 
@@ -1572,7 +1576,7 @@ export default function OutboundCalls() {
               <ChannelsSidebar
                 teamName="Contributors"
                 showFilter
-                showDialPad
+                showDialPad={scene !== 'rhs' && scene !== 'team-sidebar'}
                 activeChannelName={
                   scene === 'channel'
                     ? 'softphone-ux'
@@ -1581,6 +1585,8 @@ export default function OutboundCalls() {
                     : scene === 'dialer'
                     ? 'Dial Pad'
                     : scene === 'rhs'
+                    ? 'softphone-ux'
+                    : scene === 'team-sidebar'
                     ? 'softphone-ux'
                     : ''
                 }
@@ -1626,6 +1632,13 @@ export default function OutboundCalls() {
                   />
                 )}
                 {scene === 'rhs' && (
+                  <ChannelScene
+                    onOpenProfile={openProfile}
+                    onOpenDialer={openDialpadWidget}
+                    callSummary={callSummary}
+                  />
+                )}
+                {scene === 'team-sidebar' && (
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}

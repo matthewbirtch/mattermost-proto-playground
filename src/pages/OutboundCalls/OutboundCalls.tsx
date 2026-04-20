@@ -915,7 +915,16 @@ function DialerScene({
                     className={styles['dialer__recent']}
                     onClick={() => onStartCall(r.contactId, r.phoneIndex)}
                   >
-                    <UserAvatar src={c.avatar} alt={c.name} size="32" />
+                    {c.avatar ? (
+                      <UserAvatar src={c.avatar} alt={c.name} size="32" />
+                    ) : (
+                      <div
+                        className={styles['dialer__recent-avatar-fallback']}
+                        aria-hidden
+                      >
+                        <Icon glyph={<PhoneIcon />} size="16" />
+                      </div>
+                    )}
                     <div className={styles['dialer__recent-body']}>
                       <div
                         className={`${styles['dialer__recent-name']} ${
@@ -925,16 +934,6 @@ function DialerScene({
                         {c.name}
                       </div>
                       <div className={styles['dialer__recent-meta']}>
-                        <Icon
-                          glyph={
-                            r.direction === 'outbound' ? (
-                              <PhoneIcon />
-                            ) : (
-                              <PhoneHangupIcon />
-                            )
-                          }
-                          size="12"
-                        />
                         {p.number}
                       </div>
                     </div>
@@ -1059,6 +1058,12 @@ function CallPip({
             </div>
             <div className={styles['pip__sub']}>
               <span>{subContent}</span>
+              {!isComposing && phone?.sipTrunk && (
+                <>
+                  <span className={styles['pip__sub-sep']} aria-hidden>·</span>
+                  <span className={styles['pip__trunk']}>{phone.sipTrunk}</span>
+                </>
+              )}
             </div>
           </div>
         </div>

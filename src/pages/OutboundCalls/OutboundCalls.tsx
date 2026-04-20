@@ -236,7 +236,7 @@ function SceneSwitcher({
 // ── Call dropdown menu (prototype-only) ────────────────────────────────────
 
 function useOutsideClose(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLElement | null>,
   open: boolean,
   close: () => void,
 ) {
@@ -1396,17 +1396,7 @@ export default function OutboundCalls() {
                     recents={recents}
                     onStartCall={startCall}
                     onDialRaw={(n) => {
-                      const fakeId = `__raw-${n}`;
-                      CONTACT_MAP[fakeId] = {
-                        id: fakeId,
-                        name: n,
-                        role: 'Unknown number',
-                        avatar: '',
-                        online: false,
-                        phones: [
-                          { number: n, label: 'Dialed', kind: 'mobile', secure: false },
-                        ],
-                      };
+                      const fakeId = ensureRawContact(n);
                       startCall(fakeId, 0);
                     }}
                   />

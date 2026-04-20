@@ -16,7 +16,7 @@
     background-color: var(--color-neutral-1100, #1b1d22);
     border-radius: var(--radius-s);
     padding: var(--spacing-xxs) var(--spacing-s);
-    box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: var(--elevation-3);
     gap: var(--spacing-xxs);
   }
 
@@ -32,43 +32,43 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: #fff;
+    color: var(--color-neutral-0);
   }
 
   &__label {
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-75);
-    color: #fff;
+    color: var(--color-neutral-0);
     white-space: nowrap;
   }
 
   &__shortcuts {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: var(--spacing-xxxxs);
   }
 
   &__shortcut-tag {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(var(--color-neutral-0-rgb), 0.08);
     border-radius: var(--radius-s);
     padding: 5.5px var(--spacing-xxs);
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-75);
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(var(--color-neutral-0-rgb), 0.72);
     white-space: nowrap;
   }
 
   &__hint {
-    font-size: 11px;
+    font-size: var(--font-size-50);
     font-weight: var(--font-weight-semibold);
-    line-height: 16px;
+    line-height: var(--line-height-25);
     letter-spacing: 0.11px;
-    color: rgba(255, 255, 255, 0.64);
+    color: rgba(var(--color-neutral-0-rgb), 0.64);
     white-space: nowrap;
   }
 

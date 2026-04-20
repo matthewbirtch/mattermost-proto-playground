@@ -12,8 +12,8 @@
   overflow: hidden;
   cursor: default;
   transition:
-    background-color 150ms ease,
-    border-color 150ms ease;
+    background-color var(--duration-quick) var(--ease-transition),
+    border-color var(--duration-quick) var(--ease-transition);
 
   &:hover {
     background-color: rgba(var(--center-channel-color-rgb), 0.16);
@@ -75,7 +75,7 @@
   }
 
   &--error {
-    border-color: var(--error-text);
+    border-color: var(--color-danger);
   }
 
   // ---------------------------------------------------------------------------

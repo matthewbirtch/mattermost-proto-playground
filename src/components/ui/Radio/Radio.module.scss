@@ -51,10 +51,10 @@
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.24);
     border-radius: var(--radius-full);
     transition:
-      background-color 150ms ease,
-      border-color 150ms ease,
-      border-width 150ms ease,
-      box-shadow 150ms ease;
+      background-color var(--duration-quick) var(--ease-transition),
+      border-color var(--duration-quick) var(--ease-transition),
+      border-width var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     .radio__input:focus-visible ~ & {
       box-shadow: 0 0 0 4px rgba(var(--button-bg-rgb), 0.56);
@@ -107,44 +107,44 @@
   // Invalid (error) state
   // ---------------------------------------------------------------------------
   &--invalid &__circle {
-    border-color: var(--error-text);
+    border-color: var(--color-danger);
   }
 
   &:has(&__input:not(:disabled)):hover#{&}--invalid
     &__input:not(:checked)
     ~ &__circle {
-    border-color: var(--error-text);
+    border-color: var(--color-danger);
   }
 
   &--invalid &__input:checked ~ &__circle {
     background-color: var(--center-channel-bg);
     border-width: 1px;
-    border-color: var(--error-text);
+    border-color: var(--color-danger);
   }
 
   &--invalid &__input:checked ~ &__circle &__dot {
-    background-color: var(--error-text);
+    background-color: var(--color-danger);
   }
 
   &:has(&__input:not(:disabled)):hover#{&}--invalid
     &__input:checked
     ~ &__circle {
-    border-color: var(--error-text);
+    border-color: var(--color-danger);
   }
 
   &:has(&__input:not(:disabled)):hover#{&}--invalid
     &__input:checked
     ~ &__circle
     &__dot {
-    background-color: var(--error-text);
+    background-color: var(--color-danger);
   }
 
   &--invalid &__input:focus-visible ~ &__circle {
-    box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+    box-shadow: 0 0 0 2px rgba(var(--color-danger-rgb), 0.56);
   }
 
   &--invalid &__input:focus-visible:checked ~ &__circle {
-    box-shadow: 0 0 0 2px rgba(var(--error-text-rgb), 0.56);
+    box-shadow: 0 0 0 2px rgba(var(--color-danger-rgb), 0.56);
   }
 
   // ---------------------------------------------------------------------------
@@ -155,7 +155,7 @@
     border-radius: var(--radius-full);
     pointer-events: none;
     transform: scale(0.5);
-    transition: transform 180ms ease-out;
+    transition: transform var(--duration-quick) var(--ease-entrance);
   }
 
   &__input:checked ~ &__circle &__dot {

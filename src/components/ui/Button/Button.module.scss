@@ -12,10 +12,10 @@
   border: 1px solid transparent;
   cursor: pointer;
   transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    color 150ms ease,
-    box-shadow 150ms ease;
+    background-color var(--duration-quick) var(--ease-transition),
+    border-color var(--duration-quick) var(--ease-transition),
+    color var(--duration-quick) var(--ease-transition),
+    box-shadow var(--duration-quick) var(--ease-transition);
 
   &:focus-visible {
     outline: none;
@@ -201,14 +201,14 @@
   // ---------------------------------------------------------------------------
   &--destructive {
     &.button--emphasis-primary {
-      background-color: var(--error-text);
+      background-color: var(--color-danger);
       color: var(--button-color);
 
       &:hover:not(:disabled) {
-        background-color: var(--error-text);
+        background-color: var(--color-danger);
       }
       &:active:not(:disabled) {
-        background-color: var(--error-text);
+        background-color: var(--color-danger);
       }
       &:disabled {
         background-color: rgba(var(--center-channel-color-rgb), 0.08);
@@ -217,19 +217,19 @@
       &:focus-visible {
         box-shadow:
           0 0 0 3px var(--center-channel-bg),
-          0 0 0 5px var(--error-text);
+          0 0 0 5px var(--color-danger);
       }
     }
 
     &.button--emphasis-secondary {
-      color: var(--error-text);
-      border-color: var(--error-text);
+      color: var(--color-danger);
+      border-color: var(--color-danger);
 
       &:hover:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.08);
+        background-color: rgba(var(--color-danger-rgb), 0.08);
       }
       &:active:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.16);
+        background-color: rgba(var(--color-danger-rgb), 0.16);
       }
       &:disabled {
         border-color: rgba(var(--center-channel-color-rgb), 0.32);
@@ -238,19 +238,19 @@
       &:focus-visible {
         box-shadow:
           0 0 0 3px var(--center-channel-bg),
-          0 0 0 5px var(--error-text);
+          0 0 0 5px var(--color-danger);
       }
     }
 
     &.button--emphasis-tertiary {
-      background-color: rgba(var(--error-text-rgb), 0.08);
-      color: var(--error-text);
+      background-color: rgba(var(--color-danger-rgb), 0.08);
+      color: var(--color-danger);
 
       &:hover:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.12);
+        background-color: rgba(var(--color-danger-rgb), 0.12);
       }
       &:active:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.16);
+        background-color: rgba(var(--color-danger-rgb), 0.16);
       }
       &:disabled {
         background-color: rgba(var(--center-channel-color-rgb), 0.08);
@@ -259,18 +259,18 @@
       &:focus-visible {
         box-shadow:
           0 0 0 3px var(--center-channel-bg),
-          0 0 0 5px var(--error-text);
+          0 0 0 5px var(--color-danger);
       }
     }
 
     &.button--emphasis-quaternary {
-      color: var(--error-text);
+      color: var(--color-danger);
 
       &:hover:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.08);
+        background-color: rgba(var(--color-danger-rgb), 0.08);
       }
       &:active:not(:disabled) {
-        background-color: rgba(var(--error-text-rgb), 0.16);
+        background-color: rgba(var(--color-danger-rgb), 0.16);
       }
       &:disabled {
         color: rgba(var(--center-channel-color-rgb), 0.32);
@@ -278,12 +278,12 @@
       &:focus-visible {
         box-shadow:
           0 0 0 3px var(--center-channel-bg),
-          0 0 0 5px var(--error-text);
+          0 0 0 5px var(--color-danger);
       }
     }
 
     &.button--emphasis-link {
-      color: var(--error-text);
+      color: var(--color-danger);
 
       &:disabled {
         color: rgba(var(--center-channel-color-rgb), 0.32);
@@ -291,7 +291,7 @@
       &:focus-visible {
         box-shadow:
           0 0 0 3px var(--center-channel-bg),
-          0 0 0 5px var(--error-text);
+          0 0 0 5px var(--color-danger);
       }
     }
   }

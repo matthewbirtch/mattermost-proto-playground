@@ -23,9 +23,9 @@
   // Context modifiers — affect colour
   // ---------------------------------------------------------------------------
 
-  // Team Icon context: uses the sidebar mention badge colour (blue)
+  // Team Icon context: matches MentionBadge fill in sidebar
   &--context-team-icon {
-    background-color: var(--sidebar-text-active-border, var(--color-blue-300));
+    background-color: var(--mention-bg);
   }
 
   // Icon Button context: uses the link/button colour

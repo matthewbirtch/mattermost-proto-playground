@@ -16,15 +16,15 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-s);
-    padding: 10px 16px;
+    padding: var(--spacing-s) var(--spacing-l);
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     border-radius: var(--radius-s);
     cursor: pointer;
     user-select: none;
     transition:
-      border-color 150ms ease,
-      box-shadow 150ms ease;
+      border-color var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     &:hover:not(.dateRangePicker--disabled) {
       border-color: rgba(var(--center-channel-color-rgb), 0.24);
@@ -55,18 +55,18 @@
 
     svg {
       display: block;
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
   }
 
   &__value {
     flex: 1 1 0;
     min-width: 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-family-body);
     font-size: var(--font-size-100);
     line-height: var(--line-height-100);
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
     color: var(--center-channel-color);
     white-space: nowrap;
     overflow: hidden;
@@ -84,12 +84,12 @@
     justify-content: center;
     flex-shrink: 0;
     color: rgba(var(--center-channel-color-rgb), 0.64);
-    transition: transform 150ms ease;
+    transition: transform var(--duration-quick) var(--ease-transition);
 
     svg {
       display: block;
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
 
     .dateRangePicker--open & {
@@ -106,14 +106,14 @@
     left: 0;
     z-index: 200;
     width: 340px;
-    padding: 16px;
+    padding: var(--spacing-l);
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     border-radius: var(--radius-s);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--elevation-4);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--spacing-l);
   }
 
   // ---------------------------------------------------------------------------
@@ -123,11 +123,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 8px;
+    padding-left: var(--spacing-xs);
   }
 
   &__monthLabel {
-    font-family: 'Metropolis', sans-serif;
+    font-family: var(--font-family-heading);
     font-size: var(--font-size-200);
     line-height: var(--line-height-200);
     font-weight: var(--font-weight-semibold);
@@ -141,7 +141,7 @@
   &__headerActions {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--spacing-xxxs);
     flex-shrink: 0;
   }
 
@@ -157,7 +157,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: var(--spacing-s) 0;
   }
 
   &__weekday {
@@ -165,7 +165,7 @@
     align-items: center;
     justify-content: center;
     width: 36px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-family-body);
     font-size: var(--font-size-75);
     line-height: var(--line-height-75);
     font-weight: var(--font-weight-semibold);
@@ -181,7 +181,7 @@
   &__grid {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--spacing-xs);
   }
 
   &__week {
@@ -207,15 +207,15 @@
     background: transparent;
     border: 0;
     border-radius: 100px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-family-body);
     font-size: var(--font-size-100);
     line-height: var(--line-height-100);
     font-weight: var(--font-weight-semibold);
     color: var(--center-channel-color);
     cursor: pointer;
     transition:
-      background-color 100ms ease,
-      color 100ms ease;
+      background-color var(--duration-quick) var(--ease-transition),
+      color var(--duration-quick) var(--ease-transition);
 
     &:hover:not(&--selected) {
       background-color: rgba(var(--center-channel-color-rgb), 0.08);

@@ -29,7 +29,7 @@
     position: absolute;
     inset: -4px;
     border-radius: var(--radius-full);
-    border: 3px solid var(--online-indicator, var(--color-green-500));
+    border: 3px solid var(--online-indicator, var(--color-success));
     pointer-events: none;
   }
 
@@ -50,27 +50,27 @@
       bottom: 0;
       right: 0;
       background-color: var(--color-indigo-600);
-      color: var(--center-channel-bg, #ffffff);
+      color: var(--center-channel-bg, var(--color-neutral-0));
     }
 
     &--unmuted {
       bottom: 0;
       right: 0;
-      background-color: var(--online-indicator, var(--color-green-500));
-      color: var(--center-channel-bg, #ffffff);
+      background-color: var(--online-indicator, var(--color-success));
+      color: var(--center-channel-bg, var(--color-neutral-0));
     }
 
     &--reaction {
       bottom: 0;
       left: 0;
       background-color: var(--color-indigo-600);
-      color: var(--center-channel-bg, #ffffff);
+      color: var(--center-channel-bg, var(--color-neutral-0));
     }
 
     &--raised-hand {
       bottom: 0;
       left: 0;
-      background-color: var(--center-channel-bg, #ffffff);
+      background-color: var(--center-channel-bg, var(--color-neutral-0));
       color: var(--color-orange-400);
     }
   }
@@ -81,7 +81,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--button-color, #ffffff);
+    color: var(--button-color, var(--color-neutral-0));
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-75);
@@ -92,12 +92,12 @@
     display: inline-flex;
     align-items: center;
     padding: 0 var(--spacing-xxs);
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.08);
-    color: var(--center-channel-bg, #ffffff);
-    font-size: 10px;
+    border-radius: var(--radius-s);
+    background-color: rgba(var(--color-neutral-0-rgb), 0.08);
+    color: var(--center-channel-bg, var(--color-neutral-0));
+    font-size: var(--font-size-25);
     font-weight: var(--font-weight-semibold);
-    line-height: 16px;
+    line-height: var(--line-height-25);
     letter-spacing: 0.01em;
     text-transform: uppercase;
   }
@@ -115,18 +115,18 @@
     }
 
     .call-participant-avatar__badge {
-      padding: 8px;
+      padding: var(--spacing-xs);
 
       svg {
-        width: 20px;
-        height: 20px;
+        width: var(--icon-size-20);
+        height: var(--icon-size-20);
       }
     }
 
     .call-participant-avatar__badge--reaction,
     .call-participant-avatar__badge--raised-hand {
-      font-size: 20px;
-      line-height: 20px;
+      font-size: var(--font-size-400);
+      line-height: var(--line-height-100);
     }
   }
 
@@ -140,18 +140,18 @@
     }
 
     .call-participant-avatar__badge {
-      padding: 6px;
+      padding: var(--spacing-xxs);
 
       svg {
-        width: 16px;
-        height: 16px;
+        width: var(--icon-size-16);
+        height: var(--icon-size-16);
       }
     }
 
     .call-participant-avatar__badge--reaction,
     .call-participant-avatar__badge--raised-hand {
-      font-size: 16px;
-      line-height: 16px;
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-25);
     }
   }
 
@@ -165,18 +165,18 @@
     }
 
     .call-participant-avatar__badge {
-      padding: 4px;
+      padding: var(--spacing-xxxs);
 
       svg {
-        width: 16px;
-        height: 16px;
+        width: var(--icon-size-16);
+        height: var(--icon-size-16);
       }
     }
 
     .call-participant-avatar__badge--reaction,
     .call-participant-avatar__badge--raised-hand {
-      font-size: 16px;
-      line-height: 16px;
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-25);
     }
   }
 
@@ -190,22 +190,22 @@
     }
 
     .call-participant-avatar__badge {
-      padding: 4px;
+      padding: var(--spacing-xxxs);
 
       svg {
-        width: 12px;
-        height: 12px;
+        width: var(--icon-size-12);
+        height: var(--icon-size-12);
       }
     }
 
     .call-participant-avatar__badge--reaction,
     .call-participant-avatar__badge--raised-hand {
-      font-size: 12px;
+      font-size: var(--font-size-75);
       line-height: 12px;
     }
 
     .call-participant-avatar__name {
-      font-size: 11px;
+      font-size: var(--font-size-50);
       letter-spacing: 0.01em;
     }
   }

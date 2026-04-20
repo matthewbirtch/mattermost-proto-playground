@@ -42,7 +42,7 @@
     font-family: var(--font-family-heading);
     font-size: var(--font-size-200);
     font-weight: var(--font-weight-semibold);
-    line-height: 24px;
+    line-height: var(--line-height-200);
     color: var(--sidebar-text);
     white-space: nowrap;
     overflow: hidden;
@@ -89,7 +89,7 @@
     font-family: var(--font-family-body);
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-regular);
-    line-height: 16px;
+    line-height: var(--line-height-75);
     letter-spacing: 0.02em;
     color: var(--sidebar-text);
     opacity: 0.72;
@@ -113,6 +113,33 @@
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color var(--duration-quick) var(--ease-transition);
+
+    &:hover,
+    &:focus-within {
+      scrollbar-color: rgba(var(--sidebar-text-rgb), 0.32) transparent;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 4px;
+      transition: background var(--duration-quick) var(--ease-transition);
+    }
+
+    &:hover::-webkit-scrollbar-thumb,
+    &:focus-within::-webkit-scrollbar-thumb {
+      background: rgba(var(--sidebar-text-rgb), 0.32);
+    }
   }
 
   &__channel-groups {
@@ -167,7 +194,7 @@
     font-family: var(--font-family-body);
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
-    line-height: 16px;
+    line-height: var(--line-height-75);
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--sidebar-text);

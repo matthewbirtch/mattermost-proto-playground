@@ -71,6 +71,13 @@ export default function Home() {
             <span className={styles['home__card-arrow']}>→</span>
           </div>
         </Link>
+        <Link to="/layouts" className={styles['home__card']}>
+          <CardThumbnail src="/layouts" />
+          <div className={styles['home__card-body']}>
+            <span className={styles['home__card-label']}>Layouts</span>
+            <span className={styles['home__card-arrow']}>→</span>
+          </div>
+        </Link>
         {PROTOTYPES.map(({ id, label, path }) => (
           <Link key={id} to={path} className={styles['home__card']}>
             <CardThumbnail src={path} />

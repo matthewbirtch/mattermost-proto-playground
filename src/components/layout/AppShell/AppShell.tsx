@@ -79,7 +79,9 @@ export default function AppShell() {
           </div>
         </div>
       )}
-      <Outlet />
+      <div className={styles['app-shell__content']}>
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -52,10 +52,10 @@
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     border-radius: var(--radius-s);
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
-    padding: var(--spacing-xxxxs, 4px);
+    box-shadow: var(--elevation-1);
+    padding: var(--spacing-xxxxs);
     opacity: 0;
-    transition: opacity 150ms ease;
+    transition: opacity var(--duration-quick) var(--ease-transition);
   }
 
   &__frame:hover &__actions {
@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xxxs, 6px);
+    padding: var(--spacing-xxxs);
     background: transparent;
     border: none;
     border-radius: var(--radius-s);
@@ -92,12 +92,12 @@
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     border-radius: 555px;
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
-    padding: var(--spacing-xxxs, 6px);
+    box-shadow: var(--elevation-1);
+    padding: var(--spacing-xxxs);
     cursor: pointer;
     color: var(--center-channel-color);
     opacity: 0;
-    transition: opacity 150ms ease;
+    transition: opacity var(--duration-quick) var(--ease-transition);
   }
 
   &__frame:hover &__collapse-btn {
@@ -129,8 +129,8 @@
   &__show-icon {
     display: inline-flex;
     align-items: center;
-    width: 12px;
-    font-size: 14px;
+    width: var(--icon-size-12);
+    font-size: var(--font-size-100);
     color: rgba(var(--center-channel-color-rgb), 0.64);
   }
 }

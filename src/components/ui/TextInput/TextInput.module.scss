@@ -17,10 +17,10 @@
     min-height: 0;
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    border-radius: 4px;
+    border-radius: var(--radius-s);
     transition:
-      border-color 150ms ease,
-      box-shadow 150ms ease;
+      border-color var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     .textInput:has(.textInput__input:not(:disabled)):hover & {
       border-color: rgba(var(--center-channel-color-rgb), 0.24);
@@ -43,15 +43,15 @@
   // ---------------------------------------------------------------------------
   &__label {
     position: absolute;
-    left: 8px;
+    left: var(--spacing-xs);
     top: 50%;
-    padding: 0 4px;
+    padding: 0 var(--spacing-xxxs);
     transform: translateY(-50%);
     margin: 0;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-25);
+    font-weight: var(--font-weight-regular);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     background-color: var(--center-channel-bg);
     pointer-events: none;
@@ -60,16 +60,16 @@
     text-overflow: ellipsis;
     max-width: calc(100% - 24px);
     transition:
-      transform 150ms ease,
-      font-size 150ms ease,
-      color 150ms ease,
-      top 150ms ease,
-      left 150ms ease;
+      transform var(--duration-quick) var(--ease-transition),
+      font-size var(--duration-quick) var(--ease-transition),
+      color var(--duration-quick) var(--ease-transition),
+      top var(--duration-quick) var(--ease-transition),
+      left var(--duration-quick) var(--ease-transition);
 
     .textInput--label-floated & {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
       color: rgba(var(--center-channel-color-rgb), 0.64);
     }
@@ -93,9 +93,9 @@
     border: 0;
     background: transparent;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-25);
+    font-weight: var(--font-weight-regular);
     color: var(--center-channel-color);
 
     &:focus {
@@ -117,17 +117,17 @@
   }
 
   &__leadingIcon {
-    margin-right: 8px;
+    margin-right: var(--spacing-xs);
   }
 
   &__trailingIcon {
-    margin-left: 8px;
+    margin-left: var(--spacing-xs);
   }
 
   &__counter {
-    margin-top: 4px;
+    margin-top: var(--spacing-xxxs);
     font-family: 'Open Sans', sans-serif;
-    font-size: 10px;
+    font-size: var(--font-size-25);
     line-height: 14px;
     color: rgba(var(--center-channel-color-rgb), 0.64);
   }
@@ -141,19 +141,19 @@
     }
 
     .textInput__inner {
-      padding: 8px 12px;
+      padding: var(--spacing-xs) var(--spacing-m);
       min-height: 32px;
     }
 
     .textInput__input {
-      font-size: 12px;
-      line-height: 16px;
+      font-size: var(--font-size-75);
+      line-height: var(--line-height-25);
     }
 
     &.textInput--label-floated .textInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -164,24 +164,24 @@
     }
 
     .textInput__inner {
-      padding: 10px 16px;
+      padding: var(--spacing-s) var(--spacing-l);
       min-height: 40px;
     }
 
     .textInput__input {
-      font-size: 14px;
-      line-height: 20px;
+      font-size: var(--font-size-100);
+      line-height: var(--line-height-100);
     }
 
     .textInput__label {
-      font-size: 14px;
-      left: 12px;
+      font-size: var(--font-size-100);
+      left: var(--spacing-m);
     }
 
     &.textInput--label-floated .textInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -192,25 +192,25 @@
     }
 
     .textInput__inner {
-      padding: 12px 16px;
+      padding: var(--spacing-m) var(--spacing-l);
       min-height: 48px;
     }
 
     .textInput__input {
-      font-size: 16px;
-      line-height: 24px;
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-200);
     }
 
     .textInput__label {
-      font-size: 16px;
-      line-height: 24px;
-      left: 12px;
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-200);
+      left: var(--spacing-m);
     }
 
     &.textInput--label-floated .textInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -220,11 +220,11 @@
   // ---------------------------------------------------------------------------
   &--has-leading-icon {
     .textInput__label {
-      left: 32px; // Small: 12px padding + 16px icon + 8px gap − 4px label-padding
+      left: var(--spacing-xxxl); // Small: 12px padding + 16px icon + 8px gap − 4px label-padding
     }
 
     &.textInput--label-floated .textInput__label {
-      left: 8px;
+      left: var(--spacing-xs);
     }
 
     &.textInput--size-medium,
@@ -234,7 +234,7 @@
       }
 
       &.textInput--label-floated .textInput__label {
-        left: 12px;
+        left: var(--spacing-m);
       }
     }
   }

@@ -8,7 +8,7 @@ export type UnreadBadgeContext = 'Team Icon' | 'Icon Button';
 export interface UnreadBadgeProps {
   /** Dot size in px. Default: 8. */
   size?: UnreadBadgeSize;
-  /** Display context affects colour. Default: Team Icon. */
+  /** Display context affects dot colour. Default: Team Icon (same fill as MentionBadge). */
   context?: UnreadBadgeContext;
   /** Optional CSS class name. */
   className?: string;

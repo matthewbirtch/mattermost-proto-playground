@@ -24,48 +24,48 @@
   // Size modifiers (Figma: XX-Small, X-Small, Small, Medium, Large)
   // ---------------------------------------------------------------------------
   &--size-xx-small {
-    width: 12px;
-    height: 12px;
+    width: var(--icon-size-12);
+    height: var(--icon-size-12);
 
     .status-badge__glyph {
-      width: 10px;
-      height: 10px;
+      width: var(--icon-size-10);
+      height: var(--icon-size-10);
     }
   }
 
   &--size-x-small {
-    width: 12px;
-    height: 12px;
+    width: var(--icon-size-12);
+    height: var(--icon-size-12);
 
     .status-badge__glyph {
-      width: 12px;
-      height: 12px;
+      width: var(--icon-size-12);
+      height: var(--icon-size-12);
     }
   }
 
   &--size-small {
-    width: 16px;
-    height: 16px;
+    width: var(--icon-size-16);
+    height: var(--icon-size-16);
 
     .status-badge__glyph {
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
   }
 
   &--size-medium {
-    width: 24px;
-    height: 24px;
+    width: var(--icon-size-24);
+    height: var(--icon-size-24);
 
     .status-badge__glyph {
-      width: 20px;
-      height: 20px;
+      width: var(--icon-size-20);
+      height: var(--icon-size-20);
     }
   }
 
   &--size-large {
-    width: 32px;
-    height: 32px;
+    width: var(--icon-size-32);
+    height: var(--icon-size-32);
 
     .status-badge__glyph {
       width: 36px;
@@ -78,17 +78,17 @@
   // Status modifiers (Figma: Online, Away, Do Not Disturb, Offline)
   // ---------------------------------------------------------------------------
   &--status-online {
-    color: var(--online-indicator);
+    color: var(--color-success);
     background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 
   &--status-away {
-    color: var(--away-indicator);
+    color: var(--color-warning);
     background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 
   &--status-do-not-disturb {
-    color: var(--dnd-indicator);
+    color: var(--color-danger);
     background-color: var(--status-badge-bg, var(--center-channel-bg));
   }
 

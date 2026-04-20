@@ -1,12 +1,15 @@
 import React from 'react';
 import Button from '@/components/ui/Button/Button';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
+import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
 import MessageInput from '@/components/ui/MessageInput';
 import TextInput from '@/components/ui/TextInput/TextInput';
 import { Modal } from '@/components/ui/Modal';
 import Post from '@/components/ui/Post/Post';
 import Divider from '@/components/ui/Divider/Divider';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
+import TeamSidebar from '@/components/ui/TeamSidebar/TeamSidebar';
+import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
@@ -88,6 +91,45 @@ export default function Patterns() {
       </section>
 
       <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Global Header</h2>
+        <div className={styles['patterns__global-header-demo']}>
+          <p className={styles['patterns__variant-label']}>Channels</p>
+          <div className={styles['patterns__global-header-canvas']}>
+            <GlobalHeader
+              product="Channels"
+              userAvatarSrc={avatarLeonard}
+              userAvatarAlt="Leonard Riley"
+            />
+          </div>
+          <p className={styles['patterns__variant-label']}>Channels — with Upgrade</p>
+          <div className={styles['patterns__global-header-canvas']}>
+            <GlobalHeader
+              product="Channels"
+              showUpgradeButton
+              userAvatarSrc={avatarLeonard}
+              userAvatarAlt="Leonard Riley"
+            />
+          </div>
+          <p className={styles['patterns__variant-label']}>Playbooks</p>
+          <div className={styles['patterns__global-header-canvas']}>
+            <GlobalHeader
+              product="Playbooks"
+              userAvatarSrc={avatarLeonard}
+              userAvatarAlt="Leonard Riley"
+            />
+          </div>
+          <p className={styles['patterns__variant-label']}>Boards</p>
+          <div className={styles['patterns__global-header-canvas']}>
+            <GlobalHeader
+              product="Boards"
+              userAvatarSrc={avatarLeonard}
+              userAvatarAlt="Leonard Riley"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
         <h2 className={styles['patterns__section-title']}>Channel Header</h2>
         <div className={styles['patterns__channel-header-demo']}>
           <p className={styles['patterns__variant-label']}>Channel</p>
@@ -157,6 +199,20 @@ export default function Patterns() {
               You have 3 unread messages in #general.
             </p>
           </Post>
+        </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Team Sidebar</h2>
+        <div className={styles['patterns__team-sidebar-demo']}>
+          <TeamSidebar
+            activeTeamId="contributors"
+            teams={[
+              { id: 'contributors', name: 'Contributors', src: avatarStaffTeam },
+              { id: 'design', name: 'Design', initials: 'De', unread: true },
+              { id: 'acme', name: 'Acme', initials: 'Ac', mentions: 3 },
+            ]}
+          />
         </div>
       </section>
 

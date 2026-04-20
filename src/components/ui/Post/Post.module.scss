@@ -1,9 +1,15 @@
 .post {
+  padding: var(--spacing-xs) var(--spacing-xxl);
+  transition: background-color var(--duration-quick) var(--ease-transition);
+
+  &:hover {
+    background-color: rgba(var(--center-channel-color-rgb), 0.04);
+  }
+
   &__message {
     display: flex;
     gap: var(--spacing-m);
     align-items: flex-start;
-    padding: var(--spacing-xs) 0;
   }
 
   &__avatar-col {

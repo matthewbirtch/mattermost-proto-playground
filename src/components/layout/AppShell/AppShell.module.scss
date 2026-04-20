@@ -1,5 +1,7 @@
 .app-shell {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   background-color: var(--center-channel-bg);
   color: var(--center-channel-color);
 }
@@ -9,6 +11,15 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-m) var(--spacing-l);
+  flex: 0 0 auto;
+}
+
+.app-shell__content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-shell__theme-picker {

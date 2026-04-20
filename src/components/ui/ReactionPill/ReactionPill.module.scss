@@ -2,14 +2,14 @@
   display: inline-flex;
   align-items: center;
   border-radius: 200px;
-  background-color: var(--calls-bg, #14213e);
+  background-color: var(--calls-bg, var(--color-indigo-600));
 
   &__inner {
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xxxs);
-    background-color: rgba(255, 255, 255, 0.16);
-    border-radius: 16px;
+    background-color: rgba(var(--color-neutral-0-rgb), 0.16);
+    border-radius: var(--radius-xl);
     width: 100%;
   }
 
@@ -17,14 +17,14 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: var(--font-size-75);
     line-height: 1;
   }
 
   &__label {
     font-family: var(--font-family-body);
     font-weight: var(--font-weight-semibold);
-    color: var(--button-color, white);
+    color: var(--button-color, var(--color-neutral-0));
     white-space: nowrap;
   }
 
@@ -32,18 +32,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 2px;
+    padding: var(--spacing-xxxxs);
     flex-shrink: 0;
-    color: var(--button-color, white);
+    color: var(--button-color, var(--color-neutral-0));
   }
 
   &__trailing-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 2px;
+    padding: var(--spacing-xxxxs);
     flex-shrink: 0;
-    color: var(--button-color, white);
+    color: var(--button-color, var(--color-neutral-0));
     opacity: 0.32;
   }
 
@@ -53,16 +53,16 @@
 
   &--size-small {
     .reaction-pill__inner {
-      gap: 4px;
-      padding: 2px var(--spacing-s) 2px var(--spacing-xxxs);
+      gap: var(--spacing-xxxs);
+      padding: var(--spacing-xxxxs) var(--spacing-s) var(--spacing-xxxxs) var(--spacing-xxxs);
     }
 
     .reaction-pill__emoji {
-      font-size: 12px;
+      font-size: var(--font-size-75);
     }
 
     .reaction-pill__label {
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: var(--line-height-75);
       letter-spacing: 0.1px;
     }
@@ -71,11 +71,11 @@
   &--size-medium {
     .reaction-pill__inner {
       gap: 5px;
-      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+      padding: var(--spacing-xxxs) var(--spacing-s) var(--spacing-xxxs) var(--spacing-xxxs);
     }
 
     .reaction-pill__emoji {
-      font-size: 16px;
+      font-size: var(--font-size-200);
     }
 
     .reaction-pill__label {
@@ -86,12 +86,12 @@
 
   &--size-large {
     .reaction-pill__inner {
-      gap: 6px;
-      padding: 6px var(--spacing-l) 6px var(--spacing-s);
+      gap: var(--spacing-xxs);
+      padding: var(--spacing-xxs) var(--spacing-l) var(--spacing-xxs) var(--spacing-s);
     }
 
     .reaction-pill__emoji {
-      font-size: 20px;
+      font-size: var(--font-size-400);
     }
 
     .reaction-pill__label {
@@ -105,21 +105,21 @@
   // ---------------------------------------------------------------------------
 
   &--type-hand-raise {
-    background-color: var(--button-color, white);
-    border-radius: 20px;
+    background-color: var(--button-color, var(--color-neutral-0));
+    border-radius: var(--radius-xl);
     overflow: hidden;
 
     .reaction-pill__inner {
       background-color: transparent;
-      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+      padding: var(--spacing-xxxs) var(--spacing-s) var(--spacing-xxxs) var(--spacing-xxxs);
     }
 
     .reaction-pill__leading-icon {
-      color: var(--calls-bg, #14213e);
+      color: var(--calls-bg, var(--color-indigo-600));
     }
 
     .reaction-pill__label {
-      color: var(--calls-bg, #14213e);
+      color: var(--calls-bg, var(--color-indigo-600));
       font-size: var(--font-size-75);
       line-height: var(--line-height-75);
     }
@@ -128,7 +128,7 @@
   &--type-other {
     .reaction-pill__inner {
       gap: 5px;
-      padding: 4px var(--spacing-s) 4px var(--spacing-xxxs);
+      padding: var(--spacing-xxxs) var(--spacing-s) var(--spacing-xxxs) var(--spacing-xxxs);
     }
 
     .reaction-pill__label {

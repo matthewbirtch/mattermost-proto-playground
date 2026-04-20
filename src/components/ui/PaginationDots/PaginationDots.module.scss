@@ -59,13 +59,13 @@
     display: block;
     width: 6px;
     height: 6px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background-color: rgba(var(--center-channel-color-rgb), 0.24);
     transition:
-      background-color 150ms ease,
-      width 150ms ease,
-      height 150ms ease,
-      box-shadow 150ms ease;
+      background-color var(--duration-quick) var(--ease-transition),
+      width var(--duration-quick) var(--ease-transition),
+      height var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     &--active {
       background-color: var(--button-bg);

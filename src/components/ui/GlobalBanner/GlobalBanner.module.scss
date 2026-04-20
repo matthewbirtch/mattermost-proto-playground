@@ -20,7 +20,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: rgba(255, 255, 255, 1);
+    color: var(--color-neutral-0);
   }
 
   &__message {
@@ -43,11 +43,11 @@
   // Type modifiers
   // ---------------------------------------------------------------------------
   &--type-warning {
-    background-color: var(--color-yellow-500);
+    background-color: var(--color-warning);
   }
 
   &--type-danger {
-    background-color: var(--error-text);
+    background-color: var(--color-danger);
   }
 
   &--type-info {
@@ -55,6 +55,6 @@
   }
 
   &--type-success {
-    background-color: var(--color-green-500);
+    background-color: var(--color-success);
   }
 }

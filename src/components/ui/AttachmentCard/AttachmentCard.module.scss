@@ -8,8 +8,8 @@
   box-shadow: var(--elevation-1);
   overflow: hidden;
   transition:
-    box-shadow 150ms ease,
-    border-color 150ms ease;
+    box-shadow var(--duration-quick) var(--ease-transition),
+    border-color var(--duration-quick) var(--ease-transition);
 
   &:hover {
     box-shadow: var(--elevation-2);
@@ -52,8 +52,8 @@
   }
 
   &__thumbnail {
-    width: 40px;
-    height: 40px;
+    width: var(--icon-size-40);
+    height: var(--icon-size-40);
     border-radius: var(--radius-s);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.04);
     object-fit: cover;
@@ -145,7 +145,7 @@
     gap: var(--spacing-xxxs);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 150ms ease;
+    transition: opacity var(--duration-quick) var(--ease-transition);
   }
 
   &:hover &__actions {

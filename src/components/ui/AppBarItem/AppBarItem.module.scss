@@ -5,12 +5,12 @@
   position: relative;
   display: inline-flex;
   align-items: flex-start;
-  border-radius: 12px;
+  border-radius: var(--radius-l);
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: opacity 150ms ease;
+  transition: opacity var(--duration-quick) var(--ease-transition);
 
   &:hover {
     opacity: 0.88;
@@ -37,8 +37,8 @@
     img,
     svg {
       display: block;
-      width: 24px;
-      height: 24px;
+      width: var(--icon-size-24);
+      height: var(--icon-size-24);
     }
   }
 
@@ -52,11 +52,11 @@
     padding: 0.5px var(--spacing-xxs);
     background-color: var(--sidebar-text-active-border);
     border: 2px solid var(--sidebar-header-bg);
-    border-radius: 8px;
-    font-size: 10px;
+    border-radius: var(--radius-m);
+    font-size: var(--font-size-25);
     font-weight: var(--font-weight-semibold);
     line-height: 11px;
-    color: #fff;
+    color: var(--color-neutral-0);
     white-space: nowrap;
   }
 
@@ -66,7 +66,7 @@
     right: 0;
     width: 8px;
     height: 8px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background-color: var(--sidebar-text-active-border);
     border: 2px solid var(--sidebar-header-bg);
   }

@@ -3,7 +3,7 @@
   align-items: center;
   gap: var(--spacing-l);
   padding: var(--spacing-m);
-  background-color: var(--center-channel-bg, white);
+  background-color: var(--center-channel-bg, var(--color-neutral-0));
   border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
 
   &--simple {
@@ -53,7 +53,7 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    color: var(--center-channel-color, #3f4350);
+    color: var(--center-channel-color, var(--color-neutral-900));
     flex-shrink: 0;
 
     &:hover {
@@ -66,7 +66,7 @@
     font-size: var(--font-size-200);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-200);
-    color: var(--center-channel-color, #3f4350);
+    color: var(--center-channel-color, var(--color-neutral-900));
     white-space: nowrap;
   }
 
@@ -124,12 +124,17 @@
     flex-shrink: 0;
   }
 
+  &__call-btn {
+    padding-right: var(--spacing-m);
+    padding-left: var(--spacing-m);
+  }
+
   &__title {
     font-family: var(--font-family-heading);
     font-size: var(--font-size-200);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-200);
-    color: var(--center-channel-color, #3f4350);
+    color: var(--center-channel-color, var(--color-neutral-900));
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

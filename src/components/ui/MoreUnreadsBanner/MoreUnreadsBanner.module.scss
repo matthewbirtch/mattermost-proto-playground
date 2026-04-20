@@ -7,17 +7,17 @@
   background-color: var(--mention-bg);
   border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
   border-radius: var(--radius-s);
-  box-shadow: --elevation-1;
+  box-shadow: var(--elevation-1);
   cursor: pointer;
-  transition: background-color 150ms ease, box-shadow 150ms ease;
+  transition: background-color var(--duration-quick) var(--ease-transition), box-shadow var(--duration-quick) var(--ease-transition);
 
   &:hover {
     background-color: rgba(var(--mention-bg-rgb), 0.92);
-    box-shadow: --elevation-2;
+    box-shadow: var(--elevation-2);
   }
 
   &:active {
-    box-shadow: --elevation-1;
+    box-shadow: var(--elevation-1);
   }
 
   &:focus-visible {
@@ -63,8 +63,8 @@
 
     .more-unreads-banner__icon {
       svg {
-        width: 16px;
-        height: 16px;
+        width: var(--icon-size-16);
+        height: var(--icon-size-16);
       }
     }
   }

@@ -22,8 +22,8 @@
     background-color: rgba(var(--center-channel-color-rgb), 0.08);
     cursor: pointer;
     transition:
-      background-color 150ms ease,
-      box-shadow 150ms ease;
+      background-color var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     &:hover {
       background-color: rgba(var(--center-channel-color-rgb), 0.12);
@@ -48,8 +48,8 @@
     }
 
     &-emoji {
-      font-size: 16px;
-      line-height: 16px;
+      font-size: var(--font-size-200);
+      line-height: var(--line-height-50);
     }
 
     &-count {
@@ -69,27 +69,27 @@
     padding: var(--spacing-xxxs) var(--spacing-xxs);
     border: none;
     border-radius: var(--radius-s);
-    background-color: rgba(61, 184, 135, 0.12);
-    color: var(--online-indicator);
+    background-color: rgba(var(--color-success-rgb), 0.12);
+    color: var(--color-success);
     cursor: pointer;
-    transition: background-color 150ms ease;
+    transition: background-color var(--duration-quick) var(--ease-transition);
 
     &:hover {
-      background-color: rgba(61, 184, 135, 0.2);
+      background-color: rgba(var(--color-success-rgb), 0.2);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--online-indicator);
+      outline: 2px solid var(--color-success);
       outline-offset: 1px;
     }
 
     &--active {
-      background-color: var(--online-indicator);
+      background-color: var(--color-success);
       color: var(--button-color);
 
       &:hover {
         background-image: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
-        background-color: var(--online-indicator);
+        background-color: var(--color-success);
       }
     }
 

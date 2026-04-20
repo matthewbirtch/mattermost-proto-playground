@@ -41,7 +41,7 @@
 
   &__unread-badge {
     position: absolute;
-    top: 6px;
+    top: var(--spacing-xxs);
     left: -4px;
   }
 
@@ -85,7 +85,7 @@
   &__author {
     font-size: var(--font-size-100);
     font-weight: var(--font-weight-semibold);
-    line-height: 20px;
+    line-height: var(--line-height-100);
     color: var(--center-channel-color);
     white-space: nowrap;
     flex-shrink: 0;
@@ -94,7 +94,7 @@
   &__timestamp {
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-regular);
-    line-height: 16px;
+    line-height: var(--line-height-25);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     white-space: nowrap;
     flex-shrink: 0;
@@ -110,7 +110,7 @@
     flex: 1 0 0;
     font-size: var(--font-size-200);
     font-weight: var(--font-weight-semibold);
-    line-height: 24px;
+    line-height: var(--line-height-200);
     color: var(--center-channel-color);
     overflow: hidden;
     white-space: nowrap;
@@ -121,7 +121,7 @@
   &__preview {
     font-size: var(--font-size-100);
     font-weight: var(--font-weight-regular);
-    line-height: 20px;
+    line-height: var(--line-height-100);
     color: var(--center-channel-color);
     overflow: hidden;
     display: -webkit-box;
@@ -148,7 +148,7 @@
   &__reply-count {
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
-    line-height: 16px;
+    line-height: var(--line-height-25);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     padding: 4.5px var(--spacing-s);
   }

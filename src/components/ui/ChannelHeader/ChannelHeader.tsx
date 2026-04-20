@@ -39,6 +39,10 @@ export interface ChannelHeaderProps {
   onFavoriteClick?: () => void;
   /** Called when the channel name is clicked. */
   onNameClick?: () => void;
+  /** Called when the channel info button is clicked. */
+  onInfoClick?: () => void;
+  /** Whether the info button is in a toggled (active) state. */
+  infoToggled?: boolean;
   className?: string;
 }
 
@@ -54,6 +58,8 @@ export default function ChannelHeader({
   avatarStatus = false,
   onFavoriteClick,
   onNameClick,
+  onInfoClick,
+  infoToggled = false,
   className = '',
 }: ChannelHeaderProps) {
   const isSimple = type === 'Threads' || type === 'Drafts';
@@ -190,6 +196,7 @@ export default function ChannelHeader({
       <div className={styles['channel-header__right']}>
         {showCallButton && (
           <Button
+            className={styles['channel-header__call-btn']}
             emphasis="Quaternary"
             size="Small"
             leadingIcon={<Icon size="16" glyph={<PhoneIcon />} />}
@@ -201,6 +208,8 @@ export default function ChannelHeader({
           size="Small"
           aria-label="Channel info"
           icon={<Icon size="16" glyph={<InformationOutlineIcon />} />}
+          onClick={onInfoClick}
+          toggled={infoToggled}
         />
       </div>
     </div>

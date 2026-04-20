@@ -5,7 +5,7 @@
   display: inline-flex;
   align-items: center;
   // Default overlap for size-20
-  padding-right: 2px;
+  padding-right: var(--spacing-xxxxs);
 
   // ---------------------------------------------------------------------------
   // Elements
@@ -18,7 +18,7 @@
     margin-right: -2px;
     border-radius: var(--radius-full);
     // Sizes 20–24: 1px ring; sizes 28+: 2px ring (per Figma)
-    outline: 1px solid var(--center-channel-bg, #ffffff);
+    outline: 1px solid var(--center-channel-bg, var(--color-neutral-0));
   }
 
   // Overflow count chip (+N)

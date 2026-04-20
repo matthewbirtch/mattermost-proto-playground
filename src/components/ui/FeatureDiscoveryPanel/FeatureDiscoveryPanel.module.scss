@@ -6,7 +6,7 @@
   background-color: var(--center-channel-bg);
   border: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
   border-radius: var(--radius-m);
-  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: var(--elevation-1);
 
   &__content {
     display: flex;
@@ -31,16 +31,16 @@
   &__title {
     margin: 0;
     font-family: var(--font-family-heading);
-    font-weight: 400;
-    font-size: 22px;
-    line-height: 28px;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-500);
+    line-height: var(--line-height-500);
     color: var(--center-channel-color);
   }
 
   &__description {
     margin: 0;
     font-size: var(--font-size-100);
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-100);
     color: var(--center-channel-color);
   }

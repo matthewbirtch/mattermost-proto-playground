@@ -6,7 +6,7 @@
     background-color: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     border-radius: var(--radius-s);
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: var(--elevation-1);
     display: flex;
     flex-direction: column;
     flex: 1 0 0;
@@ -42,7 +42,7 @@
   &__text {
     font-size: var(--font-size-100);
     font-weight: var(--font-weight-regular);
-    line-height: 20px;
+    line-height: var(--line-height-100);
     color: var(--center-channel-color);
     width: 100%;
   }
@@ -50,7 +50,7 @@
   &__origin {
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-regular);
-    line-height: 16px;
+    line-height: var(--line-height-75);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     white-space: nowrap;
     flex-shrink: 0;

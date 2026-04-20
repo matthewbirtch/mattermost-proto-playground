@@ -17,8 +17,8 @@
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
     border-radius: var(--radius-s);
     transition:
-      border-color 150ms ease,
-      box-shadow 150ms ease;
+      border-color var(--duration-quick) var(--ease-transition),
+      box-shadow var(--duration-quick) var(--ease-transition);
 
     .searchInput:has(.searchInput__input:not(:disabled)):hover & {
       border-color: rgba(var(--center-channel-color-rgb), 0.24);
@@ -48,12 +48,12 @@
     left: 36px;
     top: 50%;
     transform: translateY(-50%);
-    padding: 0 4px;
+    padding: 0 var(--spacing-xxxs);
     margin: 0;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-regular);
     color: rgba(var(--center-channel-color-rgb), 0.64);
     background-color: var(--center-channel-bg);
     pointer-events: none;
@@ -61,15 +61,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     transition:
-      font-size 150ms ease,
-      top 150ms ease,
-      left 150ms ease;
+      font-size var(--duration-quick) var(--ease-transition),
+      top var(--duration-quick) var(--ease-transition),
+      left var(--duration-quick) var(--ease-transition);
 
     .searchInput--label-floated & {
       top: 0;
       transform: translateY(-50%);
-      left: 8px;
-      font-size: 10px;
+      left: var(--spacing-xs);
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -105,9 +105,9 @@
     border: 0;
     background: transparent;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-regular);
     color: var(--center-channel-color);
 
     // Remove default search input decorations
@@ -140,7 +140,7 @@
     background: transparent;
     cursor: pointer;
     color: rgba(var(--center-channel-color-rgb), 0.64);
-    transition: color 100ms ease;
+    transition: color var(--duration-quick) var(--ease-transition);
 
     &:hover {
       color: var(--center-channel-color);
@@ -160,13 +160,13 @@
     }
 
     .searchInput__inner {
-      padding: 8px 12px;
+      padding: var(--spacing-xs) var(--spacing-m);
       gap: var(--spacing-s);
     }
 
     .searchInput__searchIcon svg {
-      width: 12px;
-      height: 12px;
+      width: var(--icon-size-12);
+      height: var(--icon-size-12);
     }
 
     .searchInput__input {
@@ -175,14 +175,14 @@
     }
 
     .searchInput__clearButton svg {
-      width: 12px;
-      height: 12px;
+      width: var(--icon-size-12);
+      height: var(--icon-size-12);
     }
 
     &.searchInput--label-floated .searchInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -193,7 +193,7 @@
     }
 
     .searchInput__inner {
-      padding: 10px 16px;
+      padding: var(--spacing-s) var(--spacing-l);
       gap: var(--spacing-s);
     }
 
@@ -203,8 +203,8 @@
     }
 
     .searchInput__searchIcon svg {
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
 
     .searchInput__input {
@@ -213,14 +213,14 @@
     }
 
     .searchInput__clearButton svg {
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
 
     &.searchInput--label-floated .searchInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }
@@ -231,7 +231,7 @@
     }
 
     .searchInput__inner {
-      padding: 12px 16px;
+      padding: var(--spacing-m) var(--spacing-l);
       gap: var(--spacing-s);
     }
 
@@ -242,8 +242,8 @@
     }
 
     .searchInput__searchIcon svg {
-      width: 20px;
-      height: 20px;
+      width: var(--icon-size-20);
+      height: var(--icon-size-20);
     }
 
     .searchInput__input {
@@ -252,14 +252,14 @@
     }
 
     .searchInput__clearButton svg {
-      width: 16px;
-      height: 16px;
+      width: var(--icon-size-16);
+      height: var(--icon-size-16);
     }
 
     &.searchInput--label-floated .searchInput__label {
       top: 0;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: var(--font-size-25);
       line-height: 14px;
     }
   }

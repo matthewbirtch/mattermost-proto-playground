@@ -163,10 +163,7 @@ export default function Layouts() {
               </div>
 
               <div className={styles['layouts__message-input']}>
-                <MessageInput
-                  placeholder="Write to Town Square"
-                  showAttachments
-                />
+                <MessageInput placeholder="Write to Town Square" />
               </div>
             </div>
 

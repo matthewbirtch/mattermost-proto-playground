@@ -108,6 +108,8 @@ export interface ChannelsSidebarProps {
   avatarDavidLiang?: string;
   avatarEmmaNovak?: string;
   avatarEthanBrooks?: string;
+  /** Fires when any sidebar item is clicked. The `name` matches the item's visible name. */
+  onItemClick?: (name: string) => void;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -127,6 +129,7 @@ export default function ChannelsSidebar({
   avatarDavidLiang = '',
   avatarEmmaNovak = '',
   avatarEthanBrooks = '',
+  onItemClick,
 }: ChannelsSidebarProps) {
   const isActive = (name: string) => name === activeChannelName;
 
@@ -144,6 +147,7 @@ export default function ChannelsSidebar({
             name="Dial Pad"
             leadingVisual="Dial Pad"
             active={isActive('Dial Pad')}
+            onClick={onItemClick ? () => onItemClick('Dial Pad') : undefined}
           />
         )}
       </div>
@@ -191,7 +195,21 @@ export default function ChannelsSidebar({
             {!showUnreadsCategory && (
               <ChannelSidebarItem name="UX Design" leadingVisual="Public" active={isActive('UX Design')} />
             )}
-            <ChannelSidebarItem name="softphone-ux" leadingVisual="Public" active={isActive('softphone-ux')} />
+            <ChannelSidebarItem
+              name="softphone-ux"
+              leadingVisual="Public"
+              active={isActive('softphone-ux')}
+              onClick={onItemClick ? () => onItemClick('softphone-ux') : undefined}
+            />
+            <ChannelSidebarItem
+              name="Aiko Tan"
+              leadingVisual="Direct Message"
+              avatarSrc={avatarAikoTan}
+              avatarAlt="Aiko Tan"
+              showAvatarStatus
+              active={isActive('Aiko Tan')}
+              onClick={onItemClick ? () => onItemClick('Aiko Tan') : undefined}
+            />
             <ChannelSidebarItem name="Hilda Martin, Steve M..." leadingVisual="Group Message" memberCount={2} />
           </div>
 
@@ -222,14 +240,6 @@ export default function ChannelsSidebar({
           {/* Direct Messages */}
           <div className={styles['channels-sidebar__channel-group']}>
             <SidebarCategory label="Direct Messages" showPlusButton />
-            <ChannelSidebarItem
-              name="Aiko Tan"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarAikoTan}
-              avatarAlt="Aiko Tan"
-              showAvatarStatus
-              active={isActive('Aiko Tan')}
-            />
             {!showUnreadsCategory && (
               <>
                 <ChannelSidebarItem

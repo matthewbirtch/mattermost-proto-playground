@@ -82,6 +82,10 @@ export interface ProfilePopoverProps {
   callButton?: ReactNode;
   /** Replaces the default phone glyph shown next to the phone number. */
   phoneIcon?: ReactNode;
+  /** Animation state. Set to 'closing' to play the exit animation — listen via onAnimationEnd to unmount. */
+  state?: 'open' | 'closing';
+  /** Fires when an animation on the popover root ends (entrance or exit). */
+  onAnimationEnd?: (e: React.AnimationEvent<HTMLDivElement>) => void;
   className?: string;
 }
 
@@ -136,11 +140,17 @@ export default function ProfilePopover({
   onSend,
   callButton,
   phoneIcon,
+  state = 'open',
+  onAnimationEnd,
   className = '',
 }: ProfilePopoverProps) {
   const isYou = user === 'You';
 
-  const rootClass = [styles['profile-popover'], className]
+  const rootClass = [
+    styles['profile-popover'],
+    state === 'closing' ? styles['profile-popover--closing'] : '',
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 
@@ -149,7 +159,7 @@ export default function ProfilePopover({
   const hasSecondary = hasTitlesBlock || Boolean(localTime) || Boolean(customStatus);
 
   return (
-    <div className={rootClass}>
+    <div className={rootClass} onAnimationEnd={onAnimationEnd}>
       {role && (
         <div className={styles['profile-popover__role-tag']}>
           <LabelTag label={role} casing="All Caps" size="X-Small" />

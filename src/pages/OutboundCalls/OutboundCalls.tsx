@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PhoneIcon from '@mattermost/compass-icons/components/phone';
 import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
 import PhoneHangupIcon from '@mattermost/compass-icons/components/phone-hangup';
@@ -30,6 +30,7 @@ import Post from '@/components/ui/Post/Post';
 import ProfilePopover from '@/components/ui/ProfilePopover/ProfilePopover';
 import TeamSidebar from '@/components/ui/TeamSidebar/TeamSidebar';
 import TextInput from '@/components/ui/TextInput/TextInput';
+import { playDtmf, startRingback, stopRingback, playHangupClick } from '@/utils/phoneSounds';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarArjunPatel from '@/assets/avatars/Arjun Patel.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
@@ -437,6 +438,7 @@ function PositionedProfilePopover({
   const ref = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState<number>(anchorRect.bottom + POPOVER_GAP);
   const [measured, setMeasured] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -450,13 +452,19 @@ function PositionedProfilePopover({
     setMeasured(true);
   }, [anchorRect]);
 
+  const beginClose = useCallback(() => setClosing(true), []);
+
   useEffect(() => {
     function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+      if (ref.current && !ref.current.contains(e.target as Node)) beginClose();
     }
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [onClose]);
+  }, [beginClose]);
+
+  const handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
+    if (closing && e.target === e.currentTarget) onClose();
+  };
 
   const maxLeft = window.innerWidth - POPOVER_WIDTH - 16;
   const left = Math.min(Math.max(8, anchorRect.left), Math.max(8, maxLeft));
@@ -486,11 +494,13 @@ function PositionedProfilePopover({
         role={contact.role}
         localTime={contact.localTime}
         lastOnline={contact.online ? undefined : 'Last online 2 hrs ago'}
-        onClose={onClose}
+        onClose={beginClose}
         phoneIcon={<OutboundCallIcon />}
         callButton={
           <PopoverCallButton actions={actions} onSelect={handleSelect} />
         }
+        state={closing ? 'closing' : 'open'}
+        onAnimationEnd={handleAnimationEnd}
       />
     </div>
   );
@@ -762,22 +772,39 @@ const KEYS: { key: string; sub?: string }[] = [
   { key: '#' },
 ];
 
+const sanitizeDigits = (s: string) => s.replace(/[^0-9*#+ ()-]/g, '').slice(0, 18);
+
 function KeypadInput({
   value,
   placeholder,
+  onChange,
+  onEnter,
   trailing,
 }: {
   value: string;
   placeholder: string;
+  onChange: (v: string) => void;
+  onEnter?: () => void;
   trailing?: React.ReactNode;
 }) {
   return (
-    <div className={styles['keypad__input']}>
-      <span className={styles['keypad__input-value']}>
-        {value || <span className={styles['keypad__input-placeholder']}>{placeholder}</span>}
-      </span>
-      {trailing}
-    </div>
+    <TextInput
+      className={styles['keypad__input']}
+      size="Small"
+      value={value}
+      onChange={(e) => onChange(sanitizeDigits(e.target.value))}
+      onKeyDown={(e) => {
+        if (onEnter && e.key === 'Enter') {
+          e.preventDefault();
+          onEnter();
+        }
+      }}
+      placeholder={placeholder}
+      inputMode="tel"
+      autoComplete="off"
+      aria-label="Phone number"
+      trailingIcon={trailing}
+    />
   );
 }
 
@@ -810,8 +837,7 @@ function DialerScene({
 }) {
   const [typed, setTyped] = useState('');
 
-  const sanitize = (s: string) => s.replace(/[^0-9*#+ ()-]/g, '').slice(0, 18);
-  const append = (k: string) => setTyped((t) => sanitize(t + k));
+  const append = (k: string) => setTyped((t) => sanitizeDigits(t + k));
   const backspace = () => setTyped((t) => t.slice(0, -1));
   const dial = () => {
     if (!typed) return;
@@ -837,7 +863,7 @@ function DialerScene({
             className={styles['dialer__phone-field']}
             size="Large"
             value={typed}
-            onChange={(e) => setTyped(sanitize(e.target.value))}
+            onChange={(e) => setTyped(sanitizeDigits(e.target.value))}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
@@ -942,12 +968,14 @@ function CallPip({
   onToggleKeypad,
   keypadOpen,
   onDtmf,
+  onDtmfChange,
   onDtmfBackspace,
   onStartComposingCall,
   audioDevice,
   onPickDevice,
   onHangUp,
   onDismiss,
+  exiting,
 }: {
   call: ActiveCall;
   contact: Contact | null;
@@ -957,12 +985,14 @@ function CallPip({
   onToggleKeypad: () => void;
   keypadOpen: boolean;
   onDtmf: (k: string) => void;
+  onDtmfChange: (v: string) => void;
   onDtmfBackspace: () => void;
   onStartComposingCall: () => void;
   audioDevice: AudioDevice;
   onPickDevice: (id: string) => void;
   onHangUp: () => void;
   onDismiss: () => void;
+  exiting: boolean;
 }) {
   const [devicePickerOpen, setDevicePickerOpen] = useState(false);
   const deviceRef = useRef<HTMLDivElement>(null);
@@ -1006,7 +1036,7 @@ function CallPip({
 
   return (
     <div
-      className={styles['pip']}
+      className={`${styles['pip']}${exiting ? ` ${styles['pip--exiting']}` : ''}`}
       role="dialog"
       aria-label={isComposing ? 'Start a new call' : 'Active call'}
     >
@@ -1016,7 +1046,7 @@ function CallPip({
             <UserAvatar src={contact.avatar} alt={contact.name} size="32" />
           ) : (
             <div className={styles['pip__unknown-avatar']} aria-hidden>
-              <Icon glyph={isComposing ? <DialpadIcon /> : <PhoneIcon />} size="16" />
+              <Icon glyph={<PhoneIcon />} size="16" />
             </div>
           )}
           <div className={styles['pip__header-text']}>
@@ -1158,12 +1188,15 @@ function CallPip({
             <KeypadInput
               value={call.dtmf}
               placeholder="Enter number"
+              onChange={onDtmfChange}
+              onEnter={isComposing ? onStartComposingCall : undefined}
               trailing={
-                isComposing && call.dtmf ? (
+                isComposing ? (
                   <IconButton
                     aria-label="Delete digit"
-                    size="Small"
+                    size="X-Small"
                     padding="Compact"
+                    disabled={!call.dtmf}
                     icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
                     onClick={onDtmfBackspace}
                   />
@@ -1189,6 +1222,7 @@ export default function OutboundCalls() {
   const [callSummary, setCallSummary] = useState<
     { contactId: string; durationSec: number; endedAt: number } | null
   >(null);
+  const [callExiting, setCallExiting] = useState(false);
 
   const [nowTick, setNowTick] = useState(Date.now());
 
@@ -1200,11 +1234,15 @@ export default function OutboundCalls() {
 
   useEffect(() => {
     if (!call || call.status !== 'dialing') return;
+    startRingback();
     const id = setTimeout(() => {
       setCall((c) => (c ? { ...c, status: 'connected', startedAt: Date.now() } : c));
       setNowTick(Date.now());
     }, 2400);
-    return () => clearTimeout(id);
+    return () => {
+      clearTimeout(id);
+      stopRingback();
+    };
   }, [call?.status, call?.contactId, call?.phoneIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startCall = (contactId: string, phoneIndex: number) => {
@@ -1275,6 +1313,8 @@ export default function OutboundCalls() {
   };
 
   const hangUp = () => {
+    stopRingback();
+    playHangupClick();
     setCall((c) => {
       if (!c) return c;
       const endedAt = Date.now();
@@ -1300,15 +1340,30 @@ export default function OutboundCalls() {
 
       return { ...c, status: 'ended', endedAt };
     });
+
+    window.setTimeout(() => {
+      setCallExiting(true);
+      window.setTimeout(() => {
+        setCall(null);
+        setKeypadOpen(false);
+        setCallExiting(false);
+      }, 150);
+    }, 100);
   };
 
   const dismissCall = () => {
     setCall(null);
     setKeypadOpen(false);
+    setCallExiting(false);
   };
 
   const handleDtmf = (k: string) => {
-    setCall((c) => (c ? { ...c, dtmf: (c.dtmf + k).slice(-16) } : c));
+    playDtmf(k);
+    setCall((c) => (c ? { ...c, dtmf: sanitizeDigits(c.dtmf + k) } : c));
+  };
+
+  const handleDtmfChange = (v: string) => {
+    setCall((c) => (c ? { ...c, dtmf: v } : c));
   };
 
   const openProfile = (contactId: string, rect: DOMRect) => {
@@ -1372,6 +1427,11 @@ export default function OutboundCalls() {
                 avatarDavidLiang={avatarDavidLiang}
                 avatarEmmaNovak={avatarEmmaNovak}
                 avatarEthanBrooks={avatarEthanBrooks}
+                onItemClick={(name) => {
+                  if (name === 'softphone-ux') setScene('channel');
+                  else if (name === 'Aiko Tan') setScene('dm');
+                  else if (name === 'Dial Pad') setScene('dialer');
+                }}
               />
             </div>
 
@@ -1417,11 +1477,13 @@ export default function OutboundCalls() {
             onToggleMute={() => setCall((c) => (c ? { ...c, muted: !c.muted } : c))}
             onToggleKeypad={() => setKeypadOpen((k) => !k)}
             onDtmf={handleDtmf}
+            onDtmfChange={handleDtmfChange}
             onDtmfBackspace={dtmfBackspace}
             onStartComposingCall={startComposingCall}
             onPickDevice={(id) => setCall((c) => (c ? { ...c, deviceId: id } : c))}
             onHangUp={hangUp}
             onDismiss={dismissCall}
+            exiting={callExiting}
           />
         )}
       </div>

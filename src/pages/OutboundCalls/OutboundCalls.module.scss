@@ -123,9 +123,6 @@
   gap: var(--spacing-m);
   padding: var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-m);
   background: var(--color-neutral-0);
-  border: 1px solid var(--color-neutral-150);
-  border-radius: var(--radius-full);
-  box-shadow: var(--elevation-1);
 
   &__label {
     font-size: var(--font-size-50);
@@ -273,29 +270,12 @@
 // ---------------------------------------------------------------------------
 .keypad {
   &__input {
-    padding: var(--spacing-xs) var(--spacing-s);
-    border-radius: var(--radius-s);
-    background: var(--center-channel-bg);
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    color: var(--center-channel-color);
-    font-variant-numeric: tabular-nums;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-xs);
-  }
+    max-width: none;
 
-  &__input-value {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &__input-placeholder {
-    color: rgba(var(--center-channel-color-rgb), 0.64);
+    input {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
   }
 
   &__grid {
@@ -671,6 +651,11 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes pip-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(calc(100% + var(--spacing-l))); }
+}
+
 @keyframes pip-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.55; }
@@ -686,6 +671,10 @@
   gap: var(--spacing-xxs);
   z-index: 50;
   animation: pip-enter var(--duration-quick) var(--ease-entrance);
+
+  &--exiting {
+    animation: pip-exit var(--duration-quick) var(--ease-exit) forwards;
+  }
 
   &__widget {
     background: var(--center-channel-bg);
@@ -739,7 +728,6 @@
     display: inline-flex;
     align-items: center;
     gap: var(--spacing-xxxxs);
-    padding: 0 var(--spacing-xxxxs);
     font-size: var(--font-size-50);
     line-height: var(--line-height-50);
     font-weight: var(--font-weight-semibold);

@@ -196,12 +196,13 @@ function formatRecentDuration(sec: number): string {
 
 // ── Scene switcher ─────────────────────────────────────────────────────────
 
-type SceneId = 'channel' | 'dm' | 'dialer';
+type SceneId = 'channel' | 'dm' | 'dialer' | 'rhs';
 
 const SCENES: { id: SceneId; label: string }[] = [
   { id: 'channel', label: 'Channel' },
   { id: 'dm', label: 'Direct message' },
   { id: 'dialer', label: 'Dialer' },
+  { id: 'rhs', label: 'Right sidebar' },
 ];
 
 function SceneSwitcher({
@@ -956,6 +957,144 @@ function DialerScene({
   );
 }
 
+// ── Right-hand sidebar dialer ──────────────────────────────────────────────
+
+function RhsDialer({
+  recents,
+  onClose,
+  onStartCall,
+  onDialRaw,
+}: {
+  recents: Recent[];
+  onClose: () => void;
+  onStartCall: (contactId: string, phoneIndex: number) => void;
+  onDialRaw: (number: string) => void;
+}) {
+  const [typed, setTyped] = useState('');
+
+  const append = (k: string) => {
+    playDtmf(k);
+    setTyped((t) => sanitizeDigits(t + k));
+  };
+  const backspace = () => setTyped((t) => t.slice(0, -1));
+  const dial = () => {
+    if (!typed) return;
+    onDialRaw(typed);
+    setTyped('');
+  };
+
+  return (
+    <aside className={styles['rhs']} aria-label="Dial pad">
+      <div className={styles['rhs__header']}>
+        <span className={styles['rhs__header-icon']} aria-hidden>
+          <Icon glyph={<DialpadIcon />} size="16" />
+        </span>
+        <span className={styles['rhs__header-title']}>Dial Pad</span>
+        <IconButton
+          aria-label="Close dial pad"
+          size="Small"
+          padding="Compact"
+          icon={<Icon glyph={<CloseIcon />} size="16" />}
+          onClick={onClose}
+        />
+      </div>
+
+      <div className={styles['rhs__body']}>
+        <div className={styles['rhs__dialpad']}>
+          <TextInput
+            className={styles['rhs__phone-field']}
+            size="Large"
+            value={typed}
+            onChange={(e) => setTyped(sanitizeDigits(e.target.value))}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                dial();
+              }
+            }}
+            placeholder="Enter a number"
+            inputMode="tel"
+            autoComplete="off"
+            aria-label="Phone number"
+            trailingIcon={
+              <IconButton
+                aria-label="Delete digit"
+                size="Small"
+                padding="Compact"
+                disabled={!typed}
+                icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
+                onClick={backspace}
+              />
+            }
+          />
+          <KeypadGrid onPress={append} />
+          <button
+            className={styles['rhs__call-button']}
+            onClick={dial}
+            disabled={!typed}
+            aria-label="Start call"
+          >
+            <Icon glyph={<PhoneIcon />} size="20" />
+          </button>
+        </div>
+
+        <div className={styles['rhs__recents']}>
+          <div className={styles['rhs__recents-header']}>
+            <Icon glyph={<ClockOutlineIcon />} size="12" />
+            <span>Recent calls</span>
+          </div>
+          <ul className={styles['rhs__recents-list']}>
+            {recents.map((r, i) => {
+              const c = CONTACT_MAP[r.contactId];
+              const p = c.phones[r.phoneIndex];
+              const isMissed = r.direction === 'inbound-missed';
+              return (
+                <li key={i}>
+                  <button
+                    className={styles['rhs__recent']}
+                    onClick={() => onStartCall(r.contactId, r.phoneIndex)}
+                  >
+                    {c.avatar ? (
+                      <UserAvatar src={c.avatar} alt={c.name} size="32" />
+                    ) : (
+                      <div
+                        className={styles['rhs__recent-avatar-fallback']}
+                        aria-hidden
+                      >
+                        <Icon glyph={<PhoneIcon />} size="16" />
+                      </div>
+                    )}
+                    <div className={styles['rhs__recent-body']}>
+                      <div
+                        className={`${styles['rhs__recent-name']} ${
+                          isMissed ? styles['rhs__recent-name--missed'] : ''
+                        }`}
+                      >
+                        {c.name}
+                      </div>
+                      <div className={styles['rhs__recent-meta']}>
+                        {p.number}
+                      </div>
+                    </div>
+                    <div className={styles['rhs__recent-right']}>
+                      <div className={styles['rhs__recent-time']}>{r.timestamp}</div>
+                      <div className={styles['rhs__recent-duration']}>
+                        {r.durationSec !== undefined
+                          ? formatRecentDuration(r.durationSec)
+                          : 'Missed'}
+                      </div>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 // ── PiP call window ────────────────────────────────────────────────────────
 
 function CallPip({
@@ -1228,8 +1367,13 @@ export default function OutboundCalls() {
     { contactId: string; durationSec: number; endedAt: number } | null
   >(null);
   const [callExiting, setCallExiting] = useState(false);
+  const [rhsOpen, setRhsOpen] = useState(false);
 
   const [nowTick, setNowTick] = useState(Date.now());
+
+  useEffect(() => {
+    setRhsOpen(scene === 'rhs');
+  }, [scene]);
 
   useEffect(() => {
     if (!call || call.status !== 'connected') return;
@@ -1396,6 +1540,19 @@ export default function OutboundCalls() {
             userAvatarSrc={avatarLeonard}
             userAvatarAlt="Leonard Riley"
           />
+          {scene === 'rhs' && (
+            <button
+              type="button"
+              className={`${styles['calls__rhs-trigger']} ${
+                rhsOpen ? styles['calls__rhs-trigger--active'] : ''
+              }`}
+              onClick={() => setRhsOpen((o) => !o)}
+              aria-label="Open dial pad"
+              aria-pressed={rhsOpen}
+            >
+              <Icon glyph={<DialpadIcon />} size="16" />
+            </button>
+          )}
         </div>
 
         <div className={styles['calls__body']}>
@@ -1423,6 +1580,8 @@ export default function OutboundCalls() {
                     ? 'Aiko Tan'
                     : scene === 'dialer'
                     ? 'Dial Pad'
+                    : scene === 'rhs'
+                    ? 'softphone-ux'
                     : ''
                 }
                 avatarAikoTan={avatarAikoTan}
@@ -1466,7 +1625,25 @@ export default function OutboundCalls() {
                     }}
                   />
                 )}
+                {scene === 'rhs' && (
+                  <ChannelScene
+                    onOpenProfile={openProfile}
+                    onOpenDialer={openDialpadWidget}
+                    callSummary={callSummary}
+                  />
+                )}
               </div>
+              {scene === 'rhs' && rhsOpen && (
+                <RhsDialer
+                  recents={recents}
+                  onClose={() => setRhsOpen(false)}
+                  onStartCall={startCall}
+                  onDialRaw={(n) => {
+                    const fakeId = ensureRawContact(n);
+                    startCall(fakeId, 0);
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>

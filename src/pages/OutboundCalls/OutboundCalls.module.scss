@@ -47,7 +47,44 @@
   }
 
   &__global-header {
+    position: relative;
     flex: 0 0 auto;
+  }
+
+  // Prototype-only dialpad trigger overlaid on the GlobalHeader's right side.
+  // Visually slots before the @mentions icon without modifying the shared
+  // GlobalHeader component. Offset matches: right-pad 8 + account 40 + gap 4 +
+  // settings 28 + gap 4 + saved 28 + gap 4 + mentions 28 + gap 4 = 148px.
+  &__rhs-trigger {
+    position: absolute;
+    top: 50%;
+    right: 148px;
+    transform: translateY(-50%);
+    appearance: none;
+    border: 0;
+    width: 28px;
+    height: 28px;
+    padding: var(--spacing-xxs);
+    border-radius: var(--radius-s);
+    background: transparent;
+    color: rgba(var(--sidebar-text-rgb), 0.75);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      background: rgba(var(--sidebar-text-rgb), 0.08);
+      color: var(--sidebar-text);
+    }
+
+    &--active {
+      background: rgba(var(--sidebar-text-rgb), 0.16);
+      color: var(--sidebar-text);
+    }
   }
 
   &__body {
@@ -652,6 +689,209 @@
       align-items: center;
       gap: var(--spacing-xxxxs);
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Right-hand sidebar dialer
+// ---------------------------------------------------------------------------
+@keyframes rhs-enter {
+  from { transform: translateX(16px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.rhs {
+  flex: 0 0 auto;
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--center-channel-bg);
+  border-left: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+  animation: rhs-enter var(--duration-quick) var(--ease-entrance);
+
+  &__header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-m);
+    min-height: 57px;
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+  }
+
+  &__header-icon {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    flex-shrink: 0;
+  }
+
+  &__header-title {
+    flex: 1 0 0;
+    min-width: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-200);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-200);
+    color: var(--center-channel-color);
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  &__dialpad {
+    flex: 0 0 auto;
+    padding: var(--spacing-m);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+
+    .keypad__key { height: 56px; }
+  }
+
+  &__phone-field {
+    max-width: none;
+
+    input {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  &__call-button {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 56px;
+    border-radius: 8px;
+    background: var(--color-success);
+    color: var(--color-neutral-0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      transform var(--duration-quick) var(--ease-transition),
+      opacity var(--duration-quick) var(--ease-transition);
+
+    &:hover:not(:disabled) {
+      background: var(--color-green-600);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+  }
+
+  &__recents {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: var(--spacing-m) var(--spacing-m) var(--spacing-l);
+    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-s);
+  }
+
+  &__recents-header {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxs);
+    font-size: var(--font-size-50);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(var(--center-channel-color-rgb), 0.56);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &__recents-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__recent {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-s);
+    padding: var(--spacing-xs) var(--spacing-s);
+    border-radius: var(--radius-m);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover { background: rgba(var(--center-channel-color-rgb), 0.04); }
+  }
+
+  &__recent-avatar-fallback {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-full);
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__recent-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__recent-name {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+
+    &--missed { color: var(--color-danger); }
+  }
+
+  &__recent-meta {
+    font-size: var(--font-size-50);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  &__recent-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__recent-time {
+    font-size: var(--font-size-50);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  &__recent-duration {
+    font-size: var(--font-size-50);
+    color: rgba(var(--center-channel-color-rgb), 0.4);
+    font-variant-numeric: tabular-nums;
   }
 }
 

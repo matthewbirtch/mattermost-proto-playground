@@ -111,6 +111,10 @@ background-color: rgba(var(--color-warning-rgb), 0.04);
 border-color: rgba(var(--color-warning-rgb), 0.16);
 ```
 
+## Iconography: phone icon is always filled
+
+For any phone/call action, use the filled compass icon `@mattermost/compass-icons/components/phone`. Never use `phone-outline`, even when another design system reference shows the outline variant.
+
 ## Typography: prefer semibold over bold
 
 Use `var(--font-weight-semibold)` (600) wherever bold emphasis is needed. Do **not** use `var(--font-weight-bold)` (700) or `font-weight: bold` / `font-weight: 700` unless explicitly required by a Figma spec that specifies 700.

@@ -171,4 +171,16 @@
     color: var(--center-channel-color);
     margin: 0;
   }
+
+  // ── Profile Popover demo ────────────────────────────────────
+  &__profile-popover-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xxxl);
+    align-items: flex-start;
+
+    .patterns__variant-label {
+      margin-bottom: var(--spacing-xs);
+    }
+  }
 }

@@ -9,6 +9,7 @@ import Post from '@/components/ui/Post/Post';
 import Divider from '@/components/ui/Divider/Divider';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
 import TeamSidebar from '@/components/ui/TeamSidebar/TeamSidebar';
+import ProfilePopover from '@/components/ui/ProfilePopover/ProfilePopover';
 import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
@@ -20,7 +21,7 @@ import avatarEmmaNovak from '@/assets/avatars/Emma Novak.png';
 import avatarEthanBrooks from '@/assets/avatars/Ethan Brooks.png';
 import styles from './Patterns.module.scss';
 
-const REMAINING_PATTERNS = ['Profile Popover'];
+const REMAINING_PATTERNS: string[] = [];
 
 // ── Modal demo ────────────────────────────────────────────────────────────────
 
@@ -94,38 +95,30 @@ export default function Patterns() {
         <h2 className={styles['patterns__section-title']}>Global Header</h2>
         <div className={styles['patterns__global-header-demo']}>
           <p className={styles['patterns__variant-label']}>Channels</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Channels"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Channels"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Channels — with Upgrade</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Channels"
-              showUpgradeButton
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Channels"
+            showUpgradeButton
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Playbooks</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Playbooks"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Playbooks"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
           <p className={styles['patterns__variant-label']}>Boards</p>
-          <div className={styles['patterns__global-header-canvas']}>
-            <GlobalHeader
-              product="Boards"
-              userAvatarSrc={avatarLeonard}
-              userAvatarAlt="Leonard Riley"
-            />
-          </div>
+          <GlobalHeader
+            product="Boards"
+            userAvatarSrc={avatarLeonard}
+            userAvatarAlt="Leonard Riley"
+          />
         </div>
       </section>
 
@@ -259,6 +252,112 @@ export default function Patterns() {
           <MessageInput placeholder="Message #ux-design…" showAttachments />
           <p className={styles['patterns__variant-label']}>With priority + attachments</p>
           <MessageInput placeholder="Message #ux-design…" showPriorityIndicator showAttachments />
+        </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Profile Popover</h2>
+        <div className={styles['patterns__profile-popover-demo']}>
+          <div>
+            <p className={styles['patterns__variant-label']}>Others — full</p>
+            <ProfilePopover
+              user="Others"
+              avatarSrc={avatarLeonard}
+              avatarAlt="Leonard Riley"
+              name="Leonard Riley"
+              username="@leonard.riley"
+              title="Lead Engineer, Enterprise"
+              email="leonard.riley@acme.com"
+              role="System Admin"
+              lastOnline="Last online 6 hrs ago"
+              staff
+              localTime={{
+                time: '10:42 PM',
+                timezone: 'EST',
+                hourDifference: '3 hrs behind',
+              }}
+              onClose={() => {}}
+            />
+          </div>
+          <div>
+            <p className={styles['patterns__variant-label']}>Others — with custom status + extras</p>
+            <ProfilePopover
+              user="Others"
+              avatarSrc={avatarLeonard}
+              avatarAlt="Leonard Riley"
+              name="Leonard Riley"
+              username="@leonard.riley"
+              title="Lead Engineer, Enterprise"
+              email="leonard.riley@acme.com"
+              role="System Admin"
+              lastOnline="Last online 6 hrs ago"
+              sharedOrg="Acme Corp."
+              staff
+              coreCommitter
+              githubHandle="lennyriley"
+              localTime={{
+                time: '10:42 PM',
+                timezone: 'EST',
+                hourDifference: '3 hrs behind',
+              }}
+              customStatus={{
+                emoji: '📅',
+                text: 'In a meeting',
+                expiresLabel: 'Until Tomorrow',
+              }}
+              onClose={() => {}}
+            />
+          </div>
+          <div>
+            <p className={styles['patterns__variant-label']}>You</p>
+            <ProfilePopover
+              user="You"
+              avatarSrc={avatarLeonard}
+              avatarAlt="Leonard Riley"
+              name="Leonard Riley"
+              username="@leonard.riley"
+              title="Lead Engineer, Enterprise"
+              email="leonard.riley@acme.com"
+              role="System Admin"
+              lastOnline="Last online 6 hrs ago"
+              staff
+              localTime={{
+                time: '10:42 PM',
+                timezone: 'EST',
+                hourDifference: '3 hrs behind',
+              }}
+              onClose={() => {}}
+            />
+          </div>
+          <div>
+            <p className={styles['patterns__variant-label']}>You — with custom status + extras</p>
+            <ProfilePopover
+              user="You"
+              avatarSrc={avatarLeonard}
+              avatarAlt="Leonard Riley"
+              name="Leonard Riley"
+              username="@leonard.riley"
+              title="Lead Engineer, Enterprise"
+              email="leonard.riley@acme.com"
+              role="System Admin"
+              lastOnline="Last online 6 hrs ago"
+              sharedOrg="Dunder Mifflin"
+              staff
+              coreCommitter
+              githubHandle="lennyriley"
+              localTime={{
+                time: '10:42 PM',
+                timezone: 'EST',
+                hourDifference: '3 hrs behind',
+              }}
+              customStatus={{
+                emoji: '📅',
+                text: 'In a meeting',
+                expiresLabel: 'Until Tomorrow',
+              }}
+              onClose={() => {}}
+            />
+          </div>
         </div>
       </section>
 

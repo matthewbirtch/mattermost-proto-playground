@@ -6,6 +6,7 @@ import ChartLineIcon from '@mattermost/compass-icons/components/chart-line';
 import CircleMultipleOutlineIcon from '@mattermost/compass-icons/components/circle-multiple-outline';
 import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
 import DotsVerticalIcon from '@mattermost/compass-icons/components/dots-vertical';
+import DialpadIcon from '@/components/icons/DialpadIcon';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import MentionBadge from '@/components/ui/MentionBadge/MentionBadge';
 import IconButton from '@/components/ui/IconButton/IconButton';
@@ -18,7 +19,8 @@ export type ChannelSidebarItemLeadingVisual =
   | 'Direct Message'
   | 'Drafts'
   | 'Insights'
-  | 'Threads';
+  | 'Threads'
+  | 'Dial Pad';
 
 export type ChannelSidebarItemStatus = 'Read' | 'Unread' | 'Mention';
 
@@ -90,6 +92,8 @@ function LeadingVisualContent({
       return <ChartLineIcon size={16} />;
     case 'Threads':
       return <MessageTextOutlineIcon size={16} />;
+    case 'Dial Pad':
+      return <DialpadIcon size={16} />;
     case 'Public':
     default:
       return <GlobeIcon size={16} />;

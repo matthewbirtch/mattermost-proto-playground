@@ -29,6 +29,8 @@ export interface IconButtonProps extends Omit<
   style?: IconButtonStyle;
   /** When true, shows toggled/selected state. Figma: Toggled = On. */
   toggled?: boolean;
+  /** When true, forces the pressed/active visual state (subtler than toggled). */
+  active?: boolean;
 }
 
 /** Icon size (px) per IconButton size. Use with Icon: size="12" | "16" | "20" | "24". */
@@ -58,6 +60,7 @@ export default function IconButton({
   size = 'Medium',
   style = 'Default',
   toggled = false,
+  active = false,
   disabled,
   type = 'button',
   'aria-label': ariaLabel,
@@ -73,6 +76,7 @@ export default function IconButton({
     : '';
   const roundedClass = rounded ? styles['icon-button--rounded'] : '';
   const toggledClass = toggled ? styles['icon-button--toggled'] : '';
+  const activeClass = active ? styles['icon-button--active'] : '';
 
   const rootClass = [
     styles['icon-button'],
@@ -82,6 +86,7 @@ export default function IconButton({
     destructiveClass,
     roundedClass,
     toggledClass,
+    activeClass,
     className,
   ]
     .filter(Boolean)

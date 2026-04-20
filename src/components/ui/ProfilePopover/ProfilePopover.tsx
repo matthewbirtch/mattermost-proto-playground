@@ -48,6 +48,15 @@ export interface ProfilePopoverProps {
   title?: string;
   /** Email address. */
   email?: string;
+  /** Phone row shown under the email. */
+  phone?: {
+    number: string;
+    /** Secondary line beneath the number, e.g. "DISN Gateway • LB-4". */
+    sub?: string;
+    href?: string;
+    /** When provided, the number click runs this handler instead of navigating. */
+    onClick?: () => void;
+  };
   /** Caption above the name, e.g. "Last online 6 hrs ago". */
   lastOnline?: string;
   /** Role tag shown at the very top, e.g. "System Admin". */
@@ -69,6 +78,10 @@ export interface ProfilePopoverProps {
   onAddContact?: () => void;
   onCall?: () => void;
   onSend?: () => void;
+  /** Replaces the default Call icon button in the footer when provided. */
+  callButton?: ReactNode;
+  /** Replaces the default phone glyph shown next to the phone number. */
+  phoneIcon?: ReactNode;
   className?: string;
 }
 
@@ -107,6 +120,7 @@ export default function ProfilePopover({
   username,
   title,
   email,
+  phone,
   lastOnline,
   role,
   localTime,
@@ -120,6 +134,8 @@ export default function ProfilePopover({
   onAddContact,
   onCall,
   onSend,
+  callButton,
+  phoneIcon,
   className = '',
 }: ProfilePopoverProps) {
   const isYou = user === 'You';
@@ -129,7 +145,7 @@ export default function ProfilePopover({
     .join(' ');
 
   const hasTitlesBlock =
-    Boolean(email) || Boolean(sharedOrg) || staff || coreCommitter || Boolean(githubHandle);
+    Boolean(email) || Boolean(phone) || Boolean(sharedOrg) || staff || coreCommitter || Boolean(githubHandle);
   const hasSecondary = hasTitlesBlock || Boolean(localTime) || Boolean(customStatus);
 
   return (
@@ -174,6 +190,41 @@ export default function ProfilePopover({
                 >
                   {email}
                 </MetaRow>
+              )}
+              {phone && (
+                <div
+                  className={[
+                    styles['profile-popover__meta-item'],
+                    styles['profile-popover__meta-item--stacked'],
+                  ].join(' ')}
+                >
+                  <span className={styles['profile-popover__meta-icon']} aria-hidden>
+                    <Icon size="16" glyph={phoneIcon ?? <PhoneIcon />} />
+                  </span>
+                  <div className={styles['profile-popover__phone-body']}>
+                    {phone.onClick ? (
+                      <button
+                        type="button"
+                        className={styles['profile-popover__meta-link']}
+                        onClick={phone.onClick}
+                      >
+                        {phone.number}
+                      </button>
+                    ) : (
+                      <a
+                        className={styles['profile-popover__meta-link']}
+                        href={phone.href ?? `tel:${phone.number}`}
+                      >
+                        {phone.number}
+                      </a>
+                    )}
+                    {phone.sub && (
+                      <span className={styles['profile-popover__phone-sub']}>
+                        {phone.sub}
+                      </span>
+                    )}
+                  </div>
+                </div>
               )}
               {sharedOrg && (
                 <MetaRow
@@ -286,12 +337,14 @@ export default function ProfilePopover({
                 icon={<Icon size="16" glyph={<AccountPlusOutlineIcon />} />}
                 onClick={onAddContact}
               />
-              <IconButton
-                aria-label="Call"
-                size="Small"
-                icon={<Icon size="16" glyph={<PhoneIcon />} />}
-                onClick={onCall}
-              />
+              {callButton ?? (
+                <IconButton
+                  aria-label="Call"
+                  size="Small"
+                  icon={<Icon size="16" glyph={<PhoneIcon />} />}
+                  onClick={onCall}
+                />
+              )}
             </>
           )}
         </div>

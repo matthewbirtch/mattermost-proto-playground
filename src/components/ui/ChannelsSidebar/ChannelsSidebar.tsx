@@ -96,8 +96,11 @@ export interface ChannelsSidebarProps {
   teamName?: string;
   showUnreadsCategory?: boolean;
   showFilter?: boolean;
+  showDialPad?: boolean;
   moreUnreadsAbove?: boolean;
   moreUnreadsBelow?: boolean;
+  /** Name of the channel/DM to highlight as active. Pass '' for none. */
+  activeChannelName?: string;
   avatarAikoTan?: string;
   avatarArjunPatel?: string;
   avatarDanielOkoro?: string;
@@ -113,8 +116,10 @@ export default function ChannelsSidebar({
   teamName = 'Contributors',
   showUnreadsCategory = false,
   showFilter = false,
+  showDialPad = false,
   moreUnreadsAbove = false,
   moreUnreadsBelow = false,
+  activeChannelName = 'UX Design',
   avatarAikoTan = '',
   avatarArjunPatel = '',
   avatarDanielOkoro = '',
@@ -123,6 +128,8 @@ export default function ChannelsSidebar({
   avatarEmmaNovak = '',
   avatarEthanBrooks = '',
 }: ChannelsSidebarProps) {
+  const isActive = (name: string) => name === activeChannelName;
+
   return (
     <div className={styles['channels-sidebar']}>
       <SidebarHeader teamName={teamName} />
@@ -132,6 +139,13 @@ export default function ChannelsSidebar({
       <div className={styles['channels-sidebar__top-group']}>
         <ChannelSidebarItem name="Threads" leadingVisual="Threads" />
         <ChannelSidebarItem name="Drafts" leadingVisual="Drafts" status="Mention" mentionCount={1} />
+        {showDialPad && (
+          <ChannelSidebarItem
+            name="Dial Pad"
+            leadingVisual="Dial Pad"
+            active={isActive('Dial Pad')}
+          />
+        )}
       </div>
 
       {/* Scrollable channel list */}
@@ -142,11 +156,11 @@ export default function ChannelsSidebar({
           {showUnreadsCategory && (
             <div className={styles['channels-sidebar__channel-group']}>
               <SidebarCategory label="Unreads" showChevron={false} />
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active />
-              <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" />
-              <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" />
-              <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" />
-              <ChannelSidebarItem name="Race Teams" leadingVisual="Private" status="Unread" />
+              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active={isActive('UX Design')} />
+              <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" active={isActive('Orion')} />
+              <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
+              <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
+              <ChannelSidebarItem name="Race Teams" leadingVisual="Private" status="Unread" active={isActive('Race Teams')} />
               <ChannelSidebarItem
                 name="Arjun Patel"
                 leadingVisual="Direct Message"
@@ -155,6 +169,7 @@ export default function ChannelsSidebar({
                 avatarSrc={avatarArjunPatel}
                 avatarAlt="Arjun Patel"
                 showAvatarStatus
+                active={isActive('Arjun Patel')}
               />
               <ChannelSidebarItem
                 name="Daniel Okoro"
@@ -164,6 +179,7 @@ export default function ChannelsSidebar({
                 avatarSrc={avatarDanielOkoro}
                 avatarAlt="Daniel Okoro"
                 showAvatarStatus
+                active={isActive('Daniel Okoro')}
               />
             </div>
           )}
@@ -171,31 +187,34 @@ export default function ChannelsSidebar({
           {/* Favorites */}
           <div className={styles['channels-sidebar__channel-group']}>
             <SidebarCategory label="Favorites" />
-            <ChannelSidebarItem name="UI Redesign" leadingVisual="Public" />
+            <ChannelSidebarItem name="UI Redesign" leadingVisual="Public" active={isActive('UI Redesign')} />
             {!showUnreadsCategory && (
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active />
+              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active={isActive('UX Design')} />
             )}
+            <ChannelSidebarItem name="softphone-ux" leadingVisual="Public" active={isActive('softphone-ux')} />
             <ChannelSidebarItem name="Hilda Martin, Steve M..." leadingVisual="Group Message" memberCount={2} />
           </div>
 
           {/* Channels */}
           <div className={styles['channels-sidebar__channel-group']}>
             <SidebarCategory label="Channels" />
-            <ChannelSidebarItem name="Contributors" leadingVisual="Public" />
-            <ChannelSidebarItem name="Developers" leadingVisual="Public" />
+            <ChannelSidebarItem name="Contributors" leadingVisual="Public" active={isActive('Contributors')} />
+            <ChannelSidebarItem name="Developers" leadingVisual="Public" active={isActive('Developers')} />
             {!showUnreadsCategory && (
               <>
-                <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" />
-                <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" />
+                <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" active={isActive('Orion')} />
+                <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
               </>
             )}
-            <ChannelSidebarItem name="Security Incident" leadingVisual="Public" />
-            <ChannelSidebarItem name="System Status" leadingVisual="Private" />
-            <ChannelSidebarItem name="Product Support" leadingVisual="Private" />
+            <ChannelSidebarItem name="calling-eng" leadingVisual="Public" active={isActive('calling-eng')} />
+            <ChannelSidebarItem name="Security Incident" leadingVisual="Public" active={isActive('Security Incident')} />
+            <ChannelSidebarItem name="System Status" leadingVisual="Private" active={isActive('System Status')} />
+            <ChannelSidebarItem name="Product Support" leadingVisual="Private" active={isActive('Product Support')} />
+            <ChannelSidebarItem name="telephony-vendors" leadingVisual="Private" active={isActive('telephony-vendors')} />
             {!showUnreadsCategory && (
               <>
-                <ChannelSidebarItem name="Sales Partners" leadingVisual="Private" status="Unread" />
-                <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" />
+                <ChannelSidebarItem name="Sales Partners" leadingVisual="Private" status="Unread" active={isActive('Sales Partners')} />
+                <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
               </>
             )}
           </div>
@@ -209,6 +228,7 @@ export default function ChannelsSidebar({
               avatarSrc={avatarAikoTan}
               avatarAlt="Aiko Tan"
               showAvatarStatus
+              active={isActive('Aiko Tan')}
             />
             {!showUnreadsCategory && (
               <>
@@ -220,6 +240,7 @@ export default function ChannelsSidebar({
                   avatarSrc={avatarArjunPatel}
                   avatarAlt="Arjun Patel"
                   showAvatarStatus
+                  active={isActive('Arjun Patel')}
                 />
                 <ChannelSidebarItem
                   name="Daniel Okoro"
@@ -229,6 +250,7 @@ export default function ChannelsSidebar({
                   avatarSrc={avatarDanielOkoro}
                   avatarAlt="Daniel Okoro"
                   showAvatarStatus
+                  active={isActive('Daniel Okoro')}
                 />
               </>
             )}
@@ -239,6 +261,7 @@ export default function ChannelsSidebar({
               avatarSrc={avatarDariusCole}
               avatarAlt="Darius Cole"
               showAvatarStatus
+              active={isActive('Darius Cole')}
             />
             <ChannelSidebarItem
               name="David Liang"
@@ -246,6 +269,7 @@ export default function ChannelsSidebar({
               avatarSrc={avatarDavidLiang}
               avatarAlt="David Liang"
               showAvatarStatus
+              active={isActive('David Liang')}
             />
             <ChannelSidebarItem
               name="Emma Novak"
@@ -253,6 +277,7 @@ export default function ChannelsSidebar({
               avatarSrc={avatarEmmaNovak}
               avatarAlt="Emma Novak"
               showAvatarStatus
+              active={isActive('Emma Novak')}
             />
             <ChannelSidebarItem
               name="Ethan Brooks"
@@ -260,6 +285,7 @@ export default function ChannelsSidebar({
               avatarSrc={avatarEthanBrooks}
               avatarAlt="Ethan Brooks"
               showAvatarStatus
+              active={isActive('Ethan Brooks')}
             />
           </div>
         </div>

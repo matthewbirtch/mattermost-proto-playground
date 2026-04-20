@@ -226,101 +226,125 @@
 }
 
 // ---------------------------------------------------------------------------
-// DM custom header — styled like the product's DM header with a Call action.
-// ---------------------------------------------------------------------------
-.dm-header {
-  flex: 0 0 auto;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--spacing-l);
-  border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-  background: var(--center-channel-bg);
-
-  &__main {
-    appearance: none;
-    background: transparent;
-    border: 0;
-    padding: var(--spacing-xxs) var(--spacing-xs);
-    margin: 0 calc(var(--spacing-xs) * -1);
-    border-radius: var(--radius-m);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-m);
-    cursor: pointer;
-    text-align: left;
-    transition: background-color var(--duration-quick) var(--ease-transition);
-
-    &:hover { background: rgba(var(--center-channel-color-rgb), 0.04); }
-  }
-
-  &__text {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__name {
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-200);
-    line-height: var(--line-height-200);
-    color: var(--center-channel-color);
-  }
-
-  &__sub {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-  }
-
-  &__actions {
-    display: flex;
-    gap: var(--spacing-xs);
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Dialer header + two-column body
+// Dialer header — mirrors ChannelHeader's simple variant (Threads/Drafts).
 // ---------------------------------------------------------------------------
 .dialer-header {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-m) var(--spacing-l);
-  border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-
-  &__left {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-m);
-  }
+  gap: var(--spacing-xs);
+  padding: var(--spacing-l) var(--spacing-l);
+  background-color: var(--center-channel-bg, var(--color-neutral-0));
+  border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
 
   &__icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: rgba(var(--color-info-rgb), 0.12);
-    color: var(--color-info);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    flex-shrink: 0;
   }
 
   &__title {
+    font-family: var(--font-family-heading);
     font-size: var(--font-size-200);
     font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-200);
-    color: var(--center-channel-color);
+    color: var(--center-channel-color, var(--color-neutral-900));
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  &__sub {
+  &__description {
+    flex: 1 0 0;
+    min-width: 0;
+    font-family: var(--font-family-body);
     font-size: var(--font-size-75);
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
+// ---------------------------------------------------------------------------
+// Shared keypad — used by the dialer left column AND the PIP dtmf popover.
+// ---------------------------------------------------------------------------
+.keypad {
+  &__input {
+    padding: var(--spacing-xs) var(--spacing-s);
+    border-radius: var(--radius-s);
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    color: var(--center-channel-color);
+    font-variant-numeric: tabular-nums;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+  }
+
+  &__input-value {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__input-placeholder {
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) 0;
+  }
+
+  &__key {
+    appearance: none;
+    border: 0;
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    border-radius: 8px;
+    height: 48px;
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    cursor: pointer;
+    color: var(--center-channel-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      transform var(--duration-quick) var(--ease-transition);
+
+    &:hover { background: rgba(var(--center-channel-color-rgb), 0.12); }
+    &:active { transform: scale(0.96); }
+  }
+
+  &__key-main {
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  &__key-sub {
+    font-size: 8px;
+    line-height: 12px;
+    font-weight: var(--font-weight-semibold);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    letter-spacing: 0.12em;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Dialer two-column body
+// ---------------------------------------------------------------------------
 .dialer {
   flex: 1 1 auto;
   display: grid;
@@ -328,106 +352,53 @@
   min-height: 0;
 
   &__keypad {
-    padding: var(--spacing-xl);
+    padding: var(--spacing-m);
     border-right: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-l);
+    gap: var(--spacing-m);
     overflow-y: auto;
+
+    .keypad__key { height: 64px; }
   }
 
-  &__display {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-s);
-    padding: var(--spacing-m) var(--spacing-l);
-    border-radius: var(--radius-m);
-    background: rgba(var(--center-channel-color-rgb), 0.04);
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-    min-height: 56px;
-  }
+  &__phone-field {
+    max-width: none;
 
-  &__display-number {
-    font-size: var(--font-size-500);
-    line-height: var(--line-height-500);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-    letter-spacing: 0.02em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__display-placeholder {
-    color: rgba(var(--center-channel-color-rgb), 0.4);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-200);
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-s);
-  }
-
-  &__key {
-    appearance: none;
-    border: 0;
-    background: rgba(var(--center-channel-color-rgb), 0.04);
-    border-radius: var(--radius-full);
-    aspect-ratio: 1 / 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    cursor: pointer;
-    color: var(--center-channel-color);
-    transition:
-      background-color var(--duration-quick) var(--ease-transition),
-      transform var(--duration-quick) var(--ease-transition);
-
-    &:hover { background: rgba(var(--center-channel-color-rgb), 0.08); }
-    &:active { transform: scale(0.96); }
-  }
-
-  &__key-main {
-    font-size: var(--font-size-500);
-    line-height: 1;
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__key-sub {
-    font-size: var(--font-size-25);
-    letter-spacing: 0.12em;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
+    input {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
   }
 
   &__call-action {
     display: flex;
-    justify-content: center;
+    padding-top: var(--spacing-xxs);
   }
 
   &__call-button {
     appearance: none;
     border: 0;
     cursor: pointer;
-    width: 64px;
+    width: 100%;
     height: 64px;
-    border-radius: var(--radius-full);
+    border-radius: 8px;
     background: var(--color-success);
     color: var(--color-neutral-0);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--elevation-2);
     transition:
-      transform var(--duration-quick) var(--ease-transition),
       background-color var(--duration-quick) var(--ease-transition),
+      transform var(--duration-quick) var(--ease-transition),
       opacity var(--duration-quick) var(--ease-transition);
 
     &:hover:not(:disabled) {
-      transform: scale(1.04);
       background: var(--color-green-600);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.96);
     }
 
     &:disabled {
@@ -507,11 +478,6 @@
     gap: var(--spacing-xxs);
   }
 
-  &__recent-secure {
-    color: var(--color-success);
-    display: inline-flex;
-  }
-
   &__recent-right {
     text-align: right;
     display: flex;
@@ -532,162 +498,117 @@
 }
 
 // ---------------------------------------------------------------------------
-// Profile popover
+// Profile popover — positioning wrapper around the shared ProfilePopover.
+// The shared component brings its own background, border, shadow, and padding.
 // ---------------------------------------------------------------------------
-.popover {
+.popover-anchor {
   position: fixed;
   z-index: 40;
-  width: 320px;
-  background: var(--center-channel-bg);
-  border: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
-  border-radius: var(--radius-l);
-  box-shadow: var(--elevation-4);
-  padding: var(--spacing-l);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-m);
+}
 
-  &__header {
-    display: flex;
-    gap: var(--spacing-m);
-    align-items: flex-start;
-  }
+// ---------------------------------------------------------------------------
+// Segmented call button (prototype-only) — channel header
+// Figma MM-56584 Outbound Calling, node 5402:29828
+// ---------------------------------------------------------------------------
+.seg-call {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  background: rgba(var(--button-bg-rgb), 0.08);
+  border-radius: var(--radius-s);
+  color: var(--button-bg);
+  height: 32px;
 
-  &__identity {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xxxxs);
-  }
-
-  &__name {
-    font-size: var(--font-size-200);
-    line-height: var(--line-height-200);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-  }
-
-  &__role {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-  }
-
-  &__presence {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xxs);
-    font-size: var(--font-size-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    margin-top: var(--spacing-xxs);
-  }
-
-  &__presence-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: var(--radius-full);
-    background: rgba(var(--center-channel-color-rgb), 0.24);
-
-    &--online { background: var(--color-success); }
-  }
-
-  &__quick-actions {
-    display: flex;
-    gap: var(--spacing-xs);
-  }
-
-  &__section-label {
-    font-size: var(--font-size-50);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__phones {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xxxs);
-  }
-
-  &__phone {
+  &__primary,
+  &__trigger {
     appearance: none;
-    background: transparent;
     border: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-m);
-    padding: var(--spacing-xs) var(--spacing-s);
-    border-radius: var(--radius-m);
+    background: transparent;
     cursor: pointer;
-    text-align: left;
-    transition: background-color var(--duration-quick) var(--ease-transition);
-
-    &:hover { background: rgba(var(--center-channel-color-rgb), 0.04); }
-  }
-
-  &__phone-leading {
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    display: inline-flex;
-  }
-
-  &__phone-body {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__phone-number {
-    font-size: var(--font-size-100);
-    line-height: var(--line-height-100);
-    color: var(--center-channel-color);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__phone-meta {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    flex-wrap: wrap;
-  }
-
-  &__secure-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xxxxs);
-    padding: 2px var(--spacing-xxs);
-    border-radius: var(--radius-s);
-    background: rgba(var(--color-success-rgb), 0.12);
-    color: var(--color-success);
-    font-size: var(--font-size-50);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__unsecure-tag {
-    font-size: var(--font-size-50);
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__phone-trailing {
-    color: var(--color-success);
-    background: rgba(var(--color-success-rgb), 0.12);
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-full);
+    color: var(--button-bg);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      background: rgba(var(--button-bg-rgb), 0.08);
+    }
+  }
+
+  &__primary {
+    gap: var(--spacing-xxxs);
+    padding: var(--spacing-xs) 13px;
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-75);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-75);
+    border-top-left-radius: var(--radius-s);
+    border-bottom-left-radius: var(--radius-s);
+  }
+
+  &__trigger {
+    padding: 0 var(--spacing-xxxs);
+    border-top-right-radius: var(--radius-s);
+    border-bottom-right-radius: var(--radius-s);
+  }
+
+  &__divider {
+    width: 1px;
+    align-self: stretch;
+    background: rgba(var(--button-bg-rgb), 0.24);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Popover footer call dropdown (prototype-only)
+// Figma MM-56584 Outbound Calling, node 5445:18098 (footer)
+// ---------------------------------------------------------------------------
+.pop-call {
+  position: relative;
+  display: inline-flex;
+
+  &__btn {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxxxs);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-s);
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      background-color: rgba(var(--center-channel-color-rgb), 0.08);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Start call menu (SegmentedCallButton — MenuItem-based)
+// ---------------------------------------------------------------------------
+.start-call-menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-xxs));
+  right: 0;
+  min-width: 260px;
+  max-width: 320px;
+  background: var(--center-channel-bg);
+  border: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+  border-radius: var(--radius-m);
+  box-shadow: var(--elevation-4);
+  padding: var(--spacing-xxs) 0;
+  margin: 0;
+  list-style: none;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    list-style: none;
   }
 }
 
@@ -757,49 +678,36 @@
 
 .pip {
   position: absolute;
-  right: var(--spacing-l);
+  left: var(--spacing-l);
   bottom: var(--spacing-l);
-  width: 304px;
-  background: var(--center-channel-bg);
-  border: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--elevation-5);
-  padding: var(--spacing-l);
+  width: 302px;
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-l);
+  flex-direction: column-reverse;
+  gap: var(--spacing-xxs);
   z-index: 50;
   animation: pip-enter var(--duration-quick) var(--ease-entrance);
 
+  &__widget {
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 8px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+  }
+
   &__header {
+    height: 50px;
+    background: rgba(var(--center-channel-color-rgb), 0.04);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-  }
-
-  &__secure-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xxxxs);
-    padding: 2px var(--spacing-xs);
-    border-radius: var(--radius-s);
-    background: rgba(var(--color-success-rgb), 0.12);
-    color: var(--color-success);
-    font-size: var(--font-size-50);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  &__identity {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-xxs);
-    text-align: center;
+    gap: 10px;
+    padding: 0 8px;
   }
 
   &__unknown-avatar {
-    width: 72px;
-    height: 72px;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
     border-radius: var(--radius-full);
     background: rgba(var(--center-channel-color-rgb), 0.08);
     color: rgba(var(--center-channel-color-rgb), 0.64);
@@ -808,112 +716,103 @@
     justify-content: center;
   }
 
-  &__name {
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-300);
-    line-height: var(--line-height-300);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
+  &__header-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
 
-  &__number {
-    font-size: var(--font-size-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    font-variant-numeric: tabular-nums;
-  }
-
-  &__number-label {
-    color: rgba(var(--center-channel-color-rgb), 0.4);
-  }
-
-  &__status {
+  &__title {
     font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
     font-weight: var(--font-weight-semibold);
     color: var(--center-channel-color);
-    margin-top: var(--spacing-xxs);
-    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &--pulsing { animation: pip-pulse 1.4s var(--ease-transition) infinite; }
   }
 
-  // DTMF overlay
-  &__dtmf {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-s);
-  }
-
-  &__dtmf-display {
-    padding: var(--spacing-xs) var(--spacing-m);
-    border-radius: var(--radius-m);
-    background: rgba(var(--center-channel-color-rgb), 0.04);
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-    font-size: var(--font-size-200);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-    font-variant-numeric: tabular-nums;
-    min-height: 36px;
-    display: flex;
+  &__sub {
+    display: inline-flex;
     align-items: center;
-    letter-spacing: 0.04em;
-  }
-
-  &__dtmf-placeholder {
-    color: rgba(var(--center-channel-color-rgb), 0.4);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-75);
-    letter-spacing: 0;
-  }
-
-  &__dtmf-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xxs);
-  }
-
-  &__dtmf-key {
-    appearance: none;
-    border: 0;
-    background: rgba(var(--center-channel-color-rgb), 0.04);
-    border-radius: var(--radius-m);
-    padding: var(--spacing-xs) 0;
-    cursor: pointer;
-    font-size: var(--font-size-200);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-    transition: background-color var(--duration-quick) var(--ease-transition);
-
-    &:hover { background: rgba(var(--center-channel-color-rgb), 0.08); }
-  }
-
-  // Controls
-  &__controls {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-xs);
-  }
-
-  &__control {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-xxs);
-  }
-
-  &__control-label {
+    gap: var(--spacing-xxxxs);
+    padding: 0 var(--spacing-xxxxs);
     font-size: var(--font-size-50);
     line-height: var(--line-height-50);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
     font-weight: var(--font-weight-semibold);
-    white-space: nowrap;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__controls {
+    height: 44px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__controls-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xxs);
+  }
+
+  &__more-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  &__hangup {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    height: 28px;
+    min-width: 40px;
+    padding: 0 var(--spacing-xs);
+    border-radius: var(--radius-s);
+    background: var(--color-danger);
+    color: var(--color-neutral-0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover { background: var(--color-red-600); }
+  }
+
+  &__call {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    height: 28px;
+    min-width: 40px;
+    padding: 0 var(--spacing-xs);
+    border-radius: var(--radius-s);
+    background: var(--color-success);
+    color: var(--color-neutral-0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      opacity var(--duration-quick) var(--ease-transition);
+
+    &:hover:not(:disabled) { background: var(--color-green-600); }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
   }
 
   &__device-menu {
     position: absolute;
-    bottom: calc(100% + var(--spacing-xs));
-    right: 50%;
-    transform: translateX(50%);
+    bottom: calc(100% + var(--spacing-xxs));
+    right: 0;
     min-width: 220px;
     background: var(--center-channel-bg);
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
@@ -926,6 +825,9 @@
   }
 
   &__device-menu-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxs);
     font-size: var(--font-size-25);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -959,5 +861,38 @@
     margin-left: auto;
     color: var(--color-info);
     display: inline-flex;
+  }
+
+  // Dial pad panel (floats above the widget when keypad is toggled)
+  &__dtmf {
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 8px;
+    box-shadow: 0 20px 32px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &__dtmf-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-m);
+  }
+
+  &__dtmf-title {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+  }
+
+  &__dtmf-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-m);
+    padding: 0 var(--spacing-s) var(--spacing-m);
   }
 }

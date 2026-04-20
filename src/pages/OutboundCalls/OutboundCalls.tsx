@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PhoneIcon from '@mattermost/compass-icons/components/phone';
-import PhoneOutlineIcon from '@mattermost/compass-icons/components/phone-outline';
 import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
 import PhoneHangupIcon from '@mattermost/compass-icons/components/phone-hangup';
 import MicrophoneIcon from '@mattermost/compass-icons/components/microphone';
@@ -8,18 +7,19 @@ import MicrophoneOffIcon from '@mattermost/compass-icons/components/microphone-o
 import VolumeHighIcon from '@mattermost/compass-icons/components/volume-high';
 import HeadphonesIcon from '@mattermost/compass-icons/components/headphones';
 import CellphoneIcon from '@mattermost/compass-icons/components/cellphone';
-import KeyboardOutlineIcon from '@mattermost/compass-icons/components/keyboard-outline';
 import BackspaceOutlineIcon from '@mattermost/compass-icons/components/backspace-outline';
-import LockIcon from '@mattermost/compass-icons/components/lock';
 import ShieldOutlineIcon from '@mattermost/compass-icons/components/shield-outline';
-import CloseIcon from '@mattermost/compass-icons/components/close';
 import CheckIcon from '@mattermost/compass-icons/components/check';
-import MessageTextOutlineIcon from '@mattermost/compass-icons/components/message-text-outline';
-import AccountOutlineIcon from '@mattermost/compass-icons/components/account-outline';
 import ClockOutlineIcon from '@mattermost/compass-icons/components/clock-outline';
+import CloseIcon from '@mattermost/compass-icons/components/close';
+import DotsHorizontalIcon from '@mattermost/compass-icons/components/dots-horizontal';
+import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
+import DialpadIcon from '@/components/icons/DialpadIcon';
+import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
 import Icon, { SVG_SIZE_MAP } from '@/components/ui/Icon/Icon';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import Button from '@/components/ui/Button/Button';
+import MenuItem from '@/components/ui/MenuItem/MenuItem';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
@@ -27,7 +27,9 @@ import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
 import MessageInput from '@/components/ui/MessageInput';
 import MessageSeparator from '@/components/ui/MessageSeparator/MessageSeparator';
 import Post from '@/components/ui/Post/Post';
+import ProfilePopover from '@/components/ui/ProfilePopover/ProfilePopover';
 import TeamSidebar from '@/components/ui/TeamSidebar/TeamSidebar';
+import TextInput from '@/components/ui/TextInput/TextInput';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarArjunPatel from '@/assets/avatars/Arjun Patel.png';
 import avatarDanielle from '@/assets/avatars/Danielle Okoro.png';
@@ -42,13 +44,23 @@ import styles from './OutboundCalls.module.scss';
 // ── Mock data ───────────────────────────────────────────────────────────────
 
 type PhoneKind = 'work' | 'mobile';
-type Phone = { number: string; label: string; kind: PhoneKind; secure: boolean };
+type Phone = {
+  number: string;
+  label: string;
+  kind: PhoneKind;
+  secure: boolean;
+  sipTrunk?: string;
+};
 type Contact = {
   id: string;
   name: string;
-  role: string;
+  handle: string;
+  email: string;
+  title: string;
+  role?: string;
   avatar: string;
   online: boolean;
+  localTime?: { time: string; timezone: string; hourDifference?: string };
   phones: Phone[];
 };
 
@@ -56,48 +68,64 @@ const CONTACTS: Contact[] = [
   {
     id: 'aiko',
     name: 'Aiko Tan',
-    role: 'Product Designer · Tokyo',
+    handle: '@aiko',
+    email: 'aiko.tan@mattermost.com',
+    title: 'Product Designer',
     avatar: avatarAikoTan,
     online: true,
+    localTime: { time: '11:42 PM', timezone: 'JST', hourDifference: '13 hrs ahead' },
     phones: [
-      { number: '+1 (415) 555-0142', label: 'Work', kind: 'work', secure: true },
-      { number: '+81 3 5555 0188', label: 'Mobile', kind: 'mobile', secure: false },
+      { number: '+1 (415) 555-0142', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-4' },
+      { number: '+81 3 5555 0188', label: 'Mobile', kind: 'mobile', secure: false, sipTrunk: 'Twilio • APAC-1' },
     ],
   },
   {
     id: 'leonard',
     name: 'Leonard Riley',
-    role: 'Engineering Manager · New York',
+    handle: '@leonard',
+    email: 'leonard.riley@mattermost.com',
+    title: 'Engineering Manager',
+    role: 'System Admin',
     avatar: avatarLeonard,
     online: true,
-    phones: [{ number: '+1 (212) 555-0199', label: 'Work', kind: 'work', secure: true }],
+    localTime: { time: '10:42 AM', timezone: 'EST' },
+    phones: [{ number: '+1 (212) 555-0199', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-4' }],
   },
   {
     id: 'danielle',
     name: 'Danielle Okoro',
-    role: 'Solutions Architect · Lagos',
+    handle: '@danielle',
+    email: 'danielle.okoro@mattermost.com',
+    title: 'Solutions Architect',
     avatar: avatarDanielle,
     online: false,
+    localTime: { time: '3:42 PM', timezone: 'WAT', hourDifference: '5 hrs ahead' },
     phones: [
-      { number: '+234 1 555 0116', label: 'Work', kind: 'work', secure: true },
-      { number: '+234 803 555 8890', label: 'Mobile', kind: 'mobile', secure: false },
+      { number: '+234 1 555 0116', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-2' },
+      { number: '+234 803 555 8890', label: 'Mobile', kind: 'mobile', secure: false, sipTrunk: 'Twilio • EMEA-2' },
     ],
   },
   {
     id: 'arjun',
     name: 'Arjun Patel',
-    role: 'Customer Success · London',
+    handle: '@arjun',
+    email: 'arjun.patel@mattermost.com',
+    title: 'Customer Success',
     avatar: avatarArjunPatel,
     online: true,
-    phones: [{ number: '+44 20 7946 0814', label: 'Work', kind: 'work', secure: true }],
+    localTime: { time: '2:42 PM', timezone: 'GMT', hourDifference: '4 hrs ahead' },
+    phones: [{ number: '+44 20 7946 0814', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-1' }],
   },
   {
     id: 'ethan',
     name: 'Ethan Brooks',
-    role: 'IT Operations · Austin',
+    handle: '@ethan',
+    email: 'ethan.brooks@mattermost.com',
+    title: 'IT Operations',
     avatar: avatarEthanBrooks,
     online: false,
-    phones: [{ number: '+1 (512) 555-0163', label: 'Work', kind: 'work', secure: true }],
+    localTime: { time: '9:42 AM', timezone: 'CST', hourDifference: '1 hr behind' },
+    phones: [{ number: '+1 (512) 555-0163', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-3' }],
   },
 ];
 
@@ -139,7 +167,7 @@ const AUDIO_ICON: Record<AudioDeviceKind, typeof VolumeHighIcon> = {
 
 // ── Call state ─────────────────────────────────────────────────────────────
 
-type CallStatus = 'idle' | 'dialing' | 'connected' | 'ended';
+type CallStatus = 'idle' | 'composing' | 'dialing' | 'connected' | 'ended';
 
 type ActiveCall = {
   contactId: string;
@@ -205,20 +233,222 @@ function SceneSwitcher({
   );
 }
 
+// ── Call dropdown menu (prototype-only) ────────────────────────────────────
+
+function useOutsideClose(
+  ref: React.RefObject<HTMLElement>,
+  open: boolean,
+  close: () => void,
+) {
+  useEffect(() => {
+    if (!open) return;
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) close();
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open, close, ref]);
+}
+
+type StartCallAction =
+  | { id: 'audio'; type: 'audio' }
+  | { id: 'dialpad'; type: 'dialpad' }
+  | {
+      id: string;
+      type: 'phone';
+      label: string;
+      number: string;
+      secure: boolean;
+      contactId: string;
+      phoneIndex: number;
+    };
+
+function StartCallMenu({
+  actions,
+  onSelect,
+}: {
+  actions: StartCallAction[];
+  onSelect: (action: StartCallAction) => void;
+}) {
+  return (
+    <ul
+      className={styles['start-call-menu']}
+      role="menu"
+      aria-label="Start call options"
+    >
+      {actions.map((action) => {
+        let label: string;
+        let secondaryLabel: string | undefined;
+        let icon: React.ReactNode;
+        if (action.type === 'audio') {
+          label = 'Start an audio call';
+          icon = <Icon glyph={<PhoneIcon />} size="16" />;
+        } else if (action.type === 'phone') {
+          label = `Call ${action.label}`;
+          secondaryLabel = action.number;
+          icon = <Icon glyph={<OutboundCallIcon />} size="16" />;
+        } else {
+          label = 'Use dial pad';
+          icon = <Icon glyph={<DialpadIcon />} size="16" />;
+        }
+        return (
+          <li key={action.id} className={styles['start-call-menu__item']}>
+            <MenuItem
+              role="menuitem"
+              label={label}
+              secondaryLabel={secondaryLabel}
+              leadingVisual={icon}
+              onClick={() => onSelect(action)}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function SegmentedCallButton({
+  actions,
+  onSelect,
+}: {
+  actions: StartCallAction[];
+  onSelect: (action: StartCallAction) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  useOutsideClose(wrapRef, open, () => setOpen(false));
+
+  const toggle = () => setOpen((o) => !o);
+  const pick = (action: StartCallAction) => {
+    setOpen(false);
+    onSelect(action);
+  };
+
+  return (
+    <div className={styles['seg-call']} ref={wrapRef}>
+      <button
+        type="button"
+        className={styles['seg-call__primary']}
+        onClick={toggle}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Icon glyph={<PhoneIcon />} size="12" />
+        <span>Start call</span>
+      </button>
+      <span className={styles['seg-call__divider']} aria-hidden />
+      <button
+        type="button"
+        className={styles['seg-call__trigger']}
+        onClick={toggle}
+        aria-label="Choose call option"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Icon glyph={<ChevronDownIcon />} size="12" />
+      </button>
+      {open && <StartCallMenu actions={actions} onSelect={pick} />}
+    </div>
+  );
+}
+
+function PopoverCallButton({
+  actions,
+  onSelect,
+}: {
+  actions: StartCallAction[];
+  onSelect: (action: StartCallAction) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  useOutsideClose(wrapRef, open, () => setOpen(false));
+
+  const pick = (action: StartCallAction) => {
+    setOpen(false);
+    onSelect(action);
+  };
+
+  return (
+    <div className={styles['pop-call']} ref={wrapRef}>
+      <button
+        type="button"
+        className={styles['pop-call__btn']}
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Call"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Icon glyph={<PhoneIcon />} size="16" />
+        <Icon glyph={<ChevronDownIcon />} size="12" />
+      </button>
+      {open && <StartCallMenu actions={actions} onSelect={pick} />}
+    </div>
+  );
+}
+
 // ── Profile popover ────────────────────────────────────────────────────────
 
-function ProfilePopover({
+const POPOVER_WIDTH = 272;
+const POPOVER_GAP = 8;
+
+function PositionedProfilePopover({
   contact,
   anchorRect,
   onClose,
-  onCall,
+  onStartCall,
+  onOpenDialer,
 }: {
   contact: Contact;
   anchorRect: DOMRect;
   onClose: () => void;
-  onCall: (phoneIndex: number) => void;
+  onStartCall: (contactId: string, phoneIndex: number) => void;
+  onOpenDialer: () => void;
 }) {
+  const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
+  const workPhone = workIndex >= 0 ? contact.phones[workIndex] : null;
+
+  const actions: StartCallAction[] = [
+    { id: 'audio', type: 'audio' },
+    ...(workPhone
+      ? [
+          {
+            id: `${contact.id}:${workIndex}`,
+            type: 'phone' as const,
+            label: workPhone.label,
+            number: workPhone.number,
+            secure: workPhone.secure,
+            contactId: contact.id,
+            phoneIndex: workIndex,
+          },
+        ]
+      : []),
+    { id: 'dialpad', type: 'dialpad' },
+  ];
+
+  const handleSelect = (action: StartCallAction) => {
+    if (action.type === 'dialpad') {
+      onOpenDialer();
+    } else if (action.type === 'phone') {
+      onStartCall(action.contactId, action.phoneIndex);
+    } else {
+      onStartCall(contact.id, workIndex >= 0 ? workIndex : 0);
+    }
+  };
   const ref = useRef<HTMLDivElement>(null);
+  const [top, setTop] = useState<number>(anchorRect.bottom + POPOVER_GAP);
+  const [measured, setMeasured] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+    const h = ref.current.offsetHeight;
+    const spaceBelow = window.innerHeight - anchorRect.bottom - POPOVER_GAP - 16;
+    const spaceAbove = anchorRect.top - POPOVER_GAP - 16;
+    const placeAbove = h > spaceBelow && spaceAbove >= h;
+    setTop(
+      placeAbove ? anchorRect.top - h - POPOVER_GAP : anchorRect.bottom + POPOVER_GAP,
+    );
+    setMeasured(true);
+  }, [anchorRect]);
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -228,91 +458,40 @@ function ProfilePopover({
     return () => document.removeEventListener('mousedown', handler);
   }, [onClose]);
 
-  const popoverWidth = 320;
-  const maxLeft = window.innerWidth - popoverWidth - 16;
+  const maxLeft = window.innerWidth - POPOVER_WIDTH - 16;
   const left = Math.min(Math.max(8, anchorRect.left), Math.max(8, maxLeft));
-
-  const style: React.CSSProperties = {
-    top: anchorRect.bottom + 8,
-    left,
-  };
 
   return (
     <div
       ref={ref}
-      className={styles['popover']}
-      style={style}
-      role="dialog"
-      aria-label={`Profile for ${contact.name}`}
+      className={styles['popover-anchor']}
+      style={{ top, left, visibility: measured ? 'visible' : 'hidden' }}
     >
-      <div className={styles['popover__header']}>
-        <UserAvatar src={contact.avatar} alt={contact.name} size="72" status={contact.online} />
-        <div className={styles['popover__identity']}>
-          <div className={styles['popover__name']}>{contact.name}</div>
-          <div className={styles['popover__role']}>{contact.role}</div>
-          <div className={styles['popover__presence']}>
-            <span
-              className={`${styles['popover__presence-dot']} ${
-                contact.online ? styles['popover__presence-dot--online'] : ''
-              }`}
-            />
-            {contact.online ? 'Online' : 'Offline'}
-          </div>
-        </div>
-        <IconButton
-          aria-label="Close profile"
-          icon={<Icon glyph={<CloseIcon />} size="20" />}
-          size="Small"
-          onClick={onClose}
-        />
-      </div>
-
-      <div className={styles['popover__quick-actions']}>
-        <Button
-          emphasis="Secondary"
-          size="Small"
-          leadingIcon={<Icon glyph={<MessageTextOutlineIcon />} size="16" />}
-        >
-          Message
-        </Button>
-        <Button
-          emphasis="Secondary"
-          size="Small"
-          leadingIcon={<Icon glyph={<AccountOutlineIcon />} size="16" />}
-        >
-          View profile
-        </Button>
-      </div>
-
-      <div className={styles['popover__section-label']}>Phone</div>
-      <ul className={styles['popover__phones']}>
-        {contact.phones.map((p, idx) => (
-          <li key={p.number}>
-            <button className={styles['popover__phone']} onClick={() => onCall(idx)}>
-              <span className={styles['popover__phone-leading']}>
-                <Icon glyph={<PhoneOutlineIcon />} size="20" />
-              </span>
-              <span className={styles['popover__phone-body']}>
-                <span className={styles['popover__phone-number']}>{p.number}</span>
-                <span className={styles['popover__phone-meta']}>
-                  {p.label}
-                  {p.secure ? (
-                    <span className={styles['popover__secure-tag']}>
-                      <Icon glyph={<ShieldOutlineIcon />} size="12" />
-                      Mattermost Secure
-                    </span>
-                  ) : (
-                    <span className={styles['popover__unsecure-tag']}>PSTN · not encrypted</span>
-                  )}
-                </span>
-              </span>
-              <span className={styles['popover__phone-trailing']}>
-                <Icon glyph={<PhoneIcon />} size="16" />
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
+      <ProfilePopover
+        avatarSrc={contact.avatar}
+        avatarAlt={contact.name}
+        name={contact.name}
+        username={contact.handle}
+        title={contact.title}
+        email={contact.email}
+        phone={
+          contact.phones[0]
+            ? {
+                number: contact.phones[0].number,
+                sub: contact.phones[0].sipTrunk,
+                onClick: () => onStartCall(contact.id, 0),
+              }
+            : undefined
+        }
+        role={contact.role}
+        localTime={contact.localTime}
+        lastOnline={contact.online ? undefined : 'Last online 2 hrs ago'}
+        onClose={onClose}
+        phoneIcon={<OutboundCallIcon />}
+        callButton={
+          <PopoverCallButton actions={actions} onSelect={handleSelect} />
+        }
+      />
     </div>
   );
 }
@@ -378,11 +557,21 @@ function ProfileClickable({
 
 function ChannelScene({
   onOpenProfile,
+  onOpenDialer,
   callSummary,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
+  onOpenDialer: () => void;
   callSummary: { contactId: string; durationSec: number; endedAt: number } | null;
 }) {
+  const actions: StartCallAction[] = [
+    { id: 'audio', type: 'audio' },
+    { id: 'dialpad', type: 'dialpad' },
+  ];
+  const handleSelect = (action: StartCallAction) => {
+    if (action.type === 'dialpad') onOpenDialer();
+    // 'audio' is a stub for a Mattermost Calls group call — no-op in prototype.
+  };
   return (
     <>
       <ChannelHeader
@@ -391,6 +580,9 @@ function ChannelScene({
         description="Design + eng working group for the Mattermost outbound calling prototype."
         memberCount={8}
         pinnedCount={1}
+        callButton={
+          <SegmentedCallButton actions={actions} onSelect={handleSelect} />
+        }
       />
       <div className={styles['center__messages']}>
         <MessageSeparator type="Date" label="Today" />
@@ -467,42 +659,60 @@ function CallSummaryPost({
 function DMScene({
   onOpenProfile,
   onStartCall,
+  onOpenDialer,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onStartCall: (contactId: string, phoneIndex: number) => void;
+  onOpenDialer: () => void;
 }) {
   const contact = CONTACT_MAP['aiko'];
+  const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
+  const workPhone = workIndex >= 0 ? contact.phones[workIndex] : null;
+
+  const actions: StartCallAction[] = [
+    { id: 'audio', type: 'audio' },
+    ...(workPhone
+      ? [
+          {
+            id: `${contact.id}:${workIndex}`,
+            type: 'phone' as const,
+            label: workPhone.label,
+            number: workPhone.number,
+            secure: workPhone.secure,
+            contactId: contact.id,
+            phoneIndex: workIndex,
+          },
+        ]
+      : []),
+    { id: 'dialpad', type: 'dialpad' },
+  ];
+
+  const handleSelect = (action: StartCallAction) => {
+    if (action.type === 'dialpad') {
+      onOpenDialer();
+    } else if (action.type === 'phone') {
+      onStartCall(action.contactId, action.phoneIndex);
+    } else if (action.type === 'audio') {
+      // Simulated Mattermost Calls WebRTC audio call — prototype reuses the work phone.
+      onStartCall(contact.id, workIndex >= 0 ? workIndex : 0);
+    }
+  };
 
   return (
     <>
-      <div className={styles['dm-header']}>
-        <button
-          type="button"
-          className={styles['dm-header__main']}
-          onClick={(e) => onOpenProfile(contact.id, e.currentTarget.getBoundingClientRect())}
-        >
-          <UserAvatar
-            src={contact.avatar}
-            alt={contact.name}
-            size="32"
-            status={contact.online}
-          />
-          <div className={styles['dm-header__text']}>
-            <div className={styles['dm-header__name']}>{contact.name}</div>
-            <div className={styles['dm-header__sub']}>{contact.role}</div>
-          </div>
-        </button>
-        <div className={styles['dm-header__actions']}>
-          <Button
-            emphasis="Secondary"
-            size="Small"
-            leadingIcon={<Icon glyph={<PhoneIcon />} size="16" />}
-            onClick={() => onStartCall(contact.id, 0)}
-          >
-            Call {contact.name.split(' ')[0]}
-          </Button>
-        </div>
-      </div>
+      <ChannelHeader
+        type="DM"
+        name={contact.name}
+        description={contact.title}
+        avatarSrc={contact.avatar}
+        avatarStatus={contact.online}
+        onNameClick={(e) =>
+          onOpenProfile(contact.id, e.currentTarget.getBoundingClientRect())
+        }
+        callButton={
+          <SegmentedCallButton actions={actions} onSelect={handleSelect} />
+        }
+      />
 
       <div className={styles['center__messages']}>
         <MessageSeparator type="Date" label="Today" />
@@ -552,6 +762,43 @@ const KEYS: { key: string; sub?: string }[] = [
   { key: '#' },
 ];
 
+function KeypadInput({
+  value,
+  placeholder,
+  trailing,
+}: {
+  value: string;
+  placeholder: string;
+  trailing?: React.ReactNode;
+}) {
+  return (
+    <div className={styles['keypad__input']}>
+      <span className={styles['keypad__input-value']}>
+        {value || <span className={styles['keypad__input-placeholder']}>{placeholder}</span>}
+      </span>
+      {trailing}
+    </div>
+  );
+}
+
+function KeypadGrid({ onPress }: { onPress: (k: string) => void }) {
+  return (
+    <div className={styles['keypad__grid']}>
+      {KEYS.map(({ key, sub }) => (
+        <button
+          key={key}
+          type="button"
+          className={styles['keypad__key']}
+          onClick={() => onPress(key)}
+        >
+          <span className={styles['keypad__key-main']}>{key}</span>
+          {sub && <span className={styles['keypad__key-sub']}>{sub}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function DialerScene({
   recents,
   onStartCall,
@@ -563,68 +810,61 @@ function DialerScene({
 }) {
   const [typed, setTyped] = useState('');
 
-  const append = (k: string) => setTyped((t) => (t + k).slice(0, 18));
+  const sanitize = (s: string) => s.replace(/[^0-9*#+ ()-]/g, '').slice(0, 18);
+  const append = (k: string) => setTyped((t) => sanitize(t + k));
   const backspace = () => setTyped((t) => t.slice(0, -1));
+  const dial = () => {
+    if (!typed) return;
+    onDialRaw(typed);
+    setTyped('');
+  };
 
   return (
     <>
       <div className={styles['dialer-header']}>
-        <div className={styles['dialer-header__left']}>
-          <span className={styles['dialer-header__icon']}>
-            <Icon glyph={<KeyboardOutlineIcon />} size="20" />
-          </span>
-          <div>
-            <div className={styles['dialer-header__title']}>Dialer</div>
-            <div className={styles['dialer-header__sub']}>
-              Dial any number — work numbers go through Mattermost Secure.
-            </div>
-          </div>
-        </div>
+        <span className={styles['dialer-header__icon']}>
+          <Icon glyph={<DialpadIcon />} size="16" />
+        </span>
+        <span className={styles['dialer-header__title']}>Dial Pad</span>
+        <span className={styles['dialer-header__description']}>
+          Dial any number — work numbers go through Mattermost Secure.
+        </span>
       </div>
 
       <div className={styles['dialer']}>
         <div className={styles['dialer__keypad']}>
-          <div className={styles['dialer__display']}>
-            <span className={styles['dialer__display-number']}>
-              {typed || (
-                <span className={styles['dialer__display-placeholder']}>
-                  Enter a number
-                </span>
-              )}
-            </span>
-            {typed && (
+          <TextInput
+            className={styles['dialer__phone-field']}
+            size="Large"
+            value={typed}
+            onChange={(e) => setTyped(sanitize(e.target.value))}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                dial();
+              }
+            }}
+            placeholder="Enter a number"
+            inputMode="tel"
+            autoComplete="off"
+            aria-label="Phone number"
+            trailingIcon={
               <IconButton
                 aria-label="Delete digit"
                 size="Small"
                 padding="Compact"
-                icon={<Icon glyph={<BackspaceOutlineIcon />} size="20" />}
+                disabled={!typed}
+                icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
                 onClick={backspace}
               />
-            )}
-          </div>
-
-          <div className={styles['dialer__grid']}>
-            {KEYS.map(({ key, sub }) => (
-              <button
-                key={key}
-                className={styles['dialer__key']}
-                onClick={() => append(key)}
-                type="button"
-              >
-                <span className={styles['dialer__key-main']}>{key}</span>
-                {sub && <span className={styles['dialer__key-sub']}>{sub}</span>}
-              </button>
-            ))}
-          </div>
+            }
+          />
+          <KeypadGrid onPress={append} />
 
           <div className={styles['dialer__call-action']}>
             <button
               className={styles['dialer__call-button']}
-              onClick={() => {
-                if (!typed) return;
-                onDialRaw(typed);
-                setTyped('');
-              }}
+              onClick={dial}
               disabled={!typed}
               aria-label="Start call"
             >
@@ -662,7 +902,7 @@ function DialerScene({
                         <Icon
                           glyph={
                             r.direction === 'outbound' ? (
-                              <PhoneOutlineIcon />
+                              <PhoneIcon />
                             ) : (
                               <PhoneHangupIcon />
                             )
@@ -670,11 +910,6 @@ function DialerScene({
                           size="12"
                         />
                         {p.number}
-                        {p.secure && (
-                          <span className={styles['dialer__recent-secure']}>
-                            <Icon glyph={<LockIcon />} size="12" />
-                          </span>
-                        )}
                       </div>
                     </div>
                     <div className={styles['dialer__recent-right']}>
@@ -707,6 +942,8 @@ function CallPip({
   onToggleKeypad,
   keypadOpen,
   onDtmf,
+  onDtmfBackspace,
+  onStartComposingCall,
   audioDevice,
   onPickDevice,
   onHangUp,
@@ -720,6 +957,8 @@ function CallPip({
   onToggleKeypad: () => void;
   keypadOpen: boolean;
   onDtmf: (k: string) => void;
+  onDtmfBackspace: () => void;
+  onStartComposingCall: () => void;
   audioDevice: AudioDevice;
   onPickDevice: (id: string) => void;
   onHangUp: () => void;
@@ -739,185 +978,202 @@ function CallPip({
     return () => document.removeEventListener('mousedown', handler);
   }, [devicePickerOpen]);
 
-  const statusText = (() => {
-    if (call.status === 'dialing') return 'Calling…';
+  const isComposing = call.status === 'composing';
+  const displayName = contact ? contact.name : phone?.number || 'Unknown';
+
+  const title = (() => {
+    if (isComposing) return 'Start new call';
+    if (call.status === 'dialing') return `Calling ${displayName}…`;
+    if (call.status === 'ended') return 'Call ended';
+    return displayName;
+  })();
+
+  const subDuration = (() => {
     if (call.status === 'connected' && call.startedAt) {
-      const elapsed = Math.max(0, Math.floor((nowTick - call.startedAt) / 1000));
-      return formatDuration(elapsed);
+      return formatDuration(Math.max(0, Math.floor((nowTick - call.startedAt) / 1000)));
     }
     if (call.status === 'ended' && call.startedAt && call.endedAt) {
-      const elapsed = Math.max(0, Math.floor((call.endedAt - call.startedAt) / 1000));
-      return `Call ended · ${formatDuration(elapsed)}`;
+      return formatDuration(Math.max(0, Math.floor((call.endedAt - call.startedAt) / 1000)));
     }
-    if (call.status === 'ended') return 'Call ended';
-    return '';
+    return null;
   })();
+
+  const subContent = isComposing ? 'Enter a number' : subDuration ?? phone?.number ?? '';
 
   const DeviceIcon = AUDIO_ICON[audioDevice.kind];
   const controlsDisabled = call.status === 'ended';
+  const showDtmf = (keypadOpen || isComposing) && call.status !== 'ended';
 
   return (
-    <div className={styles['pip']} role="dialog" aria-label="Active call">
-      <div className={styles['pip__header']}>
-        <span className={styles['pip__secure-tag']}>
-          <Icon glyph={<ShieldOutlineIcon />} size="12" />
-          Mattermost Secure
-        </span>
-        {call.status === 'ended' && (
+    <div
+      className={styles['pip']}
+      role="dialog"
+      aria-label={isComposing ? 'Start a new call' : 'Active call'}
+    >
+      <div className={styles['pip__widget']}>
+        <div className={styles['pip__header']}>
+          {contact && contact.avatar ? (
+            <UserAvatar src={contact.avatar} alt={contact.name} size="32" />
+          ) : (
+            <div className={styles['pip__unknown-avatar']} aria-hidden>
+              <Icon glyph={isComposing ? <DialpadIcon /> : <PhoneIcon />} size="16" />
+            </div>
+          )}
+          <div className={styles['pip__header-text']}>
+            <div
+              className={`${styles['pip__title']} ${
+                call.status === 'dialing' ? styles['pip__title--pulsing'] : ''
+              }`}
+            >
+              {title}
+            </div>
+            <div className={styles['pip__sub']}>
+              <span>{subContent}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles['pip__controls']}>
           <IconButton
-            aria-label="Dismiss call window"
+            aria-label={keypadOpen ? 'Hide keypad' : 'Show keypad'}
             size="Small"
             padding="Compact"
-            icon={<Icon glyph={<CloseIcon />} size="16" />}
-            onClick={onDismiss}
+            active={keypadOpen || isComposing}
+            disabled={controlsDisabled || isComposing}
+            icon={<Icon glyph={<DialpadIcon />} size="16" />}
+            onClick={onToggleKeypad}
           />
-        )}
-      </div>
-
-      <div className={styles['pip__identity']}>
-        {contact && contact.avatar ? (
-          <UserAvatar src={contact.avatar} alt={contact.name} size="72" />
-        ) : (
-          <div className={styles['pip__unknown-avatar']} aria-hidden>
-            <Icon glyph={<PhoneOutlineIcon />} size="32" />
-          </div>
-        )}
-        <div className={styles['pip__name']}>
-          {contact ? contact.name : phone?.number || 'Unknown number'}
-        </div>
-        <div className={styles['pip__number']}>
-          {phone?.number || ''}
-          {phone && (
-            <span className={styles['pip__number-label']}>
-              {' · '}
-              {phone.label}
-            </span>
-          )}
-        </div>
-        <div
-          className={`${styles['pip__status']} ${
-            call.status === 'dialing' ? styles['pip__status--pulsing'] : ''
-          }`}
-        >
-          {statusText}
-        </div>
-      </div>
-
-      {keypadOpen && call.status !== 'ended' && (
-        <div className={styles['pip__dtmf']}>
-          <div className={styles['pip__dtmf-display']}>
-            {call.dtmf || (
-              <span className={styles['pip__dtmf-placeholder']}>Press a key</span>
+          <div className={styles['pip__controls-right']}>
+            {isComposing ? (
+              <>
+                <button
+                  type="button"
+                  aria-label="Start call"
+                  className={styles['pip__call']}
+                  disabled={!call.dtmf}
+                  onClick={onStartComposingCall}
+                >
+                  <Icon glyph={<PhoneIcon />} size="16" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Cancel"
+                  className={styles['pip__hangup']}
+                  onClick={onDismiss}
+                >
+                  <Icon glyph={<CloseIcon />} size="16" />
+                </button>
+              </>
+            ) : (
+              <>
+                <IconButton
+                  aria-label={call.muted ? 'Unmute microphone' : 'Mute microphone'}
+                  size="Small"
+                  padding="Compact"
+                  toggled={call.muted}
+                  destructive={call.muted}
+                  disabled={controlsDisabled}
+                  icon={
+                    <Icon
+                      glyph={call.muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
+                      size="16"
+                    />
+                  }
+                  onClick={onToggleMute}
+                />
+                <div className={styles['pip__more-wrap']} ref={deviceRef}>
+                  <IconButton
+                    aria-label="More options"
+                    size="Small"
+                    padding="Compact"
+                    toggled={devicePickerOpen}
+                    disabled={controlsDisabled}
+                    icon={<Icon glyph={<DotsHorizontalIcon />} size="16" />}
+                    onClick={() => setDevicePickerOpen((o) => !o)}
+                  />
+                  {devicePickerOpen && (
+                    <ul className={styles['pip__device-menu']} role="menu">
+                      <li className={styles['pip__device-menu-label']}>
+                        <Icon glyph={<DeviceIcon size={SVG_SIZE_MAP['12']} />} size="12" />
+                        <span>Audio output</span>
+                      </li>
+                      {AUDIO_DEVICES.map((d) => {
+                        const DIcon = AUDIO_ICON[d.kind];
+                        const selected = d.id === audioDevice.id;
+                        return (
+                          <li key={d.id}>
+                            <button
+                              role="menuitem"
+                              className={`${styles['pip__device-item']} ${
+                                selected ? styles['pip__device-item--selected'] : ''
+                              }`}
+                              onClick={() => {
+                                onPickDevice(d.id);
+                                setDevicePickerOpen(false);
+                              }}
+                            >
+                              <Icon glyph={<DIcon size={SVG_SIZE_MAP['16']} />} size="16" />
+                              <span>{d.label}</span>
+                              {selected && (
+                                <span className={styles['pip__device-check']}>
+                                  <Icon glyph={<CheckIcon />} size="16" />
+                                </span>
+                              )}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  aria-label={call.status === 'ended' ? 'Dismiss' : 'End call'}
+                  className={styles['pip__hangup']}
+                  onClick={call.status === 'ended' ? onDismiss : onHangUp}
+                >
+                  <Icon glyph={<PhoneHangupIcon />} size="16" />
+                </button>
+              </>
             )}
           </div>
-          <div className={styles['pip__dtmf-grid']}>
-            {KEYS.map(({ key }) => (
-              <button
-                key={key}
-                type="button"
-                className={styles['pip__dtmf-key']}
-                onClick={() => onDtmf(key)}
-              >
-                {key}
-              </button>
-            ))}
+        </div>
+      </div>
+
+      {showDtmf && (
+        <div className={styles['pip__dtmf']}>
+          <div className={styles['pip__dtmf-header']}>
+            <span className={styles['pip__dtmf-title']}>Dial pad</span>
+            {!isComposing && (
+              <IconButton
+                aria-label="Close dial pad"
+                size="Small"
+                padding="Compact"
+                icon={<Icon glyph={<CloseIcon />} size="16" />}
+                onClick={onToggleKeypad}
+              />
+            )}
+          </div>
+          <div className={styles['pip__dtmf-body']}>
+            <KeypadInput
+              value={call.dtmf}
+              placeholder="Enter number"
+              trailing={
+                isComposing && call.dtmf ? (
+                  <IconButton
+                    aria-label="Delete digit"
+                    size="Small"
+                    padding="Compact"
+                    icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
+                    onClick={onDtmfBackspace}
+                  />
+                ) : undefined
+              }
+            />
+            <KeypadGrid onPress={onDtmf} />
           </div>
         </div>
       )}
-
-      <div className={styles['pip__controls']}>
-        <div className={styles['pip__control']}>
-          <IconButton
-            aria-label={call.muted ? 'Unmute microphone' : 'Mute microphone'}
-            size="Large"
-            rounded
-            toggled={call.muted}
-            destructive={call.muted}
-            disabled={controlsDisabled}
-            icon={
-              <Icon
-                glyph={call.muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
-                size="20"
-              />
-            }
-            onClick={onToggleMute}
-          />
-          <span className={styles['pip__control-label']}>
-            {call.muted ? 'Muted' : 'Mute'}
-          </span>
-        </div>
-
-        <div className={styles['pip__control']}>
-          <IconButton
-            aria-label={keypadOpen ? 'Hide keypad' : 'Show keypad'}
-            size="Large"
-            rounded
-            toggled={keypadOpen}
-            disabled={controlsDisabled}
-            icon={<Icon glyph={<KeyboardOutlineIcon />} size="20" />}
-            onClick={onToggleKeypad}
-          />
-          <span className={styles['pip__control-label']}>Keypad</span>
-        </div>
-
-        <div className={styles['pip__control']} ref={deviceRef}>
-          <IconButton
-            aria-label="Audio device"
-            size="Large"
-            rounded
-            toggled={devicePickerOpen}
-            disabled={controlsDisabled}
-            icon={<Icon glyph={<DeviceIcon size={SVG_SIZE_MAP['20']} />} size="20" />}
-            onClick={() => setDevicePickerOpen((o) => !o)}
-          />
-          <span className={styles['pip__control-label']}>Speaker</span>
-          {devicePickerOpen && (
-            <ul className={styles['pip__device-menu']} role="menu">
-              <li className={styles['pip__device-menu-label']}>Audio output</li>
-              {AUDIO_DEVICES.map((d) => {
-                const DIcon = AUDIO_ICON[d.kind];
-                const selected = d.id === audioDevice.id;
-                return (
-                  <li key={d.id}>
-                    <button
-                      role="menuitem"
-                      className={`${styles['pip__device-item']} ${
-                        selected ? styles['pip__device-item--selected'] : ''
-                      }`}
-                      onClick={() => {
-                        onPickDevice(d.id);
-                        setDevicePickerOpen(false);
-                      }}
-                    >
-                      <Icon glyph={<DIcon size={SVG_SIZE_MAP['16']} />} size="16" />
-                      <span>{d.label}</span>
-                      {selected && (
-                        <span className={styles['pip__device-check']}>
-                          <Icon glyph={<CheckIcon />} size="16" />
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-
-        <div className={styles['pip__control']}>
-          <IconButton
-            aria-label={call.status === 'ended' ? 'Dismiss' : 'End call'}
-            size="Large"
-            rounded
-            destructive={call.status !== 'ended'}
-            icon={<Icon glyph={<PhoneHangupIcon />} size="20" />}
-            onClick={call.status === 'ended' ? onDismiss : onHangUp}
-          />
-          <span className={styles['pip__control-label']}>
-            {call.status === 'ended' ? 'Dismiss' : 'End'}
-          </span>
-        </div>
-      </div>
     </div>
   );
 }
@@ -965,6 +1221,57 @@ export default function OutboundCalls() {
       deviceId: AUDIO_DEVICES[0].id,
       dtmf: '',
     });
+  };
+
+  const ensureRawContact = (n: string) => {
+    const fakeId = `__raw-${n}`;
+    CONTACT_MAP[fakeId] = {
+      id: fakeId,
+      name: n,
+      handle: '',
+      email: '',
+      title: '',
+      role: 'Unknown number',
+      avatar: '',
+      online: false,
+      phones: [{ number: n, label: 'Dialed', kind: 'mobile', secure: false }],
+    };
+    return fakeId;
+  };
+
+  const openDialpadWidget = () => {
+    setCallSummary(null);
+    setPopover(null);
+    setKeypadOpen(true);
+    setCall({
+      contactId: '',
+      phoneIndex: 0,
+      status: 'composing',
+      startedAt: null,
+      endedAt: null,
+      muted: false,
+      deviceId: AUDIO_DEVICES[0].id,
+      dtmf: '',
+    });
+  };
+
+  const startComposingCall = () => {
+    setCall((c) => {
+      if (!c || c.status !== 'composing' || !c.dtmf) return c;
+      const fakeId = ensureRawContact(c.dtmf);
+      return {
+        ...c,
+        contactId: fakeId,
+        phoneIndex: 0,
+        status: 'dialing',
+        dtmf: '',
+      };
+    });
+    setKeypadOpen(false);
+  };
+
+  const dtmfBackspace = () => {
+    setCall((c) => (c ? { ...c, dtmf: c.dtmf.slice(0, -1) } : c));
   };
 
   const hangUp = () => {
@@ -1048,6 +1355,16 @@ export default function OutboundCalls() {
               <ChannelsSidebar
                 teamName="Contributors"
                 showFilter
+                showDialPad
+                activeChannelName={
+                  scene === 'channel'
+                    ? 'softphone-ux'
+                    : scene === 'dm'
+                    ? 'Aiko Tan'
+                    : scene === 'dialer'
+                    ? 'Dial Pad'
+                    : ''
+                }
                 avatarAikoTan={avatarAikoTan}
                 avatarArjunPatel={avatarArjunPatel}
                 avatarDanielOkoro={avatarDanielle}
@@ -1061,10 +1378,18 @@ export default function OutboundCalls() {
             <div className={styles['calls__inner-panel']}>
               <div className={styles['calls__center']}>
                 {scene === 'channel' && (
-                  <ChannelScene onOpenProfile={openProfile} callSummary={callSummary} />
+                  <ChannelScene
+                    onOpenProfile={openProfile}
+                    onOpenDialer={openDialpadWidget}
+                    callSummary={callSummary}
+                  />
                 )}
                 {scene === 'dm' && (
-                  <DMScene onOpenProfile={openProfile} onStartCall={startCall} />
+                  <DMScene
+                    onOpenProfile={openProfile}
+                    onStartCall={startCall}
+                    onOpenDialer={openDialpadWidget}
+                  />
                 )}
                 {scene === 'dialer' && (
                   <DialerScene
@@ -1102,6 +1427,8 @@ export default function OutboundCalls() {
             onToggleMute={() => setCall((c) => (c ? { ...c, muted: !c.muted } : c))}
             onToggleKeypad={() => setKeypadOpen((k) => !k)}
             onDtmf={handleDtmf}
+            onDtmfBackspace={dtmfBackspace}
+            onStartComposingCall={startComposingCall}
             onPickDevice={(id) => setCall((c) => (c ? { ...c, deviceId: id } : c))}
             onHangUp={hangUp}
             onDismiss={dismissCall}
@@ -1110,11 +1437,12 @@ export default function OutboundCalls() {
       </div>
 
       {popover && (
-        <ProfilePopover
+        <PositionedProfilePopover
           contact={CONTACT_MAP[popover.contactId]}
           anchorRect={popover.rect}
           onClose={() => setPopover(null)}
-          onCall={(idx) => startCall(popover.contactId, idx)}
+          onStartCall={startCall}
+          onOpenDialer={openDialpadWidget}
         />
       )}
     </div>

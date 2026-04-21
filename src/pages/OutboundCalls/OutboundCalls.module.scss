@@ -709,6 +709,7 @@
   background: var(--center-channel-bg);
   border-left: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
   animation: rhs-enter var(--duration-quick) var(--ease-entrance);
+  box-shadow: var(--elevation-2);
 
   &__header {
     flex: 0 0 auto;
@@ -1011,7 +1012,7 @@
   &__controls-right {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xxs);
+    gap: var(--spacing-xxxs);
   }
 
   &__more-wrap {
@@ -1148,24 +1149,13 @@
     padding: 0 var(--spacing-s) var(--spacing-m);
   }
 
-  // Small status line beneath pip__sub while the add-participant panel is open.
-  &__mute-notice {
-    font-size: var(--font-size-50);
-    line-height: var(--line-height-50);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-warning);
-    letter-spacing: 0.02em;
-    margin-top: 2px;
-  }
-
-  // Footer row under pip__controls that shows the participant count button.
-  &__footer {
+  &__controls-left {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 0 8px var(--spacing-xxs);
+    gap: var(--spacing-xxxs);
   }
 
+  // Inline pill that sits beside the dial-pad button inside pip__controls.
   &__participants-btn {
     appearance: none;
     border: 0;
@@ -1174,8 +1164,8 @@
     color: rgba(var(--center-channel-color-rgb), 0.75);
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-xxs);
-    height: 24px;
+    gap: var(--spacing-xxxs);
+    height: 28px;
     padding: 0 var(--spacing-xs);
     border-radius: var(--radius-s);
     font-size: var(--font-size-75);
@@ -1349,8 +1339,8 @@
   }
 
   &__participants-title {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
+    font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
     font-weight: var(--font-weight-semibold);
     color: var(--center-channel-color);
   }
@@ -1421,5 +1411,11 @@
 
   &__participant-status {
     color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  // Hangup icon shown on removable bridged rows. Keep the default icon-button
+  // background; only tint the icon itself with the danger color.
+  &__participant-remove:not(:disabled) {
+    color: var(--color-danger);
   }
 }

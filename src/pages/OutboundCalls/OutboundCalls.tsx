@@ -217,9 +217,9 @@ type SceneId = 'channel' | 'dm' | 'dialer' | 'rhs' | 'team-sidebar';
 const SCENES: { id: SceneId; label: string }[] = [
   { id: 'channel', label: 'Channel' },
   { id: 'dm', label: 'Direct message' },
-  { id: 'dialer', label: 'Dialer' },
-  { id: 'rhs', label: 'Right sidebar' },
-  { id: 'team-sidebar', label: 'Team sidebar' },
+  { id: 'dialer', label: 'Dialer v1' },
+  { id: 'rhs', label: 'Dialer v2' },
+  { id: 'team-sidebar', label: 'Dialer v3' },
 ];
 
 function SceneSwitcher({
@@ -1118,6 +1118,7 @@ function ParticipantRow({
   avatarSrc,
   avatarAlt,
   name,
+  number,
   status,
   onRemove,
   removeDisabled,
@@ -1125,10 +1126,12 @@ function ParticipantRow({
   avatarSrc?: string;
   avatarAlt?: string;
   name: string;
+  number?: string;
   status: BridgedStatus;
   onRemove?: () => void;
   removeDisabled?: boolean;
 }) {
+  const numberLabel = number && number !== name ? number : null;
   return (
     <li
       className={`${styles['pip__participant']}${
@@ -1145,10 +1148,14 @@ function ParticipantRow({
       <div className={styles['pip__participant-body']}>
         <span className={styles['pip__participant-name']}>{name}</span>
         <div className={styles['pip__participant-meta']}>
-          <span className={styles['pip__trunk']}>Phone</span>
+          {numberLabel && (
+            <span className={styles['pip__trunk']}>{numberLabel}</span>
+          )}
           {status === 'dialing' && (
             <>
-              <span className={styles['pip__sub-sep']} aria-hidden>·</span>
+              {numberLabel && (
+                <span className={styles['pip__sub-sep']} aria-hidden>·</span>
+              )}
               <span
                 className={`${styles['pip__participant-status']} ${styles['pip__title--pulsing']}`}
               >
@@ -1163,8 +1170,9 @@ function ParticipantRow({
           aria-label="Remove participant"
           size="Small"
           padding="Compact"
+          className={styles['pip__participant-remove']}
           disabled={removeDisabled}
-          icon={<Icon glyph={<CloseIcon />} size="16" />}
+          icon={<Icon glyph={<PhoneHangupIcon />} size="16" />}
           onClick={onRemove}
         />
       )}
@@ -1271,7 +1279,7 @@ function CallPip({
     (p) => p.status !== 'ended',
   );
   const activePartyCount = (call.status !== 'ended' ? 1 : 0) + activeParticipants.length;
-  const showFooter = call.bridgedParticipants.length > 0 && !isComposing;
+  const showParticipantsBtn = call.bridgedParticipants.length > 0 && !isComposing;
 
   const handleAddDtmfKey = (k: string) => {
     playDtmf(k);
@@ -1333,24 +1341,35 @@ function CallPip({
                 </>
               )}
             </div>
-            {addingParticipant && (
-              <div className={styles['pip__mute-notice']}>
-                Muted while adding participant
-              </div>
-            )}
           </div>
         </div>
 
         <div className={styles['pip__controls']}>
-          <IconButton
-            aria-label={keypadOpen ? 'Hide keypad' : 'Show keypad'}
-            size="Small"
-            padding="Compact"
-            active={keypadOpen || isComposing}
-            disabled={controlsDisabled || isComposing}
-            icon={<Icon glyph={<DialpadIcon />} size="16" />}
-            onClick={onToggleKeypad}
-          />
+          <div className={styles['pip__controls-left']}>
+            <IconButton
+              aria-label={keypadOpen ? 'Hide keypad' : 'Show keypad'}
+              size="Small"
+              padding="Compact"
+              active={keypadOpen || isComposing}
+              disabled={call.status !== 'connected' && !isComposing}
+              icon={<Icon glyph={<DialpadIcon />} size="16" />}
+              onClick={onToggleKeypad}
+            />
+            {showParticipantsBtn && (
+              <button
+                type="button"
+                className={`${styles['pip__participants-btn']}${
+                  participantListOpen ? ` ${styles['pip__participants-btn--active']}` : ''
+                }`}
+                aria-label={participantListOpen ? 'Hide participants' : 'Show participants'}
+                aria-pressed={participantListOpen}
+                onClick={onToggleParticipantList}
+              >
+                <Icon glyph={<AccountMultipleOutlineIcon />} size="16" />
+                <span>{activePartyCount}</span>
+              </button>
+            )}
+          </div>
           <div className={styles['pip__controls-right']}>
             {isComposing ? (
               <>
@@ -1458,23 +1477,6 @@ function CallPip({
             )}
           </div>
         </div>
-
-        {showFooter && (
-          <div className={styles['pip__footer']}>
-            <button
-              type="button"
-              className={`${styles['pip__participants-btn']}${
-                participantListOpen ? ` ${styles['pip__participants-btn--active']}` : ''
-              }`}
-              aria-label={participantListOpen ? 'Hide participants' : 'Show participants'}
-              aria-pressed={participantListOpen}
-              onClick={onToggleParticipantList}
-            >
-              <Icon glyph={<AccountMultipleOutlineIcon />} size="16" />
-              <span>{activePartyCount}</span>
-            </button>
-          </div>
-        )}
       </div>
 
       {participantListOpen && (
@@ -1494,6 +1496,7 @@ function CallPip({
               avatarSrc={contact?.avatar}
               avatarAlt={contact?.name}
               name={contact ? contact.name : phone?.number ?? 'Unknown'}
+              number={phone?.number}
               status={call.status === 'dialing' ? 'dialing' : 'connected'}
             />
             {call.bridgedParticipants.map((p) => {
@@ -1508,6 +1511,7 @@ function CallPip({
                   avatarSrc={pContact?.avatar || undefined}
                   avatarAlt={pContact?.name}
                   name={pName}
+                  number={pPhone?.number}
                   status={p.status}
                   onRemove={
                     p.status === 'connected'
@@ -1687,7 +1691,6 @@ export default function OutboundCalls() {
 
   const [addingParticipant, setAddingParticipant] = useState(false);
   const [addMode, setAddMode] = useState<AddMode>('contacts');
-  const [preMutedForBridge, setPreMutedForBridge] = useState<boolean | null>(null);
   const [participantListOpen, setParticipantListOpen] = useState(false);
 
   const [nowTick, setNowTick] = useState(Date.now());
@@ -1821,7 +1824,6 @@ export default function OutboundCalls() {
         setCallExiting(false);
         setAddingParticipant(false);
         setParticipantListOpen(false);
-        setPreMutedForBridge(null);
       }, 150);
     }, 100);
   };
@@ -1832,7 +1834,6 @@ export default function OutboundCalls() {
     setCallExiting(false);
     setAddingParticipant(false);
     setParticipantListOpen(false);
-    setPreMutedForBridge(null);
   };
 
   const handleDtmf = (k: string) => {
@@ -1845,11 +1846,6 @@ export default function OutboundCalls() {
   };
 
   const openAddParticipant = () => {
-    setCall((c) => {
-      if (!c) return c;
-      setPreMutedForBridge(c.muted);
-      return { ...c, muted: true };
-    });
     setAddMode('contacts');
     setAddingParticipant(true);
     setKeypadOpen(false);
@@ -1858,12 +1854,6 @@ export default function OutboundCalls() {
 
   const closeAddParticipant = () => {
     setAddingParticipant(false);
-    setCall((c) => {
-      if (!c) return c;
-      if (preMutedForBridge === null) return c;
-      return { ...c, muted: preMutedForBridge };
-    });
-    setPreMutedForBridge(null);
   };
 
   const scheduleBridgeConnect = (participantId: string) => {

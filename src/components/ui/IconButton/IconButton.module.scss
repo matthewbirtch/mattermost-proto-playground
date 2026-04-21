@@ -148,19 +148,19 @@
 
     // Inverted + destructive
     &.icon-button--destructive {
-      background-color: var(--color-danger);
-      color: var(--button-color);
+      background-color: transparent;
+      color: var(--color-danger);
 
       &:hover:not(:disabled) {
-        background-color: rgba(var(--color-danger-rgb), 0.92);
+        background-color: rgba(var(--color-danger-rgb), 0.08);
+        color: var(--color-danger);
       }
-      &:active:not(:disabled),
-      &.icon-button--toggled {
-        background-color: rgba(var(--color-danger-rgb), 0.84);
+      &:active:not(:disabled):not(.icon-button--toggled) {
+        background-color: rgba(var(--color-danger-rgb), 0.16);
       }
       &:focus-visible {
         box-shadow:
-          0 0 0 3px var(--center-channel-bg),
+          0 0 0 3px var(--sidebar-bg),
           0 0 0 5px var(--color-danger);
       }
     }
@@ -168,17 +168,18 @@
 
   // ---------------------------------------------------------------------------
   // Destructive (Figma: Destructive = True)
+  // Transparent background with danger-color icon; tinted bg on hover/active.
   // ---------------------------------------------------------------------------
   &--destructive {
-    background-color: var(--color-danger);
-    color: var(--button-color);
+    background-color: transparent;
+    color: var(--color-danger);
 
     &:hover:not(:disabled) {
-      background-color: rgba(var(--color-danger-rgb), 0.92);
+      background-color: rgba(var(--color-danger-rgb), 0.08);
+      color: var(--color-danger);
     }
-    &:active:not(:disabled),
-    &.icon-button--toggled {
-      background-color: rgba(var(--color-danger-rgb), 0.84);
+    &:active:not(:disabled):not(.icon-button--toggled) {
+      background-color: rgba(var(--color-danger-rgb), 0.16);
     }
     &:focus-visible {
       box-shadow:

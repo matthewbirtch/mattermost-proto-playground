@@ -111,6 +111,17 @@ background-color: rgba(var(--color-warning-rgb), 0.04);
 border-color: rgba(var(--color-warning-rgb), 0.16);
 ```
 
+## Figma color variables with opacity suffix
+
+When a Figma color variable has a suffix (e.g. `center-channel-color-8`, `sidebar-text-24`, `button-bg-16`, `color-danger-12`), the suffix encodes an opacity percentage. Do **not** look for a suffixed CSS token — it doesn't exist. Instead, use the root token's `-rgb` counterpart inside `rgba()`, with the suffix converted to a decimal alpha (divide by 100).
+
+| Figma variable | CSS |
+|---|---|
+| `center-channel-color/8` | `rgba(var(--center-channel-color-rgb), 0.08)` |
+| `sidebar-text/24` | `rgba(var(--sidebar-text-rgb), 0.24)` |
+| `button-bg/16` | `rgba(var(--button-bg-rgb), 0.16)` |
+| `color-danger/12` | `rgba(var(--color-danger-rgb), 0.12)` |
+
 ## Iconography: phone icon is always filled
 
 For any phone/call action, use the filled compass icon `@mattermost/compass-icons/components/phone`. Never use `phone-outline`, even when another design system reference shows the outline variant.

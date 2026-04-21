@@ -14,6 +14,9 @@ import ClockOutlineIcon from '@mattermost/compass-icons/components/clock-outline
 import CloseIcon from '@mattermost/compass-icons/components/close';
 import DotsHorizontalIcon from '@mattermost/compass-icons/components/dots-horizontal';
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
+import AccountPlusOutlineIcon from '@mattermost/compass-icons/components/account-plus-outline';
+import AccountMultipleOutlineIcon from '@mattermost/compass-icons/components/account-multiple-outline';
+import MagnifyIcon from '@mattermost/compass-icons/components/magnify';
 import DialpadIcon from '@/components/icons/DialpadIcon';
 import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
 import Icon, { SVG_SIZE_MAP } from '@/components/ui/Icon/Icon';
@@ -170,6 +173,16 @@ const AUDIO_ICON: Record<AudioDeviceKind, typeof VolumeHighIcon> = {
 
 type CallStatus = 'idle' | 'composing' | 'dialing' | 'connected' | 'ended';
 
+type BridgedStatus = 'dialing' | 'connected' | 'ended';
+
+type BridgedParticipant = {
+  id: string;
+  contactId: string;
+  phoneIndex: number;
+  status: BridgedStatus;
+  startedAt: number | null;
+};
+
 type ActiveCall = {
   contactId: string;
   phoneIndex: number;
@@ -179,7 +192,10 @@ type ActiveCall = {
   muted: boolean;
   deviceId: string;
   dtmf: string;
+  bridgedParticipants: BridgedParticipant[];
 };
+
+type AddMode = 'contacts' | 'dialpad';
 
 function formatDuration(sec: number): string {
   const m = Math.floor(sec / 60);
@@ -1098,6 +1114,64 @@ function RhsDialer({
 
 // ── PiP call window ────────────────────────────────────────────────────────
 
+function ParticipantRow({
+  avatarSrc,
+  avatarAlt,
+  name,
+  status,
+  onRemove,
+  removeDisabled,
+}: {
+  avatarSrc?: string;
+  avatarAlt?: string;
+  name: string;
+  status: BridgedStatus;
+  onRemove?: () => void;
+  removeDisabled?: boolean;
+}) {
+  return (
+    <li
+      className={`${styles['pip__participant']}${
+        status === 'ended' ? ` ${styles['pip__participant--ending']}` : ''
+      }`}
+    >
+      {avatarSrc ? (
+        <UserAvatar src={avatarSrc} alt={avatarAlt ?? name} size="24" />
+      ) : (
+        <div className={styles['pip__participant-avatar-fallback']} aria-hidden>
+          <Icon glyph={<PhoneIcon />} size="12" />
+        </div>
+      )}
+      <div className={styles['pip__participant-body']}>
+        <span className={styles['pip__participant-name']}>{name}</span>
+        <div className={styles['pip__participant-meta']}>
+          <span className={styles['pip__trunk']}>Phone</span>
+          {status === 'dialing' && (
+            <>
+              <span className={styles['pip__sub-sep']} aria-hidden>·</span>
+              <span
+                className={`${styles['pip__participant-status']} ${styles['pip__title--pulsing']}`}
+              >
+                Ringing…
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+      {onRemove && (
+        <IconButton
+          aria-label="Remove participant"
+          size="Small"
+          padding="Compact"
+          disabled={removeDisabled}
+          icon={<Icon glyph={<CloseIcon />} size="16" />}
+          onClick={onRemove}
+        />
+      )}
+    </li>
+  );
+}
+
 function CallPip({
   call,
   contact,
@@ -1115,6 +1189,16 @@ function CallPip({
   onHangUp,
   onDismiss,
   exiting,
+  addingParticipant,
+  addMode,
+  onSetAddMode,
+  onOpenAddParticipant,
+  onCloseAddParticipant,
+  onBridgeContact,
+  onBridgeNumber,
+  participantListOpen,
+  onToggleParticipantList,
+  onRemoveParticipant,
 }: {
   call: ActiveCall;
   contact: Contact | null;
@@ -1132,9 +1216,29 @@ function CallPip({
   onHangUp: () => void;
   onDismiss: () => void;
   exiting: boolean;
+  addingParticipant: boolean;
+  addMode: AddMode;
+  onSetAddMode: (m: AddMode) => void;
+  onOpenAddParticipant: () => void;
+  onCloseAddParticipant: () => void;
+  onBridgeContact: (contactId: string, phoneIndex: number) => void;
+  onBridgeNumber: (n: string) => void;
+  participantListOpen: boolean;
+  onToggleParticipantList: () => void;
+  onRemoveParticipant: (participantId: string) => void;
 }) {
   const [devicePickerOpen, setDevicePickerOpen] = useState(false);
   const deviceRef = useRef<HTMLDivElement>(null);
+
+  const [addSearch, setAddSearch] = useState('');
+  const [addDtmf, setAddDtmf] = useState('');
+
+  useEffect(() => {
+    if (!addingParticipant) {
+      setAddSearch('');
+      setAddDtmf('');
+    }
+  }, [addingParticipant]);
 
   useEffect(() => {
     if (!devicePickerOpen) return;
@@ -1149,6 +1253,30 @@ function CallPip({
 
   const isComposing = call.status === 'composing';
   const displayName = contact ? contact.name : phone?.number || 'Unknown';
+  const canAddParticipant = call.status === 'connected';
+
+  const contactOptions = useMemo(() => {
+    const query = addSearch.trim().toLowerCase();
+    return CONTACTS
+      .filter((c) => c.phones.length > 0)
+      .filter((c) => !query || c.name.toLowerCase().includes(query))
+      .map((c) => {
+        const workIndex = c.phones.findIndex((p) => p.kind === 'work');
+        const idx = workIndex >= 0 ? workIndex : 0;
+        return { contact: c, phoneIndex: idx, phone: c.phones[idx] };
+      });
+  }, [addSearch]);
+
+  const activeParticipants = call.bridgedParticipants.filter(
+    (p) => p.status !== 'ended',
+  );
+  const activePartyCount = (call.status !== 'ended' ? 1 : 0) + activeParticipants.length;
+  const showFooter = call.bridgedParticipants.length > 0 && !isComposing;
+
+  const handleAddDtmfKey = (k: string) => {
+    playDtmf(k);
+    setAddDtmf((d) => sanitizeDigits(d + k));
+  };
 
   const title = (() => {
     if (isComposing) return 'Start new call';
@@ -1205,6 +1333,11 @@ function CallPip({
                 </>
               )}
             </div>
+            {addingParticipant && (
+              <div className={styles['pip__mute-notice']}>
+                Muted while adding participant
+              </div>
+            )}
           </div>
         </div>
 
@@ -1241,6 +1374,18 @@ function CallPip({
               </>
             ) : (
               <>
+                {canAddParticipant && (
+                  <IconButton
+                    aria-label={addingParticipant ? 'Close add participant' : 'Add participant'}
+                    size="Small"
+                    padding="Compact"
+                    active={addingParticipant}
+                    icon={<Icon glyph={<AccountPlusOutlineIcon />} size="16" />}
+                    onClick={
+                      addingParticipant ? onCloseAddParticipant : onOpenAddParticipant
+                    }
+                  />
+                )}
                 <IconButton
                   aria-label={call.muted ? 'Unmute microphone' : 'Mute microphone'}
                   size="Small"
@@ -1313,7 +1458,177 @@ function CallPip({
             )}
           </div>
         </div>
+
+        {showFooter && (
+          <div className={styles['pip__footer']}>
+            <button
+              type="button"
+              className={`${styles['pip__participants-btn']}${
+                participantListOpen ? ` ${styles['pip__participants-btn--active']}` : ''
+              }`}
+              aria-label={participantListOpen ? 'Hide participants' : 'Show participants'}
+              aria-pressed={participantListOpen}
+              onClick={onToggleParticipantList}
+            >
+              <Icon glyph={<AccountMultipleOutlineIcon />} size="16" />
+              <span>{activePartyCount}</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {participantListOpen && (
+        <div className={styles['pip__participants']}>
+          <div className={styles['pip__participants-header']}>
+            <span className={styles['pip__participants-title']}>Participants</span>
+            <IconButton
+              aria-label="Close participants"
+              size="Small"
+              padding="Compact"
+              icon={<Icon glyph={<CloseIcon />} size="16" />}
+              onClick={onToggleParticipantList}
+            />
+          </div>
+          <ul className={styles['pip__participants-list']}>
+            <ParticipantRow
+              avatarSrc={contact?.avatar}
+              avatarAlt={contact?.name}
+              name={contact ? contact.name : phone?.number ?? 'Unknown'}
+              status={call.status === 'dialing' ? 'dialing' : 'connected'}
+            />
+            {call.bridgedParticipants.map((p) => {
+              const pContact = CONTACT_MAP[p.contactId] ?? null;
+              const pPhone = pContact ? pContact.phones[p.phoneIndex] ?? null : null;
+              const pName = pContact && pContact.avatar
+                ? pContact.name
+                : pPhone?.number ?? pContact?.name ?? 'Unknown';
+              return (
+                <ParticipantRow
+                  key={p.id}
+                  avatarSrc={pContact?.avatar || undefined}
+                  avatarAlt={pContact?.name}
+                  name={pName}
+                  status={p.status}
+                  onRemove={
+                    p.status === 'connected'
+                      ? () => onRemoveParticipant(p.id)
+                      : undefined
+                  }
+                  removeDisabled={p.status !== 'connected'}
+                />
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
+      {addingParticipant && (
+        <div className={styles['pip__add']}>
+          <div className={styles['pip__add-header']}>
+            <div className={styles['pip__add-tabs']} role="tablist" aria-label="Add participant source">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={addMode === 'contacts'}
+                className={`${styles['pip__add-tab']}${
+                  addMode === 'contacts' ? ` ${styles['pip__add-tab--active']}` : ''
+                }`}
+                onClick={() => onSetAddMode('contacts')}
+              >
+                Contacts
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={addMode === 'dialpad'}
+                className={`${styles['pip__add-tab']}${
+                  addMode === 'dialpad' ? ` ${styles['pip__add-tab--active']}` : ''
+                }`}
+                onClick={() => onSetAddMode('dialpad')}
+              >
+                Dial pad
+              </button>
+            </div>
+            <IconButton
+              aria-label="Close add participant"
+              size="Small"
+              padding="Compact"
+              icon={<Icon glyph={<CloseIcon />} size="16" />}
+              onClick={onCloseAddParticipant}
+            />
+          </div>
+
+          {addMode === 'contacts' ? (
+            <div className={styles['pip__add-body']}>
+              <TextInput
+                size="Small"
+                value={addSearch}
+                onChange={(e) => setAddSearch(e.target.value)}
+                placeholder="Search contacts"
+                aria-label="Search contacts"
+                autoComplete="off"
+                leadingIcon={<Icon glyph={<MagnifyIcon />} size="16" />}
+              />
+              <ul className={styles['pip__add-contacts']}>
+                {contactOptions.length === 0 && (
+                  <li className={styles['pip__add-empty']}>No matching contacts</li>
+                )}
+                {contactOptions.map(({ contact: c, phone: ph, phoneIndex }) => (
+                  <li key={c.id}>
+                    <MenuItem
+                      label={c.name}
+                      secondaryLabel={`${ph.label} · ${ph.number}`}
+                      leadingVisual={
+                        <UserAvatar src={c.avatar} alt={c.name} size="24" />
+                      }
+                      onClick={() => onBridgeContact(c.id, phoneIndex)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className={styles['pip__add-body']}>
+              <KeypadInput
+                value={addDtmf}
+                placeholder="Enter number"
+                onChange={setAddDtmf}
+                onEnter={() => addDtmf && onBridgeNumber(addDtmf)}
+                trailing={
+                  <IconButton
+                    aria-label="Delete digit"
+                    size="X-Small"
+                    padding="Compact"
+                    disabled={!addDtmf}
+                    icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
+                    onClick={() => setAddDtmf((d) => d.slice(0, -1))}
+                  />
+                }
+              />
+              <KeypadGrid onPress={handleAddDtmfKey} />
+              <div className={styles['pip__add-actions']}>
+                <button
+                  type="button"
+                  aria-label="Cancel"
+                  className={styles['pip__add-cancel']}
+                  onClick={onCloseAddParticipant}
+                >
+                  <Icon glyph={<CloseIcon />} size="16" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Start bridge call"
+                  className={styles['pip__add-call']}
+                  disabled={!addDtmf}
+                  onClick={() => addDtmf && onBridgeNumber(addDtmf)}
+                >
+                  <Icon glyph={<PhoneIcon />} size="16" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {showDtmf && (
         <div className={styles['pip__dtmf']}>
@@ -1370,6 +1685,11 @@ export default function OutboundCalls() {
   const [callExiting, setCallExiting] = useState(false);
   const [rhsOpen, setRhsOpen] = useState(false);
 
+  const [addingParticipant, setAddingParticipant] = useState(false);
+  const [addMode, setAddMode] = useState<AddMode>('contacts');
+  const [preMutedForBridge, setPreMutedForBridge] = useState<boolean | null>(null);
+  const [participantListOpen, setParticipantListOpen] = useState(false);
+
   const [nowTick, setNowTick] = useState(Date.now());
 
   useEffect(() => {
@@ -1408,6 +1728,7 @@ export default function OutboundCalls() {
       muted: false,
       deviceId: AUDIO_DEVICES[0].id,
       dtmf: '',
+      bridgedParticipants: [],
     });
   };
 
@@ -1440,6 +1761,7 @@ export default function OutboundCalls() {
       muted: false,
       deviceId: AUDIO_DEVICES[0].id,
       dtmf: '',
+      bridgedParticipants: [],
     });
   };
 
@@ -1497,6 +1819,9 @@ export default function OutboundCalls() {
         setCall(null);
         setKeypadOpen(false);
         setCallExiting(false);
+        setAddingParticipant(false);
+        setParticipantListOpen(false);
+        setPreMutedForBridge(null);
       }, 150);
     }, 100);
   };
@@ -1505,6 +1830,9 @@ export default function OutboundCalls() {
     setCall(null);
     setKeypadOpen(false);
     setCallExiting(false);
+    setAddingParticipant(false);
+    setParticipantListOpen(false);
+    setPreMutedForBridge(null);
   };
 
   const handleDtmf = (k: string) => {
@@ -1514,6 +1842,109 @@ export default function OutboundCalls() {
 
   const handleDtmfChange = (v: string) => {
     setCall((c) => (c ? { ...c, dtmf: v } : c));
+  };
+
+  const openAddParticipant = () => {
+    setCall((c) => {
+      if (!c) return c;
+      setPreMutedForBridge(c.muted);
+      return { ...c, muted: true };
+    });
+    setAddMode('contacts');
+    setAddingParticipant(true);
+    setKeypadOpen(false);
+    setParticipantListOpen(false);
+  };
+
+  const closeAddParticipant = () => {
+    setAddingParticipant(false);
+    setCall((c) => {
+      if (!c) return c;
+      if (preMutedForBridge === null) return c;
+      return { ...c, muted: preMutedForBridge };
+    });
+    setPreMutedForBridge(null);
+  };
+
+  const scheduleBridgeConnect = (participantId: string) => {
+    // Prototype-only: simulate the bridged leg connecting. In production, ringback
+    // audio must be routed only to the dialer's local output — never broadcast into
+    // the shared LiveKit room audio track, or every party would hear it.
+    startRingback();
+    window.setTimeout(() => {
+      stopRingback();
+      setCall((c) => {
+        if (!c) return c;
+        return {
+          ...c,
+          bridgedParticipants: c.bridgedParticipants.map((p) =>
+            p.id === participantId
+              ? { ...p, status: 'connected', startedAt: Date.now() }
+              : p,
+          ),
+        };
+      });
+      setNowTick(Date.now());
+    }, 2400);
+  };
+
+  const bridgeParticipant = (contactId: string, phoneIndex: number) => {
+    const participantId = `bridge-${Date.now()}`;
+    setCall((c) => {
+      if (!c) return c;
+      return {
+        ...c,
+        bridgedParticipants: [
+          ...c.bridgedParticipants,
+          {
+            id: participantId,
+            contactId,
+            phoneIndex,
+            status: 'dialing',
+            startedAt: null,
+          },
+        ],
+      };
+    });
+    closeAddParticipant();
+    scheduleBridgeConnect(participantId);
+  };
+
+  const bridgeRawNumber = (n: string) => {
+    const trimmed = n.trim();
+    if (!trimmed) return;
+    const fakeId = ensureRawContact(trimmed);
+    bridgeParticipant(fakeId, 0);
+  };
+
+  const toggleParticipantList = () => {
+    setParticipantListOpen((open) => {
+      const next = !open;
+      if (next) {
+        setKeypadOpen(false);
+        if (addingParticipant) closeAddParticipant();
+      }
+      return next;
+    });
+  };
+
+  const removeBridgedParticipant = (participantId: string) => {
+    setCall((c) => {
+      if (!c) return c;
+      return {
+        ...c,
+        bridgedParticipants: c.bridgedParticipants.map((p) =>
+          p.id === participantId ? { ...p, status: 'ended' } : p,
+        ),
+      };
+    });
+    window.setTimeout(() => {
+      setCall((c) => {
+        if (!c) return c;
+        const remaining = c.bridgedParticipants.filter((p) => p.id !== participantId);
+        return { ...c, bridgedParticipants: remaining };
+      });
+    }, 300);
   };
 
   const openProfile = (contactId: string, rect: DOMRect) => {
@@ -1670,7 +2101,16 @@ export default function OutboundCalls() {
             audioDevice={activeDevice}
             keypadOpen={keypadOpen}
             onToggleMute={() => setCall((c) => (c ? { ...c, muted: !c.muted } : c))}
-            onToggleKeypad={() => setKeypadOpen((k) => !k)}
+            onToggleKeypad={() =>
+              setKeypadOpen((k) => {
+                const next = !k;
+                if (next) {
+                  if (addingParticipant) closeAddParticipant();
+                  setParticipantListOpen(false);
+                }
+                return next;
+              })
+            }
             onDtmf={handleDtmf}
             onDtmfChange={handleDtmfChange}
             onDtmfBackspace={dtmfBackspace}
@@ -1679,6 +2119,16 @@ export default function OutboundCalls() {
             onHangUp={hangUp}
             onDismiss={dismissCall}
             exiting={callExiting}
+            addingParticipant={addingParticipant}
+            addMode={addMode}
+            onSetAddMode={setAddMode}
+            onOpenAddParticipant={openAddParticipant}
+            onCloseAddParticipant={closeAddParticipant}
+            onBridgeContact={bridgeParticipant}
+            onBridgeNumber={bridgeRawNumber}
+            participantListOpen={participantListOpen}
+            onToggleParticipantList={toggleParticipantList}
+            onRemoveParticipant={removeBridgedParticipant}
           />
         )}
       </div>

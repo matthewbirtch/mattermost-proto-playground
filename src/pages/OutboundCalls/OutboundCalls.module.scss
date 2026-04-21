@@ -159,19 +159,19 @@
   align-items: center;
   gap: var(--spacing-m);
   padding: var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-m);
-  background: var(--color-neutral-0);
+  background: var(--center-channel-bg);
 
   &__label {
     font-size: var(--font-size-50);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: var(--font-weight-semibold);
-    color: var(--color-neutral-600);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
   }
 
   &__segmented {
     display: inline-flex;
-    background: var(--color-neutral-100);
+    background: rgba(var(--center-channel-color-rgb), 0.08);
     padding: 2px;
     border-radius: var(--radius-full);
     gap: 2px;
@@ -181,7 +181,7 @@
     appearance: none;
     border: 0;
     background: transparent;
-    color: var(--color-neutral-700);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
     font-size: var(--font-size-75);
     font-weight: var(--font-weight-semibold);
     padding: var(--spacing-xxxs) var(--spacing-m);
@@ -192,12 +192,12 @@
       color var(--duration-quick) var(--ease-transition);
 
     &:hover {
-      color: var(--color-neutral-1000);
+      color: var(--center-channel-color);
     }
 
     &--active {
-      background: var(--color-neutral-0);
-      color: var(--color-neutral-1000);
+      background: var(--center-channel-bg);
+      color: var(--center-channel-color);
       box-shadow: var(--elevation-1);
     }
   }
@@ -1146,5 +1146,280 @@
     flex-direction: column;
     gap: var(--spacing-m);
     padding: 0 var(--spacing-s) var(--spacing-m);
+  }
+
+  // Small status line beneath pip__sub while the add-participant panel is open.
+  &__mute-notice {
+    font-size: var(--font-size-50);
+    line-height: var(--line-height-50);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-warning);
+    letter-spacing: 0.02em;
+    margin-top: 2px;
+  }
+
+  // Footer row under pip__controls that shows the participant count button.
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 8px var(--spacing-xxs);
+  }
+
+  &__participants-btn {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    background: transparent;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxs);
+    height: 24px;
+    padding: 0 var(--spacing-xs);
+    border-radius: var(--radius-s);
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      background: rgba(var(--center-channel-color-rgb), 0.08);
+    }
+
+    &--active {
+      background: rgba(var(--center-channel-color-rgb), 0.12);
+      color: var(--center-channel-color);
+    }
+  }
+
+  // Add-participant panel (opens above pip__widget, same shell as pip__dtmf).
+  &__add {
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 8px;
+    box-shadow: 0 20px 32px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &__add-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+  }
+
+  &__add-tabs {
+    display: inline-flex;
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    padding: 2px;
+    border-radius: var(--radius-full);
+    gap: 2px;
+  }
+
+  &__add-tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    font-size: var(--font-size-50);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-xxxs) var(--spacing-s);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      color: var(--center-channel-color);
+    }
+
+    &--active {
+      background: var(--center-channel-bg);
+      color: var(--center-channel-color);
+      box-shadow: var(--elevation-1);
+    }
+  }
+
+  &__add-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-s) var(--spacing-s);
+  }
+
+  &__add-contacts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 232px;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--center-channel-color-rgb), 0.24) transparent;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--center-channel-color-rgb), 0.24);
+      border-radius: 3px;
+    }
+  }
+
+  &__add-empty {
+    padding: var(--spacing-s) var(--spacing-xs);
+    font-size: var(--font-size-75);
+    color: rgba(var(--center-channel-color-rgb), 0.56);
+    text-align: center;
+  }
+
+  &__add-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding-top: var(--spacing-xxs);
+  }
+
+  &__add-cancel {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    height: 32px;
+    min-width: 40px;
+    padding: 0 var(--spacing-xs);
+    border-radius: var(--radius-s);
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--duration-quick) var(--ease-transition);
+
+    &:hover { background: rgba(var(--center-channel-color-rgb), 0.12); }
+  }
+
+  &__add-call {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    flex: 1 1 auto;
+    height: 32px;
+    border-radius: var(--radius-s);
+    background: var(--color-success);
+    color: var(--color-neutral-0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      opacity var(--duration-quick) var(--ease-transition);
+
+    &:hover:not(:disabled) { background: var(--color-green-600); }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+  }
+
+  // Participant list panel (opens above pip__widget, same shell as pip__dtmf).
+  &__participants {
+    background: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: 8px;
+    box-shadow: 0 20px 32px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  &__participants-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-m);
+  }
+
+  &__participants-title {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+  }
+
+  &__participants-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--spacing-xxs) var(--spacing-xxs);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__participant {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    border-radius: var(--radius-s);
+    transition: opacity var(--duration-quick) var(--ease-exit);
+
+    &--ending {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+
+  &__participant-avatar-fallback {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-full);
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__participant-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__participant-name {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__participant-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xxxxs);
+    font-size: var(--font-size-50);
+    line-height: var(--line-height-50);
+    font-weight: var(--font-weight-semibold);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    letter-spacing: 0.02em;
+  }
+
+  &__participant-status {
+    color: rgba(var(--center-channel-color-rgb), 0.64);
   }
 }

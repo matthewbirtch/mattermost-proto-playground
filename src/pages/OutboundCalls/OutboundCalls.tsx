@@ -217,9 +217,9 @@ type SceneId = 'channel' | 'dm' | 'dialer' | 'rhs' | 'team-sidebar';
 const SCENES: { id: SceneId; label: string }[] = [
   { id: 'channel', label: 'Channel' },
   { id: 'dm', label: 'Direct message' },
-  { id: 'dialer', label: 'Dialer v1' },
+  { id: 'team-sidebar', label: 'Dialer v1' },
   { id: 'rhs', label: 'Dialer v2' },
-  { id: 'team-sidebar', label: 'Dialer v3' },
+  { id: 'dialer', label: 'Dialer v3' },
 ];
 
 function SceneSwitcher({
@@ -1374,25 +1374,14 @@ function CallPip({
           </div>
           <div className={styles['pip__controls-right']}>
             {isComposing ? (
-              <>
-                <button
-                  type="button"
-                  aria-label="Start call"
-                  className={styles['pip__call']}
-                  disabled={!call.dtmf}
-                  onClick={onStartComposingCall}
-                >
-                  <Icon glyph={<PhoneIcon />} size="16" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="Cancel"
-                  className={styles['pip__hangup']}
-                  onClick={onDismiss}
-                >
-                  <Icon glyph={<CloseIcon />} size="16" />
-                </button>
-              </>
+              <button
+                type="button"
+                aria-label="Cancel"
+                className={styles['pip__hangup']}
+                onClick={onDismiss}
+              >
+                <Icon glyph={<PhoneHangupIcon />} size="16" />
+              </button>
             ) : (
               <>
                 {canAddParticipant && (
@@ -1672,6 +1661,17 @@ function CallPip({
               }
             />
             <KeypadGrid onPress={onDtmf} />
+            {isComposing && (
+              <button
+                type="button"
+                aria-label="Start call"
+                className={styles['pip__dtmf-call']}
+                disabled={!call.dtmf}
+                onClick={onStartComposingCall}
+              >
+                <Icon glyph={<PhoneIcon />} size="20" />
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -7,7 +7,7 @@ import MicrophoneOffIcon from '@mattermost/compass-icons/components/microphone-o
 import VolumeHighIcon from '@mattermost/compass-icons/components/volume-high';
 import HeadphonesIcon from '@mattermost/compass-icons/components/headphones';
 import CellphoneIcon from '@mattermost/compass-icons/components/cellphone';
-import BackspaceOutlineIcon from '@mattermost/compass-icons/components/backspace-outline';
+import CloseCircleIcon from '@mattermost/compass-icons/components/close-circle';
 import ShieldOutlineIcon from '@mattermost/compass-icons/components/shield-outline';
 import CheckIcon from '@mattermost/compass-icons/components/check';
 import ClockOutlineIcon from '@mattermost/compass-icons/components/clock-outline';
@@ -856,7 +856,7 @@ function DialerScene({
   const [typed, setTyped] = useState('');
 
   const append = (k: string) => setTyped((t) => sanitizeDigits(t + k));
-  const backspace = () => setTyped((t) => t.slice(0, -1));
+  const clearTyped = () => setTyped('');
   const dial = () => {
     if (!typed) return;
     onDialRaw(typed);
@@ -893,14 +893,15 @@ function DialerScene({
             autoComplete="off"
             aria-label="Phone number"
             trailingIcon={
-              <IconButton
-                aria-label="Delete digit"
-                size="Small"
-                padding="Compact"
-                disabled={!typed}
-                icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
-                onClick={backspace}
-              />
+              <span style={{ visibility: typed ? 'visible' : 'hidden' }}>
+                <IconButton
+                  aria-label="Clear number"
+                  size="Small"
+                  padding="Compact"
+                  icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
+                  onClick={clearTyped}
+                />
+              </span>
             }
           />
           <KeypadGrid onPress={append} />
@@ -993,7 +994,7 @@ function RhsDialer({
     playDtmf(k);
     setTyped((t) => sanitizeDigits(t + k));
   };
-  const backspace = () => setTyped((t) => t.slice(0, -1));
+  const clearTyped = () => setTyped('');
   const dial = () => {
     if (!typed) return;
     onDialRaw(typed);
@@ -1034,14 +1035,15 @@ function RhsDialer({
             autoComplete="off"
             aria-label="Phone number"
             trailingIcon={
-              <IconButton
-                aria-label="Delete digit"
-                size="Small"
-                padding="Compact"
-                disabled={!typed}
-                icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
-                onClick={backspace}
-              />
+              <span style={{ visibility: typed ? 'visible' : 'hidden' }}>
+                <IconButton
+                  aria-label="Clear number"
+                  size="Small"
+                  padding="Compact"
+                  icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
+                  onClick={clearTyped}
+                />
+              </span>
             }
           />
           <KeypadGrid onPress={append} />
@@ -1190,7 +1192,7 @@ function CallPip({
   keypadOpen,
   onDtmf,
   onDtmfChange,
-  onDtmfBackspace,
+  onDtmfClear,
   onStartComposingCall,
   audioDevice,
   onPickDevice,
@@ -1217,7 +1219,7 @@ function CallPip({
   keypadOpen: boolean;
   onDtmf: (k: string) => void;
   onDtmfChange: (v: string) => void;
-  onDtmfBackspace: () => void;
+  onDtmfClear: () => void;
   onStartComposingCall: () => void;
   audioDevice: AudioDevice;
   onPickDevice: (id: string) => void;
@@ -1599,14 +1601,15 @@ function CallPip({
                 onChange={setAddDtmf}
                 onEnter={() => addDtmf && onBridgeNumber(addDtmf)}
                 trailing={
-                  <IconButton
-                    aria-label="Delete digit"
-                    size="X-Small"
-                    padding="Compact"
-                    disabled={!addDtmf}
-                    icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
-                    onClick={() => setAddDtmf((d) => d.slice(0, -1))}
-                  />
+                  <span style={{ visibility: addDtmf ? 'visible' : 'hidden' }}>
+                    <IconButton
+                      aria-label="Clear number"
+                      size="X-Small"
+                      padding="Compact"
+                      icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
+                      onClick={() => setAddDtmf('')}
+                    />
+                  </span>
                 }
               />
               <KeypadGrid onPress={handleAddDtmfKey} />
@@ -1656,14 +1659,15 @@ function CallPip({
               onEnter={isComposing ? onStartComposingCall : undefined}
               trailing={
                 isComposing ? (
-                  <IconButton
-                    aria-label="Delete digit"
-                    size="X-Small"
-                    padding="Compact"
-                    disabled={!call.dtmf}
-                    icon={<Icon glyph={<BackspaceOutlineIcon />} size="16" />}
-                    onClick={onDtmfBackspace}
-                  />
+                  <span style={{ visibility: call.dtmf ? 'visible' : 'hidden' }}>
+                    <IconButton
+                      aria-label="Clear number"
+                      size="X-Small"
+                      padding="Compact"
+                      icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
+                      onClick={onDtmfClear}
+                    />
+                  </span>
                 ) : undefined
               }
             />
@@ -1783,8 +1787,8 @@ export default function OutboundCalls() {
     setKeypadOpen(false);
   };
 
-  const dtmfBackspace = () => {
-    setCall((c) => (c ? { ...c, dtmf: c.dtmf.slice(0, -1) } : c));
+  const clearDtmf = () => {
+    setCall((c) => (c ? { ...c, dtmf: '' } : c));
   };
 
   const hangUp = () => {
@@ -2103,7 +2107,7 @@ export default function OutboundCalls() {
             }
             onDtmf={handleDtmf}
             onDtmfChange={handleDtmfChange}
-            onDtmfBackspace={dtmfBackspace}
+            onDtmfClear={clearDtmf}
             onStartComposingCall={startComposingCall}
             onPickDevice={(id) => setCall((c) => (c ? { ...c, deviceId: id } : c))}
             onHangUp={hangUp}

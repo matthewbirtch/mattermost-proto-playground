@@ -61,6 +61,20 @@
     }
   }
 
+  @media (hover: hover) and (pointer: fine) {
+    &__add-reaction {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-quick) var(--ease-transition);
+    }
+
+    &:hover &__add-reaction,
+    &:focus-within &__add-reaction {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
   // Acknowledge button
   &__ack {
     display: inline-flex;

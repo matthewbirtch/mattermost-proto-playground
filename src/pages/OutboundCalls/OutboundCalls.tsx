@@ -594,6 +594,25 @@ const CHANNEL_POSTS: PostItem[] = [
   },
 ];
 
+function PhoneNumberLink({
+  number,
+  onClick,
+}: {
+  number: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={styles['phone-link']}
+      onClick={onClick}
+    >
+      <Icon glyph={<PhoneIcon />} size="12" />
+      <span>{number}</span>
+    </button>
+  );
+}
+
 function ProfileClickable({
   contactId,
   contactName,
@@ -627,10 +646,12 @@ function ChannelScene({
   onOpenProfile,
   onOpenDialer,
   onStartConferenceCall,
+  onStartCall,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onOpenDialer: () => void;
   onStartConferenceCall: () => void;
+  onStartCall: (contactId: string, phoneIndex: number) => void;
 }) {
   const actions: StartCallAction[] = [
     { id: 'audio', type: 'audio' },
@@ -677,6 +698,28 @@ function ChannelScene({
             </ProfileClickable>
           );
         })}
+
+        <ProfileClickable
+          contactId="leonard"
+          contactName="Leonard Riley"
+          onOpen={onOpenProfile}
+        >
+          <Post
+            avatarSrc={CONTACT_MAP['leonard'].avatar}
+            avatarAlt="Leonard Riley"
+            username="Leonard Riley"
+            timestamp="9:42 AM"
+          >
+            <p className={layoutStyles['layouts__post-text']}>
+              Best line is{' '}
+              <PhoneNumberLink
+                number={CONTACT_MAP['leonard'].phones[0].number}
+                onClick={() => onStartCall('leonard', 0)}
+              />
+              {' '}— free for the next hour.
+            </p>
+          </Post>
+        </ProfileClickable>
       </div>
       <div className={layoutStyles['layouts__message-input']}>
         <MessageInput placeholder="Message softphone-ux" />
@@ -800,6 +843,22 @@ function DMScene({
         >
           <p className={layoutStyles['layouts__post-text']}>
             Yep — tap the Call button above or open my profile and pick a number, either works.
+          </p>
+        </Post>
+        <Post
+          avatarSrc={contact.avatar}
+          avatarAlt={contact.name}
+          username={contact.name}
+          timestamp="9:05 AM"
+        >
+          <p className={layoutStyles['layouts__post-text']}>
+            Or just ring my direct line:{' '}
+            {workPhone && (
+              <PhoneNumberLink
+                number={workPhone.number}
+                onClick={() => onStartCall(contact.id, workIndex)}
+              />
+            )}
           </p>
         </Post>
 
@@ -2316,6 +2375,7 @@ export default function OutboundCalls() {
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
                     onStartConferenceCall={startConferenceCall}
+                    onStartCall={startCall}
                   />
                 )}
                 {scene === 'dm' && (
@@ -2341,6 +2401,7 @@ export default function OutboundCalls() {
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
                     onStartConferenceCall={startConferenceCall}
+                    onStartCall={startCall}
                   />
                 )}
                 {scene === 'team-sidebar' && (
@@ -2348,6 +2409,7 @@ export default function OutboundCalls() {
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
                     onStartConferenceCall={startConferenceCall}
+                    onStartCall={startCall}
                   />
                 )}
               </div>

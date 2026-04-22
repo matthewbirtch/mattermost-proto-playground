@@ -215,6 +215,30 @@
 }
 
 // ---------------------------------------------------------------------------
+// Inline clickable phone number — appears embedded within message body text.
+// ---------------------------------------------------------------------------
+.phone-link {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 var(--spacing-xxxxs);
+  border-radius: var(--radius-s);
+  background: rgba(var(--button-bg-rgb), 0.08);
+  color: var(--link-color);
+  font-family: inherit;
+  font-size: var(--font-size-100);
+  line-height: var(--line-height-100);
+  vertical-align: baseline;
+  transition: background-color var(--duration-quick) var(--ease-transition);
+
+  &:hover { background: rgba(var(--button-bg-rgb), 0.16); }
+  &:active { background: rgba(var(--button-bg-rgb), 0.24); }
+}
+
+// ---------------------------------------------------------------------------
 // Dialer header — mirrors ChannelHeader's simple variant (Threads/Drafts).
 // ---------------------------------------------------------------------------
 .dialer-header {

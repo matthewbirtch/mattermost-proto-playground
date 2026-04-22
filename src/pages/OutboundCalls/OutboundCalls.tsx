@@ -146,6 +146,13 @@ type Recent = {
   durationSec?: number;
 };
 
+const CONFERENCE_BRIDGE = {
+  number: '+1 669 444 9171 (US)',
+  rawNumber: '+16694449171',
+  pin: '938 394',
+  rawPin: '938394',
+};
+
 const INITIAL_RECENTS: Recent[] = [
   { contactId: 'leonard', phoneIndex: 0, direction: 'outbound', timestamp: 'Today, 9:42 AM', durationSec: 252 },
   { contactId: 'danielle', phoneIndex: 0, direction: 'inbound-missed', timestamp: 'Yesterday, 4:18 PM' },
@@ -195,6 +202,7 @@ type ActiveCall = {
   dtmf: string;
   bridgedParticipants: BridgedParticipant[];
   fromDialpad: boolean;
+  pendingDtmf?: string;
 };
 
 type AddMode = 'recents' | 'dialpad';
@@ -300,6 +308,7 @@ function useOutsideClose(
 type StartCallAction =
   | { id: 'audio'; type: 'audio' }
   | { id: 'dialpad'; type: 'dialpad' }
+  | { id: 'conference'; type: 'conference' }
   | {
       id: string;
       type: 'phone';
@@ -333,6 +342,10 @@ function StartCallMenu({
         } else if (action.type === 'phone') {
           label = `Call ${action.label}`;
           secondaryLabel = action.number;
+          icon = <Icon glyph={<OutboundCallIcon />} size="16" />;
+        } else if (action.type === 'conference') {
+          label = 'Call conference bridge';
+          secondaryLabel = CONFERENCE_BRIDGE.number;
           icon = <Icon glyph={<OutboundCallIcon />} size="16" />;
         } else {
           label = 'Use dial pad';
@@ -614,16 +627,20 @@ function ProfileClickable({
 function ChannelScene({
   onOpenProfile,
   onOpenDialer,
+  onStartConferenceCall,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onOpenDialer: () => void;
+  onStartConferenceCall: () => void;
 }) {
   const actions: StartCallAction[] = [
     { id: 'audio', type: 'audio' },
+    { id: 'conference', type: 'conference' },
     { id: 'dialpad', type: 'dialpad' },
   ];
   const handleSelect = (action: StartCallAction) => {
     if (action.type === 'dialpad') onOpenDialer();
+    else if (action.type === 'conference') onStartConferenceCall();
     // 'audio' is a stub for a Mattermost Calls group call — no-op in prototype.
   };
   return (
@@ -1237,6 +1254,7 @@ function CallPip({
   onRemoveParticipant,
   recents,
   onStartCall,
+  onStartConferenceCall,
 }: {
   call: ActiveCall;
   contact: Contact | null;
@@ -1266,12 +1284,13 @@ function CallPip({
   onRemoveParticipant: (participantId: string) => void;
   recents: Recent[];
   onStartCall: (contactId: string, phoneIndex: number) => void;
+  onStartConferenceCall: () => void;
 }) {
   const [devicePickerOpen, setDevicePickerOpen] = useState(false);
   const deviceRef = useRef<HTMLDivElement>(null);
 
   const [addDtmf, setAddDtmf] = useState('');
-  const [composeTab, setComposeTab] = useState<'dialpad' | 'recent'>('dialpad');
+  const [composeTab, setComposeTab] = useState<'dialpad' | 'recent' | 'conference'>('dialpad');
 
   useEffect(() => {
     if (!addingParticipant) {
@@ -1296,7 +1315,8 @@ function CallPip({
 
   const isComposing = call.status === 'composing';
   const displayName = contact ? contact.name : phone?.number || 'Unknown';
-  const canAddParticipant = call.status === 'connected';
+  // Temporarily hidden — flip back to `call.status === 'connected'` to restore.
+  const canAddParticipant = false;
 
   const activeParticipants = call.bridgedParticipants.filter(
     (p) => p.status !== 'ended',
@@ -1601,7 +1621,6 @@ function CallPip({
                 }`}
                 onClick={() => onSetAddMode('dialpad')}
               >
-                <Icon glyph={<DialpadIcon />} size="16" />
                 <span>Dial pad</span>
               </button>
               <button
@@ -1613,7 +1632,6 @@ function CallPip({
                 }`}
                 onClick={() => onSetAddMode('recents')}
               >
-                <Icon glyph={<ClockOutlineIcon />} size="16" />
                 <span>Recents</span>
               </button>
             </div>
@@ -1727,7 +1745,6 @@ function CallPip({
                   }`}
                   onClick={() => setComposeTab('dialpad')}
                 >
-                  <Icon glyph={<DialpadIcon />} size="16" />
                   <span>Dial pad</span>
                 </button>
                 <button
@@ -1739,8 +1756,18 @@ function CallPip({
                   }`}
                   onClick={() => setComposeTab('recent')}
                 >
-                  <Icon glyph={<ClockOutlineIcon />} size="16" />
-                  <span>Recents</span>
+                  <span>Recent</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={composeTab === 'conference'}
+                  className={`${styles['pip__tab']}${
+                    composeTab === 'conference' ? ` ${styles['pip__tab--active']}` : ''
+                  }`}
+                  onClick={() => setComposeTab('conference')}
+                >
+                  <span>Conference</span>
                 </button>
               </div>
               <IconButton
@@ -1763,7 +1790,32 @@ function CallPip({
               />
             </div>
           )}
-          {isComposing && composeTab === 'recent' ? (
+          {isComposing && composeTab === 'conference' ? (
+            <div className={styles['pip__conference']}>
+              <h3 className={styles['pip__conference-title']}>Conference bridge</h3>
+              <p className={styles['pip__conference-description']}>
+                  The conference bridge is configured by admins for to you can call and join a conference. Use the number and PIN below to join.
+              </p>
+              <dl className={styles['pip__conference-details']}>
+                <div className={styles['pip__conference-row']}>
+                  <dt className={styles['pip__conference-label']}>Dial-in:</dt>
+                  <dd className={styles['pip__conference-value']}>{CONFERENCE_BRIDGE.number}</dd>
+                </div>
+                <div className={styles['pip__conference-row']}>
+                  <dt className={styles['pip__conference-label']}>PIN:</dt>
+                  <dd className={styles['pip__conference-value']}>{CONFERENCE_BRIDGE.pin}</dd>
+                </div>
+              </dl>
+              <button
+                type="button"
+                className={styles['pip__conference-call']}
+                onClick={onStartConferenceCall}
+              >
+                <Icon glyph={<PhoneIcon />} size="16" />
+                <span>Call conference bridge</span>
+              </button>
+            </div>
+          ) : isComposing && composeTab === 'recent' ? (
             <div className={styles['pip__recents']}>
               {recents.length === 0 ? (
                 <div className={styles['pip__recents-empty']}>
@@ -1896,6 +1948,20 @@ export default function OutboundCalls() {
     };
   }, [call?.status, call?.contactId, call?.phoneIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (!call || call.status !== 'connected' || !call.pendingDtmf) return;
+    const digits = call.pendingDtmf;
+    setCall((c) => (c ? { ...c, pendingDtmf: undefined } : c));
+    const timers: number[] = [];
+    digits.split('').forEach((digit, i) => {
+      const t = window.setTimeout(() => playDtmf(digit), 500 + i * 150);
+      timers.push(t);
+    });
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+    };
+  }, [call?.status]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const startCall = (contactId: string, phoneIndex: number) => {
     setCallSummary(null);
     setKeypadOpen(false);
@@ -1928,6 +1994,42 @@ export default function OutboundCalls() {
       phones: [{ number: n, label: 'Dialed', kind: 'mobile', secure: false }],
     };
     return fakeId;
+  };
+
+  const startConferenceCall = () => {
+    const fakeId = '__conference-bridge';
+    CONTACT_MAP[fakeId] = {
+      id: fakeId,
+      name: 'Conference bridge',
+      handle: '',
+      email: '',
+      title: '',
+      role: 'Conference',
+      avatar: '',
+      online: false,
+      phones: [{
+        number: CONFERENCE_BRIDGE.number,
+        label: 'Conference',
+        kind: 'work',
+        secure: false,
+      }],
+    };
+    setCallSummary(null);
+    setKeypadOpen(false);
+    setPopover(null);
+    setCall({
+      contactId: fakeId,
+      phoneIndex: 0,
+      status: 'dialing',
+      startedAt: null,
+      endedAt: null,
+      muted: false,
+      deviceId: AUDIO_DEVICES[0].id,
+      dtmf: '',
+      bridgedParticipants: [],
+      fromDialpad: true,
+      pendingDtmf: CONFERENCE_BRIDGE.rawPin,
+    });
   };
 
   const openDialpadWidget = () => {
@@ -2214,6 +2316,7 @@ export default function OutboundCalls() {
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
+                    onStartConferenceCall={startConferenceCall}
                   />
                 )}
                 {scene === 'dm' && (
@@ -2238,12 +2341,14 @@ export default function OutboundCalls() {
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
+                    onStartConferenceCall={startConferenceCall}
                   />
                 )}
                 {scene === 'team-sidebar' && (
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
+                    onStartConferenceCall={startConferenceCall}
                   />
                 )}
               </div>
@@ -2301,6 +2406,7 @@ export default function OutboundCalls() {
             onRemoveParticipant={removeBridgedParticipant}
             recents={recents}
             onStartCall={startCall}
+            onStartConferenceCall={startConferenceCall}
           />
         )}
       </div>

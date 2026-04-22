@@ -1176,15 +1176,15 @@
   // call button is hidden and the popover collapses.
   &__dtmf-body--tall,
   &__add-body,
-  &__recents {
-    min-height: 368px;
+  &__recents,
+  &__conference {
+    height: 352px;
   }
 
   &__recents {
     display: flex;
     flex-direction: column;
     padding: var(--spacing-xs) 0;
-    max-height: 368px;
     overflow-y: auto;
 
     scrollbar-width: thin;
@@ -1236,6 +1236,77 @@
     white-space: nowrap;
   }
 
+  &__conference {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-l);
+    padding: var(--spacing-l) var(--spacing-l) var(--spacing-s);
+  }
+
+  &__conference-title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-200);
+    line-height: var(--line-height-200);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
+  }
+  &__conference-description {
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+  }
+
+  &__conference-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin: 0;
+  }
+
+  &__conference-row {
+    display: flex;
+    gap: var(--spacing-xxxxs);
+    font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
+    color: var(--center-channel-color);
+  }
+
+  &__conference-label {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+    flex-shrink: 0;
+  }
+
+  &__conference-value {
+    margin: 0;
+    font-weight: var(--font-weight-regular);
+  }
+
+  &__conference-call {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    width: 100%;
+    padding: var(--spacing-s) var(--spacing-xl);
+    border-radius: var(--radius-s);
+    background: var(--color-success);
+    color: var(--color-neutral-0);
+    font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
+    font-weight: var(--font-weight-semibold);
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      transform var(--duration-quick) var(--ease-transition);
+
+    &:hover { background: var(--color-green-600); }
+    &:active { transform: scale(0.98); }
+  }
+
   &__dtmf-body {
     display: flex;
     flex-direction: column;
@@ -1248,7 +1319,7 @@
     border: 0;
     cursor: pointer;
     width: 100%;
-    height: 56px;
+    height: 48px;
     border-radius: 8px;
     background: var(--color-success);
     color: var(--color-neutral-0);

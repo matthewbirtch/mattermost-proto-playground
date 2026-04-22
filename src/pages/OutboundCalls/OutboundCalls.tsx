@@ -490,9 +490,8 @@ function PositionedProfilePopover({
       onOpenDialer();
     } else if (action.type === 'phone') {
       onStartCall(action.contactId, action.phoneIndex);
-    } else {
-      onStartCall(contact.id, workIndex >= 0 ? workIndex : 0);
     }
+    // 'audio' is a stub for a Mattermost Calls WebRTC call — no-op in prototype.
   };
   const ref = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState<number>(anchorRect.bottom + POPOVER_GAP);

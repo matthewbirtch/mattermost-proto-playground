@@ -318,7 +318,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-xs);
-    padding: var(--spacing-xs) 0;
+    padding: 0;
   }
 
   &__key {
@@ -1155,7 +1155,7 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-m);
+    padding: var(--spacing-xs) var(--spacing-xs) 0 var(--spacing-m);
   }
 
   &__dtmf-title {
@@ -1165,11 +1165,127 @@
     color: var(--center-channel-color);
   }
 
+  // Shared tab header + underline tabs, used by the dial pad popover
+  // (Dial pad / Recent) and the Add participants popover (Contacts / Dial pad).
+  &__tabs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-xs);
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+  }
+
+  &__tab {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: flex-end;
+    gap: var(--spacing-xs);
+    padding: 12px var(--spacing-xs) 10px;
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    font-weight: var(--font-weight-semibold);
+    position: relative;
+    transition: color var(--duration-quick) var(--ease-transition);
+
+    &:hover:not(&--active) {
+      color: rgba(var(--center-channel-color-rgb), 0.88);
+    }
+
+    &--active {
+      color: var(--link-color);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background-color: var(--button-bg);
+      }
+    }
+  }
+
+  // Shared min-height so switching tabs keeps the popover height stable.
+  // dtmf-body only gets the tall height while composing; during in-call DTMF the
+  // call button is hidden and the popover collapses.
+  &__dtmf-body--tall,
+  &__add-body,
+  &__recents {
+    min-height: 368px;
+  }
+
+  &__recents {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-xs) 0;
+    max-height: 368px;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--center-channel-color-rgb), 0.24) transparent;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--center-channel-color-rgb), 0.24);
+      border-radius: 3px;
+    }
+  }
+
+  &__recents-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__recents-empty {
+    padding: var(--spacing-l) var(--spacing-m);
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    text-align: center;
+  }
+
+  &__recent-avatar-fallback {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__recent-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    text-align: right;
+    white-space: nowrap;
+  }
+
   &__dtmf-body {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-m);
-    padding: 0 var(--spacing-s) var(--spacing-m);
+    padding: var(--spacing-m);
   }
 
   &__dtmf-call {
@@ -1249,93 +1365,12 @@
     }
   }
 
-  &__add-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-m);
-  }
-
-  &__add-title {
-    font-size: var(--font-size-100);
-    line-height: var(--line-height-100);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-  }
-
-  &__add-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: 0 var(--spacing-s) var(--spacing-xs);
-  }
-
-  &__add-tabs {
-    display: inline-flex;
-    background: rgba(var(--center-channel-color-rgb), 0.08);
-    padding: 2px;
-    border-radius: var(--radius-full);
-    gap: 2px;
-  }
-
-  &__add-tab {
-    appearance: none;
-    border: 0;
-    background: transparent;
-    color: rgba(var(--center-channel-color-rgb), 0.75);
-    font-size: var(--font-size-50);
-    font-weight: var(--font-weight-semibold);
-    padding: var(--spacing-xxxs) var(--spacing-s);
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    transition:
-      background-color var(--duration-quick) var(--ease-transition),
-      color var(--duration-quick) var(--ease-transition);
-
-    &:hover {
-      color: var(--center-channel-color);
-    }
-
-    &--active {
-      background: var(--center-channel-bg);
-      color: var(--center-channel-color);
-      box-shadow: var(--elevation-1);
-    }
-  }
 
   &__add-body {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
-    padding: 0 var(--spacing-s) var(--spacing-s);
-  }
-
-  &__add-contacts {
-    list-style: none;
-    margin: 0 -16px;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    max-height: 232px;
-    overflow-y: auto;
-
-    scrollbar-width: thin;
-    scrollbar-color: rgba(var(--center-channel-color-rgb), 0.24) transparent;
-
-    &::-webkit-scrollbar { width: 6px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(var(--center-channel-color-rgb), 0.24);
-      border-radius: 3px;
-    }
-  }
-
-  &__add-empty {
-    padding: var(--spacing-s) var(--spacing-xs);
-    font-size: var(--font-size-75);
-    color: rgba(var(--center-channel-color-rgb), 0.56);
-    text-align: center;
+    gap: var(--spacing-m);
+    padding: var(--spacing-m);
   }
 
   // Participant list panel (opens above pip__widget, same shell as pip__dtmf).

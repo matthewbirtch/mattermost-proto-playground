@@ -16,7 +16,6 @@ import DotsHorizontalIcon from '@mattermost/compass-icons/components/dots-horizo
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import AccountPlusOutlineIcon from '@mattermost/compass-icons/components/account-plus-outline';
 import AccountMultipleOutlineIcon from '@mattermost/compass-icons/components/account-multiple-outline';
-import MagnifyIcon from '@mattermost/compass-icons/components/magnify';
 import DialpadIcon from '@/components/icons/DialpadIcon';
 import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
 import Icon, { SVG_SIZE_MAP } from '@/components/ui/Icon/Icon';
@@ -197,7 +196,7 @@ type ActiveCall = {
   fromDialpad: boolean;
 };
 
-type AddMode = 'contacts' | 'dialpad';
+type AddMode = 'recents' | 'dialpad';
 
 function formatDuration(sec: number): string {
   const m = Math.floor(sec / 60);
@@ -1235,6 +1234,8 @@ function CallPip({
   participantListOpen,
   onToggleParticipantList,
   onRemoveParticipant,
+  recents,
+  onStartCall,
 }: {
   call: ActiveCall;
   contact: Contact | null;
@@ -1262,19 +1263,24 @@ function CallPip({
   participantListOpen: boolean;
   onToggleParticipantList: () => void;
   onRemoveParticipant: (participantId: string) => void;
+  recents: Recent[];
+  onStartCall: (contactId: string, phoneIndex: number) => void;
 }) {
   const [devicePickerOpen, setDevicePickerOpen] = useState(false);
   const deviceRef = useRef<HTMLDivElement>(null);
 
-  const [addSearch, setAddSearch] = useState('');
   const [addDtmf, setAddDtmf] = useState('');
+  const [composeTab, setComposeTab] = useState<'dialpad' | 'recent'>('dialpad');
 
   useEffect(() => {
     if (!addingParticipant) {
-      setAddSearch('');
       setAddDtmf('');
     }
   }, [addingParticipant]);
+
+  useEffect(() => {
+    if (call.status !== 'composing') setComposeTab('dialpad');
+  }, [call.status]);
 
   useEffect(() => {
     if (!devicePickerOpen) return;
@@ -1290,18 +1296,6 @@ function CallPip({
   const isComposing = call.status === 'composing';
   const displayName = contact ? contact.name : phone?.number || 'Unknown';
   const canAddParticipant = call.status === 'connected';
-
-  const contactOptions = useMemo(() => {
-    const query = addSearch.trim().toLowerCase();
-    return CONTACTS
-      .filter((c) => c.phones.length > 0)
-      .filter((c) => !query || c.name.toLowerCase().includes(query))
-      .map((c) => {
-        const workIndex = c.phones.findIndex((p) => p.kind === 'work');
-        const idx = workIndex >= 0 ? workIndex : 0;
-        return { contact: c, phoneIndex: idx, phone: c.phones[idx] };
-      });
-  }, [addSearch]);
 
   const activeParticipants = call.bridgedParticipants.filter(
     (p) => p.status !== 'ended',
@@ -1591,8 +1585,37 @@ function CallPip({
             addAnim.exiting ? ` ${styles['pip__add--exiting']}` : ''
           }`}
         >
-          <div className={styles['pip__add-title-row']}>
-            <span className={styles['pip__add-title']}>Add participants</span>
+          <div className={styles['pip__tabs-header']}>
+            <div
+              className={styles['pip__tabs']}
+              role="tablist"
+              aria-label="Add participant source"
+            >
+              <button
+                type="button"
+                role="tab"
+                aria-selected={addMode === 'dialpad'}
+                className={`${styles['pip__tab']}${
+                  addMode === 'dialpad' ? ` ${styles['pip__tab--active']}` : ''
+                }`}
+                onClick={() => onSetAddMode('dialpad')}
+              >
+                <Icon glyph={<DialpadIcon />} size="16" />
+                <span>Dial pad</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={addMode === 'recents'}
+                className={`${styles['pip__tab']}${
+                  addMode === 'recents' ? ` ${styles['pip__tab--active']}` : ''
+                }`}
+                onClick={() => onSetAddMode('recents')}
+              >
+                <Icon glyph={<ClockOutlineIcon />} size="16" />
+                <span>Recents</span>
+              </button>
+            </div>
             <IconButton
               aria-label="Close add participant"
               size="Small"
@@ -1601,61 +1624,51 @@ function CallPip({
               onClick={onCloseAddParticipant}
             />
           </div>
-          <div className={styles['pip__add-header']}>
-            <div className={styles['pip__add-tabs']} role="tablist" aria-label="Add participant source">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={addMode === 'contacts'}
-                className={`${styles['pip__add-tab']}${
-                  addMode === 'contacts' ? ` ${styles['pip__add-tab--active']}` : ''
-                }`}
-                onClick={() => onSetAddMode('contacts')}
-              >
-                Contacts
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={addMode === 'dialpad'}
-                className={`${styles['pip__add-tab']}${
-                  addMode === 'dialpad' ? ` ${styles['pip__add-tab--active']}` : ''
-                }`}
-                onClick={() => onSetAddMode('dialpad')}
-              >
-                Dial pad
-              </button>
-            </div>
-          </div>
 
-          {addMode === 'contacts' ? (
-            <div className={styles['pip__add-body']}>
-              <TextInput
-                size="Small"
-                value={addSearch}
-                onChange={(e) => setAddSearch(e.target.value)}
-                placeholder="Search contacts"
-                aria-label="Search contacts"
-                autoComplete="off"
-                leadingIcon={<Icon glyph={<MagnifyIcon />} size="16" />}
-              />
-              <ul className={styles['pip__add-contacts']}>
-                {contactOptions.length === 0 && (
-                  <li className={styles['pip__add-empty']}>No matching contacts</li>
-                )}
-                {contactOptions.map(({ contact: c, phone: ph, phoneIndex }) => (
-                  <li key={c.id}>
-                    <MenuItem
-                      label={c.name}
-                      secondaryLabel={`${ph.label} · ${ph.number}`}
-                      leadingVisual={
-                        <UserAvatar src={c.avatar} alt={c.name} size="24" />
-                      }
-                      onClick={() => onBridgeContact(c.id, phoneIndex)}
-                    />
-                  </li>
-                ))}
-              </ul>
+          {addMode === 'recents' ? (
+            <div className={styles['pip__recents']}>
+              {recents.length === 0 ? (
+                <div className={styles['pip__recents-empty']}>
+                  No recent calls
+                </div>
+              ) : (
+                <ul className={styles['pip__recents-list']}>
+                  {recents.map((r, i) => {
+                    const c = CONTACT_MAP[r.contactId];
+                    if (!c) return null;
+                    const p = c.phones[r.phoneIndex];
+                    const [timeDay, timeHour] = r.timestamp.split(',').map((s) => s.trim());
+                    return (
+                      <li key={`${r.contactId}-${i}`}>
+                        <MenuItem
+                          label={c.name}
+                          secondaryLabel={p?.number ?? ''}
+                          leadingVisual={
+                            c.avatar ? (
+                              <UserAvatar src={c.avatar} alt={c.name} size="32" />
+                            ) : (
+                              <div
+                                className={styles['pip__recent-avatar-fallback']}
+                                aria-hidden
+                              >
+                                <Icon glyph={<PhoneIcon />} size="16" />
+                              </div>
+                            )
+                          }
+                          trailingElement
+                          trailingVisual={
+                            <span className={styles['pip__recent-time']}>
+                              <span>{timeDay}</span>
+                              {timeHour && <span>{timeHour}</span>}
+                            </span>
+                          }
+                          onClick={() => onBridgeContact(r.contactId, r.phoneIndex)}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
           ) : (
             <div className={styles['pip__add-body']}>
@@ -1697,9 +1710,49 @@ function CallPip({
             dtmfAnim.exiting ? ` ${styles['pip__dtmf--exiting']}` : ''
           }`}
         >
-          <div className={styles['pip__dtmf-header']}>
-            <span className={styles['pip__dtmf-title']}>Dial pad</span>
-            {!isComposing && (
+          {isComposing ? (
+            <div className={styles['pip__tabs-header']}>
+              <div
+                className={styles['pip__tabs']}
+                role="tablist"
+                aria-label="Dial pad source"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={composeTab === 'dialpad'}
+                  className={`${styles['pip__tab']}${
+                    composeTab === 'dialpad' ? ` ${styles['pip__tab--active']}` : ''
+                  }`}
+                  onClick={() => setComposeTab('dialpad')}
+                >
+                  <Icon glyph={<DialpadIcon />} size="16" />
+                  <span>Dial pad</span>
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={composeTab === 'recent'}
+                  className={`${styles['pip__tab']}${
+                    composeTab === 'recent' ? ` ${styles['pip__tab--active']}` : ''
+                  }`}
+                  onClick={() => setComposeTab('recent')}
+                >
+                  <Icon glyph={<ClockOutlineIcon />} size="16" />
+                  <span>Recents</span>
+                </button>
+              </div>
+              <IconButton
+                aria-label="Cancel"
+                size="Small"
+                padding="Compact"
+                icon={<Icon glyph={<CloseIcon />} size="16" />}
+                onClick={onDismiss}
+              />
+            </div>
+          ) : (
+            <div className={styles['pip__dtmf-header']}>
+              <span className={styles['pip__dtmf-title']}>Dial pad</span>
               <IconButton
                 aria-label="Close dial pad"
                 size="Small"
@@ -1707,41 +1760,92 @@ function CallPip({
                 icon={<Icon glyph={<CloseIcon />} size="16" />}
                 onClick={onToggleKeypad}
               />
-            )}
-          </div>
-          <div className={styles['pip__dtmf-body']}>
-            <KeypadInput
-              value={call.dtmf}
-              placeholder="Enter number"
-              onChange={onDtmfChange}
-              onEnter={isComposing ? onStartComposingCall : undefined}
-              trailing={
-                isComposing ? (
-                  <span style={{ visibility: call.dtmf ? 'visible' : 'hidden' }}>
-                    <IconButton
-                      aria-label="Clear number"
-                      size="X-Small"
-                      padding="Compact"
-                      icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
-                      onClick={onDtmfClear}
-                    />
-                  </span>
-                ) : undefined
-              }
-            />
-            <KeypadGrid onPress={onDtmf} />
-            {isComposing && (
-              <button
-                type="button"
-                aria-label="Start call"
-                className={styles['pip__dtmf-call']}
-                disabled={!call.dtmf}
-                onClick={onStartComposingCall}
-              >
-                <Icon glyph={<PhoneIcon />} size="20" />
-              </button>
-            )}
-          </div>
+            </div>
+          )}
+          {isComposing && composeTab === 'recent' ? (
+            <div className={styles['pip__recents']}>
+              {recents.length === 0 ? (
+                <div className={styles['pip__recents-empty']}>
+                  No recent calls
+                </div>
+              ) : (
+                <ul className={styles['pip__recents-list']}>
+                  {recents.map((r, i) => {
+                    const c = CONTACT_MAP[r.contactId];
+                    if (!c) return null;
+                    const p = c.phones[r.phoneIndex];
+                    const [timeDay, timeHour] = r.timestamp.split(',').map((s) => s.trim());
+                    return (
+                      <li key={`${r.contactId}-${i}`}>
+                        <MenuItem
+                          label={c.name}
+                          secondaryLabel={p?.number ?? ''}
+                          leadingVisual={
+                            c.avatar ? (
+                              <UserAvatar src={c.avatar} alt={c.name} size="32" />
+                            ) : (
+                              <div
+                                className={styles['pip__recent-avatar-fallback']}
+                                aria-hidden
+                              >
+                                <Icon glyph={<PhoneIcon />} size="16" />
+                              </div>
+                            )
+                          }
+                          trailingElement
+                          trailingVisual={
+                            <span className={styles['pip__recent-time']}>
+                              <span>{timeDay}</span>
+                              {timeHour && <span>{timeHour}</span>}
+                            </span>
+                          }
+                          onClick={() => onStartCall(r.contactId, r.phoneIndex)}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          ) : (
+            <div
+              className={`${styles['pip__dtmf-body']}${
+                isComposing ? ` ${styles['pip__dtmf-body--tall']}` : ''
+              }`}
+            >
+              <KeypadInput
+                value={call.dtmf}
+                placeholder="Enter number"
+                onChange={onDtmfChange}
+                onEnter={isComposing ? onStartComposingCall : undefined}
+                trailing={
+                  isComposing ? (
+                    <span style={{ visibility: call.dtmf ? 'visible' : 'hidden' }}>
+                      <IconButton
+                        aria-label="Clear number"
+                        size="X-Small"
+                        padding="Compact"
+                        icon={<Icon glyph={<CloseCircleIcon />} size="16" />}
+                        onClick={onDtmfClear}
+                      />
+                    </span>
+                  ) : undefined
+                }
+              />
+              <KeypadGrid onPress={onDtmf} />
+              {isComposing && (
+                <button
+                  type="button"
+                  aria-label="Start call"
+                  className={styles['pip__dtmf-call']}
+                  disabled={!call.dtmf}
+                  onClick={onStartComposingCall}
+                >
+                  <Icon glyph={<PhoneIcon />} size="20" />
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -1763,7 +1867,7 @@ export default function OutboundCalls() {
   const [rhsOpen, setRhsOpen] = useState(false);
 
   const [addingParticipant, setAddingParticipant] = useState(false);
-  const [addMode, setAddMode] = useState<AddMode>('contacts');
+  const [addMode, setAddMode] = useState<AddMode>('dialpad');
   const [participantListOpen, setParticipantListOpen] = useState(false);
 
   const [nowTick, setNowTick] = useState(Date.now());
@@ -1923,7 +2027,7 @@ export default function OutboundCalls() {
   };
 
   const openAddParticipant = () => {
-    setAddMode('contacts');
+    setAddMode('dialpad');
     setAddingParticipant(true);
     setKeypadOpen(false);
     setParticipantListOpen(false);
@@ -2194,6 +2298,8 @@ export default function OutboundCalls() {
             participantListOpen={participantListOpen}
             onToggleParticipantList={toggleParticipantList}
             onRemoveParticipant={removeBridgedParticipant}
+            recents={recents}
+            onStartCall={startCall}
           />
         )}
       </div>

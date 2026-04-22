@@ -43,6 +43,7 @@ import avatarEmmaNovak from '@/assets/avatars/Emma Novak.png';
 import avatarEthanBrooks from '@/assets/avatars/Ethan Brooks.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
 import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
+import layoutStyles from '@/pages/Layouts/Layouts.module.scss';
 import styles from './OutboundCalls.module.scss';
 
 // ── Mock data ───────────────────────────────────────────────────────────────
@@ -637,7 +638,7 @@ function ChannelScene({
           <SegmentedCallButton actions={actions} onSelect={handleSelect} />
         }
       />
-      <div className={styles['center__messages']}>
+      <div className={layoutStyles['layouts__messages']}>
         <MessageSeparator type="Date" label="Today" />
 
         {CHANNEL_POSTS.map((p) => {
@@ -655,13 +656,13 @@ function ChannelScene({
                 username={c.name}
                 timestamp={p.timestamp}
               >
-                <p className={styles['center__post-text']}>{p.body}</p>
+                <p className={layoutStyles['layouts__post-text']}>{p.body}</p>
               </Post>
             </ProfileClickable>
           );
         })}
       </div>
-      <div className={styles['center__composer']}>
+      <div className={layoutStyles['layouts__message-input']}>
         <MessageInput placeholder="Message softphone-ux" />
       </div>
     </>
@@ -762,7 +763,7 @@ function DMScene({
         }
       />
 
-      <div className={styles['center__messages']}>
+      <div className={layoutStyles['layouts__messages']}>
         <MessageSeparator type="Date" label="Today" />
 
         <Post
@@ -771,7 +772,7 @@ function DMScene({
           username={contact.name}
           timestamp="9:02 AM"
         >
-          <p className={styles['center__post-text']}>
+          <p className={layoutStyles['layouts__post-text']}>
             Hey! Do you have a minute to walk through the outbound calling flow? Easier by voice.
           </p>
         </Post>
@@ -781,7 +782,7 @@ function DMScene({
           username="Leonard Riley"
           timestamp="9:04 AM"
         >
-          <p className={styles['center__post-text']}>
+          <p className={layoutStyles['layouts__post-text']}>
             Yep — tap the Call button above or open my profile and pick a number, either works.
           </p>
         </Post>
@@ -793,7 +794,7 @@ function DMScene({
           />
         )}
       </div>
-      <div className={styles['center__composer']}>
+      <div className={layoutStyles['layouts__message-input']}>
         <MessageInput placeholder={`Message ${contact.name}`} />
       </div>
     </>

@@ -909,6 +909,16 @@
   50%      { opacity: 0.55; }
 }
 
+@keyframes pip-panel-enter {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pip-panel-exit {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.96); }
+}
+
 .pip {
   position: absolute;
   left: var(--spacing-l);
@@ -939,6 +949,18 @@
     align-items: center;
     gap: 10px;
     padding: var(--spacing-xxs) 8px;
+  }
+
+  // Tighter overlap for the in-call avatar group — the default 3px gap at
+  // size-32 reads as separation; condense so the stack reads as one unit.
+  // Double the class selector to beat UserAvatarGroup's size-32 rule
+  // (.user-avatar-group--size-32 .user-avatar-group__item, specificity 0,2,0).
+  #{&}__avatar-group#{&}__avatar-group {
+    padding-right: 12px;
+
+    > span {
+      margin-right: -12px;
+    }
   }
 
   &__unknown-avatar {
@@ -1120,6 +1142,12 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transform-origin: center bottom;
+    animation: pip-panel-enter var(--duration-quick) var(--ease-entrance);
+
+    &--exiting {
+      animation: pip-panel-exit var(--duration-quick) var(--ease-exit) forwards;
+    }
   }
 
   &__dtmf-header {
@@ -1213,14 +1241,34 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transform-origin: center bottom;
+    animation: pip-panel-enter var(--duration-quick) var(--ease-entrance);
+
+    &--exiting {
+      animation: pip-panel-exit var(--duration-quick) var(--ease-exit) forwards;
+    }
+  }
+
+  &__add-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-m);
+  }
+
+  &__add-title {
+    font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
+    font-weight: var(--font-weight-semibold);
+    color: var(--center-channel-color);
   }
 
   &__add-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+    padding: 0 var(--spacing-s) var(--spacing-xs);
   }
 
   &__add-tabs {
@@ -1265,11 +1313,10 @@
 
   &__add-contacts {
     list-style: none;
-    margin: 0;
+    margin: 0 -16px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
     max-height: 232px;
     overflow-y: auto;
 
@@ -1291,54 +1338,6 @@
     text-align: center;
   }
 
-  &__add-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding-top: var(--spacing-xxs);
-  }
-
-  &__add-cancel {
-    appearance: none;
-    border: 0;
-    cursor: pointer;
-    height: 32px;
-    min-width: 40px;
-    padding: 0 var(--spacing-xs);
-    border-radius: var(--radius-s);
-    background: rgba(var(--center-channel-color-rgb), 0.08);
-    color: rgba(var(--center-channel-color-rgb), 0.75);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color var(--duration-quick) var(--ease-transition);
-
-    &:hover { background: rgba(var(--center-channel-color-rgb), 0.12); }
-  }
-
-  &__add-call {
-    appearance: none;
-    border: 0;
-    cursor: pointer;
-    flex: 1 1 auto;
-    height: 32px;
-    border-radius: var(--radius-s);
-    background: var(--color-success);
-    color: var(--color-neutral-0);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-      background-color var(--duration-quick) var(--ease-transition),
-      opacity var(--duration-quick) var(--ease-transition);
-
-    &:hover:not(:disabled) { background: var(--color-green-600); }
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.4;
-    }
-  }
-
   // Participant list panel (opens above pip__widget, same shell as pip__dtmf).
   &__participants {
     background: var(--center-channel-bg);
@@ -1348,6 +1347,12 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    transform-origin: center bottom;
+    animation: pip-panel-enter var(--duration-quick) var(--ease-entrance);
+
+    &--exiting {
+      animation: pip-panel-exit var(--duration-quick) var(--ease-exit) forwards;
+    }
   }
 
   &__participants-header {
@@ -1368,18 +1373,13 @@
   &__participants-list {
     list-style: none;
     margin: 0;
-    padding: 0 var(--spacing-xxs) var(--spacing-xxs);
+    padding: 0 0 var(--spacing-xxs);
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
 
   &__participant {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xxs) var(--spacing-xs);
-    border-radius: var(--radius-s);
+    display: block;
     transition: opacity var(--duration-quick) var(--ease-exit);
 
     &--ending {
@@ -1398,39 +1398,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-
-  &__participant-body {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  &__participant-name {
-    font-size: var(--font-size-75);
-    line-height: var(--line-height-75);
-    font-weight: var(--font-weight-semibold);
-    color: var(--center-channel-color);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  &__participant-meta {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xxxxs);
-    font-size: var(--font-size-50);
-    line-height: var(--line-height-50);
-    font-weight: var(--font-weight-semibold);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    letter-spacing: 0.02em;
-  }
-
-  &__participant-status {
-    color: rgba(var(--center-channel-color-rgb), 0.64);
   }
 
   // Hangup icon shown on removable bridged rows. Keep the default icon-button

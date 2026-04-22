@@ -24,6 +24,7 @@ import IconButton from '@/components/ui/IconButton/IconButton';
 import Button from '@/components/ui/Button/Button';
 import MenuItem from '@/components/ui/MenuItem/MenuItem';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
+import { UserAvatarGroup } from '@/components/ui/UserAvatarGroup';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
 import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
@@ -193,6 +194,7 @@ type ActiveCall = {
   deviceId: string;
   dtmf: string;
   bridgedParticipants: BridgedParticipant[];
+  fromDialpad: boolean;
 };
 
 type AddMode = 'contacts' | 'dialpad';
@@ -208,6 +210,32 @@ function formatRecentDuration(sec: number): string {
   const s = Math.floor(sec % 60);
   if (m === 0) return `${s}s`;
   return `${m}m ${s}s`;
+}
+
+// Keeps a panel mounted through its exit animation. While `open` is true the
+// panel renders normally. When `open` flips false, the panel keeps rendering
+// for `durationMs` with `exiting: true` so an exit animation can play before
+// the DOM node is removed.
+function useExitAnimation(open: boolean, durationMs: number) {
+  const [rendered, setRendered] = useState(open);
+  const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setRendered(true);
+      setExiting(false);
+      return;
+    }
+    if (!rendered) return;
+    setExiting(true);
+    const t = window.setTimeout(() => {
+      setRendered(false);
+      setExiting(false);
+    }, durationMs);
+    return () => window.clearTimeout(t);
+  }, [open, rendered, durationMs]);
+
+  return { rendered, exiting };
 }
 
 // ── Scene switcher ─────────────────────────────────────────────────────────
@@ -586,11 +614,9 @@ function ProfileClickable({
 function ChannelScene({
   onOpenProfile,
   onOpenDialer,
-  callSummary,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onOpenDialer: () => void;
-  callSummary: { contactId: string; durationSec: number; endedAt: number } | null;
 }) {
   const actions: StartCallAction[] = [
     { id: 'audio', type: 'audio' },
@@ -635,13 +661,6 @@ function ChannelScene({
             </ProfileClickable>
           );
         })}
-
-        {callSummary && (
-          <CallSummaryPost
-            contact={CONTACT_MAP[callSummary.contactId]}
-            durationSec={callSummary.durationSec}
-          />
-        )}
       </div>
       <div className={styles['center__composer']}>
         <MessageInput placeholder="Message softphone-ux" />
@@ -688,10 +707,12 @@ function DMScene({
   onOpenProfile,
   onStartCall,
   onOpenDialer,
+  callSummary,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onStartCall: (contactId: string, phoneIndex: number) => void;
   onOpenDialer: () => void;
+  callSummary: { contactId: string; durationSec: number; endedAt: number } | null;
 }) {
   const contact = CONTACT_MAP['aiko'];
   const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
@@ -765,6 +786,13 @@ function DMScene({
             Yep — tap the Call button above or open my profile and pick a number, either works.
           </p>
         </Post>
+
+        {callSummary && (
+          <CallSummaryPost
+            contact={CONTACT_MAP[callSummary.contactId]}
+            durationSec={callSummary.durationSec}
+          />
+        )}
       </div>
       <div className={styles['center__composer']}>
         <MessageInput placeholder={`Message ${contact.name}`} />
@@ -1134,50 +1162,48 @@ function ParticipantRow({
   removeDisabled?: boolean;
 }) {
   const numberLabel = number && number !== name ? number : null;
+  const secondaryParts: string[] = [];
+  if (numberLabel) secondaryParts.push(numberLabel);
+  if (status === 'dialing') secondaryParts.push('Ringing…');
+  const secondaryLabel = secondaryParts.join(' · ') || undefined;
+
+  const leadingVisual = avatarSrc ? (
+    <UserAvatar src={avatarSrc} alt={avatarAlt ?? name} size="24" />
+  ) : (
+    <div className={styles['pip__participant-avatar-fallback']} aria-hidden>
+      <Icon glyph={<PhoneIcon />} size="12" />
+    </div>
+  );
+
+  const trailingVisual = onRemove ? (
+    <IconButton
+      aria-label="Remove participant"
+      size="Small"
+      padding="Compact"
+      className={styles['pip__participant-remove']}
+      disabled={removeDisabled}
+      icon={<Icon glyph={<PhoneHangupIcon />} size="16" />}
+      onClick={(e) => {
+        e.stopPropagation();
+        onRemove();
+      }}
+    />
+  ) : undefined;
+
   return (
     <li
       className={`${styles['pip__participant']}${
         status === 'ended' ? ` ${styles['pip__participant--ending']}` : ''
       }`}
     >
-      {avatarSrc ? (
-        <UserAvatar src={avatarSrc} alt={avatarAlt ?? name} size="24" />
-      ) : (
-        <div className={styles['pip__participant-avatar-fallback']} aria-hidden>
-          <Icon glyph={<PhoneIcon />} size="12" />
-        </div>
-      )}
-      <div className={styles['pip__participant-body']}>
-        <span className={styles['pip__participant-name']}>{name}</span>
-        <div className={styles['pip__participant-meta']}>
-          {numberLabel && (
-            <span className={styles['pip__trunk']}>{numberLabel}</span>
-          )}
-          {status === 'dialing' && (
-            <>
-              {numberLabel && (
-                <span className={styles['pip__sub-sep']} aria-hidden>·</span>
-              )}
-              <span
-                className={`${styles['pip__participant-status']} ${styles['pip__title--pulsing']}`}
-              >
-                Ringing…
-              </span>
-            </>
-          )}
-        </div>
-      </div>
-      {onRemove && (
-        <IconButton
-          aria-label="Remove participant"
-          size="Small"
-          padding="Compact"
-          className={styles['pip__participant-remove']}
-          disabled={removeDisabled}
-          icon={<Icon glyph={<PhoneHangupIcon />} size="16" />}
-          onClick={onRemove}
-        />
-      )}
+      <MenuItem
+        label={name}
+        secondaryLabel={secondaryLabel}
+        leadingVisual={leadingVisual}
+        trailingVisual={trailingVisual}
+        trailingElement={Boolean(trailingVisual)}
+        tabIndex={-1}
+      />
     </li>
   );
 }
@@ -1283,6 +1309,33 @@ function CallPip({
   const activePartyCount = (call.status !== 'ended' ? 1 : 0) + activeParticipants.length;
   const showParticipantsBtn = call.bridgedParticipants.length > 0 && !isComposing;
 
+  const partyMembers = (() => {
+    if (isComposing) return [];
+    const primaryName = contact ? contact.name : phone?.number || 'Unknown';
+    const primary = {
+      key: 'primary',
+      name: primaryName,
+      avatar: contact?.avatar || '',
+    };
+    const others = activeParticipants.map((p) => {
+      const pContact = CONTACT_MAP[p.contactId] ?? null;
+      const pPhone = pContact ? pContact.phones[p.phoneIndex] ?? null : null;
+      const pName = pContact && pContact.avatar
+        ? pContact.name
+        : pPhone?.number ?? pContact?.name ?? 'Unknown';
+      return {
+        key: p.id,
+        name: pName,
+        avatar: pContact?.avatar || '',
+      };
+    });
+    return [primary, ...others];
+  })();
+  const isMultiParty = partyMembers.length > 1;
+  const avatarGroupItems = partyMembers
+    .filter((m) => m.avatar)
+    .map((m) => ({ key: m.key, src: m.avatar, name: m.name }));
+
   const handleAddDtmfKey = (k: string) => {
     playDtmf(k);
     setAddDtmf((d) => sanitizeDigits(d + k));
@@ -1292,6 +1345,7 @@ function CallPip({
     if (isComposing) return 'Start new call';
     if (call.status === 'dialing') return `Calling ${displayName}…`;
     if (call.status === 'ended') return 'Call ended';
+    if (isMultiParty) return partyMembers.map((m) => m.name).join(', ');
     return displayName;
   })();
 
@@ -1311,6 +1365,10 @@ function CallPip({
   const controlsDisabled = call.status === 'ended';
   const showDtmf = (keypadOpen || isComposing) && call.status !== 'ended';
 
+  const dtmfAnim = useExitAnimation(showDtmf, 150);
+  const addAnim = useExitAnimation(addingParticipant, 150);
+  const participantsAnim = useExitAnimation(participantListOpen, 150);
+
   return (
     <div
       className={`${styles['pip']}${exiting ? ` ${styles['pip--exiting']}` : ''}`}
@@ -1319,7 +1377,13 @@ function CallPip({
     >
       <div className={styles['pip__widget']}>
         <div className={styles['pip__header']}>
-          {contact && contact.avatar ? (
+          {isMultiParty && avatarGroupItems.length > 0 ? (
+            <UserAvatarGroup
+              avatars={avatarGroupItems}
+              size="32"
+              className={styles['pip__avatar-group']}
+            />
+          ) : contact && contact.avatar ? (
             <UserAvatar src={contact.avatar} alt={contact.name} size="32" />
           ) : (
             <div className={styles['pip__unknown-avatar']} aria-hidden>
@@ -1470,8 +1534,12 @@ function CallPip({
         </div>
       </div>
 
-      {participantListOpen && (
-        <div className={styles['pip__participants']}>
+      {participantsAnim.rendered && (
+        <div
+          className={`${styles['pip__participants']}${
+            participantsAnim.exiting ? ` ${styles['pip__participants--exiting']}` : ''
+          }`}
+        >
           <div className={styles['pip__participants-header']}>
             <span className={styles['pip__participants-title']}>Participants</span>
             <IconButton
@@ -1517,8 +1585,22 @@ function CallPip({
         </div>
       )}
 
-      {addingParticipant && (
-        <div className={styles['pip__add']}>
+      {addAnim.rendered && (
+        <div
+          className={`${styles['pip__add']}${
+            addAnim.exiting ? ` ${styles['pip__add--exiting']}` : ''
+          }`}
+        >
+          <div className={styles['pip__add-title-row']}>
+            <span className={styles['pip__add-title']}>Add participants</span>
+            <IconButton
+              aria-label="Close add participant"
+              size="Small"
+              padding="Compact"
+              icon={<Icon glyph={<CloseIcon />} size="16" />}
+              onClick={onCloseAddParticipant}
+            />
+          </div>
           <div className={styles['pip__add-header']}>
             <div className={styles['pip__add-tabs']} role="tablist" aria-label="Add participant source">
               <button
@@ -1544,13 +1626,6 @@ function CallPip({
                 Dial pad
               </button>
             </div>
-            <IconButton
-              aria-label="Close add participant"
-              size="Small"
-              padding="Compact"
-              icon={<Icon glyph={<CloseIcon />} size="16" />}
-              onClick={onCloseAddParticipant}
-            />
           </div>
 
           {addMode === 'contacts' ? (
@@ -1602,32 +1677,26 @@ function CallPip({
                 }
               />
               <KeypadGrid onPress={handleAddDtmfKey} />
-              <div className={styles['pip__add-actions']}>
-                <button
-                  type="button"
-                  aria-label="Cancel"
-                  className={styles['pip__add-cancel']}
-                  onClick={onCloseAddParticipant}
-                >
-                  <Icon glyph={<CloseIcon />} size="16" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="Start bridge call"
-                  className={styles['pip__add-call']}
-                  disabled={!addDtmf}
-                  onClick={() => addDtmf && onBridgeNumber(addDtmf)}
-                >
-                  <Icon glyph={<PhoneIcon />} size="16" />
-                </button>
-              </div>
+              <button
+                type="button"
+                aria-label="Start bridge call"
+                className={styles['pip__dtmf-call']}
+                disabled={!addDtmf}
+                onClick={() => addDtmf && onBridgeNumber(addDtmf)}
+              >
+                <Icon glyph={<PhoneIcon />} size="20" />
+              </button>
             </div>
           )}
         </div>
       )}
 
-      {showDtmf && (
-        <div className={styles['pip__dtmf']}>
+      {dtmfAnim.rendered && (
+        <div
+          className={`${styles['pip__dtmf']}${
+            dtmfAnim.exiting ? ` ${styles['pip__dtmf--exiting']}` : ''
+          }`}
+        >
           <div className={styles['pip__dtmf-header']}>
             <span className={styles['pip__dtmf-title']}>Dial pad</span>
             {!isComposing && (
@@ -1736,6 +1805,7 @@ export default function OutboundCalls() {
       deviceId: AUDIO_DEVICES[0].id,
       dtmf: '',
       bridgedParticipants: [],
+      fromDialpad: false,
     });
   };
 
@@ -1769,6 +1839,7 @@ export default function OutboundCalls() {
       deviceId: AUDIO_DEVICES[0].id,
       dtmf: '',
       bridgedParticipants: [],
+      fromDialpad: true,
     });
   };
 
@@ -1804,7 +1875,9 @@ export default function OutboundCalls() {
           : 0;
 
       if (c.status === 'connected' && durationSec > 0) {
-        setCallSummary({ contactId: c.contactId, durationSec, endedAt });
+        if (!c.fromDialpad) {
+          setCallSummary({ contactId: c.contactId, durationSec, endedAt });
+        }
         setRecents((prev) => [
           {
             contactId: c.contactId,
@@ -1990,7 +2063,7 @@ export default function OutboundCalls() {
                 { id: 'design', name: 'Design', initials: 'De', unread: true },
                 { id: 'acme', name: 'Acme', initials: 'Ac', mentions: 3 },
               ]}
-              showDialPad={scene === 'team-sidebar'}
+              showDialPad={scene === 'team-sidebar' || scene === 'channel' || scene === 'dm'}
               dialPadActive={!!call && keypadOpen}
               onDialPadClick={openDialpadWidget}
             />
@@ -2001,7 +2074,7 @@ export default function OutboundCalls() {
               <ChannelsSidebar
                 teamName="Contributors"
                 showFilter
-                showDialPad={scene !== 'rhs' && scene !== 'team-sidebar'}
+                showDialPad={scene === 'dialer'}
                 activeChannelName={
                   scene === 'channel'
                     ? 'softphone-ux'
@@ -2036,7 +2109,6 @@ export default function OutboundCalls() {
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
-                    callSummary={callSummary}
                   />
                 )}
                 {scene === 'dm' && (
@@ -2044,6 +2116,7 @@ export default function OutboundCalls() {
                     onOpenProfile={openProfile}
                     onStartCall={startCall}
                     onOpenDialer={openDialpadWidget}
+                    callSummary={callSummary}
                   />
                 )}
                 {scene === 'dialer' && (
@@ -2060,14 +2133,12 @@ export default function OutboundCalls() {
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
-                    callSummary={callSummary}
                   />
                 )}
                 {scene === 'team-sidebar' && (
                   <ChannelScene
                     onOpenProfile={openProfile}
                     onOpenDialer={openDialpadWidget}
-                    callSummary={callSummary}
                   />
                 )}
               </div>

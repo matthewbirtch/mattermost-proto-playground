@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PhoneIcon from '@mattermost/compass-icons/components/phone';
-import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
 import PhoneHangupIcon from '@mattermost/compass-icons/components/phone-hangup';
 import MicrophoneIcon from '@mattermost/compass-icons/components/microphone';
 import MicrophoneOffIcon from '@mattermost/compass-icons/components/microphone-off';
@@ -8,7 +7,6 @@ import VolumeHighIcon from '@mattermost/compass-icons/components/volume-high';
 import HeadphonesIcon from '@mattermost/compass-icons/components/headphones';
 import CellphoneIcon from '@mattermost/compass-icons/components/cellphone';
 import CloseCircleIcon from '@mattermost/compass-icons/components/close-circle';
-import ShieldOutlineIcon from '@mattermost/compass-icons/components/shield-outline';
 import CheckIcon from '@mattermost/compass-icons/components/check';
 import ClockOutlineIcon from '@mattermost/compass-icons/components/clock-outline';
 import CloseIcon from '@mattermost/compass-icons/components/close';
@@ -20,7 +18,6 @@ import DialpadIcon from '@/components/icons/DialpadIcon';
 import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
 import Icon, { SVG_SIZE_MAP } from '@/components/ui/Icon/Icon';
 import IconButton from '@/components/ui/IconButton/IconButton';
-import Button from '@/components/ui/Button/Button';
 import MenuItem from '@/components/ui/MenuItem/MenuItem';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import { UserAvatarGroup } from '@/components/ui/UserAvatarGroup';
@@ -728,50 +725,16 @@ function ChannelScene({
   );
 }
 
-function CallSummaryPost({
-  contact,
-  durationSec,
-}: {
-  contact: Contact;
-  durationSec: number;
-}) {
-  return (
-    <div className={styles['call-summary']}>
-      <div className={styles['call-summary__icon']}>
-        <Icon glyph={<PhoneInTalkIcon />} size="20" />
-      </div>
-      <div className={styles['call-summary__body']}>
-        <div className={styles['call-summary__title']}>
-          Call with <strong>{contact.name}</strong> ended
-        </div>
-        <div className={styles['call-summary__meta']}>
-          <span>
-            <Icon glyph={<ShieldOutlineIcon />} size="12" />
-            Mattermost Secure
-          </span>
-          <span>·</span>
-          <span>Duration {formatRecentDuration(durationSec)}</span>
-        </div>
-      </div>
-      <Button emphasis="Tertiary" size="Small">
-        Call back
-      </Button>
-    </div>
-  );
-}
-
 // ── DM scene ───────────────────────────────────────────────────────────────
 
 function DMScene({
   onOpenProfile,
   onStartCall,
   onOpenDialer,
-  callSummary,
 }: {
   onOpenProfile: (contactId: string, rect: DOMRect) => void;
   onStartCall: (contactId: string, phoneIndex: number) => void;
   onOpenDialer: () => void;
-  callSummary: { contactId: string; durationSec: number; endedAt: number } | null;
 }) {
   const contact = CONTACT_MAP['aiko'];
   const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
@@ -861,13 +824,6 @@ function DMScene({
             )}
           </p>
         </Post>
-
-        {callSummary && (
-          <CallSummaryPost
-            contact={CONTACT_MAP[callSummary.contactId]}
-            durationSec={callSummary.durationSec}
-          />
-        )}
       </div>
       <div className={layoutStyles['layouts__message-input']}>
         <MessageInput placeholder={`Message ${contact.name}`} />
@@ -1971,9 +1927,6 @@ export default function OutboundCalls() {
   const [keypadOpen, setKeypadOpen] = useState(false);
   const [popover, setPopover] = useState<{ contactId: string; rect: DOMRect } | null>(null);
   const [recents, setRecents] = useState<Recent[]>(INITIAL_RECENTS);
-  const [callSummary, setCallSummary] = useState<
-    { contactId: string; durationSec: number; endedAt: number } | null
-  >(null);
   const [callExiting, setCallExiting] = useState(false);
   const [rhsOpen, setRhsOpen] = useState(false);
 
@@ -2021,7 +1974,6 @@ export default function OutboundCalls() {
   }, [call?.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startCall = (contactId: string, phoneIndex: number) => {
-    setCallSummary(null);
     setKeypadOpen(false);
     setPopover(null);
     setCall({
@@ -2072,7 +2024,6 @@ export default function OutboundCalls() {
         secure: false,
       }],
     };
-    setCallSummary(null);
     setKeypadOpen(false);
     setPopover(null);
     setCall({
@@ -2091,7 +2042,6 @@ export default function OutboundCalls() {
   };
 
   const openDialpadWidget = () => {
-    setCallSummary(null);
     setPopover(null);
     setKeypadOpen(true);
     setCall({
@@ -2140,9 +2090,6 @@ export default function OutboundCalls() {
           : 0;
 
       if (c.status === 'connected' && durationSec > 0) {
-        if (!c.fromDialpad) {
-          setCallSummary({ contactId: c.contactId, durationSec, endedAt });
-        }
         setRecents((prev) => [
           {
             contactId: c.contactId,
@@ -2383,7 +2330,6 @@ export default function OutboundCalls() {
                     onOpenProfile={openProfile}
                     onStartCall={startCall}
                     onOpenDialer={openDialpadWidget}
-                    callSummary={callSummary}
                   />
                 )}
                 {scene === 'dialer' && (

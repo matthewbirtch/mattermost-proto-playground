@@ -620,57 +620,6 @@
 }
 
 // ---------------------------------------------------------------------------
-// Call summary post (channel recap card)
-// ---------------------------------------------------------------------------
-.call-summary {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-m);
-  padding: var(--spacing-m) var(--spacing-l);
-  margin: var(--spacing-xxs) var(--spacing-l) 0;
-  border: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
-  border-radius: var(--radius-l);
-  background: rgba(var(--center-channel-color-rgb), 0.04);
-
-  &__icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    background: rgba(var(--color-success-rgb), 0.12);
-    color: var(--color-success);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xxxxs);
-  }
-
-  &__title {
-    font-size: var(--font-size-100);
-    color: var(--center-channel-color);
-  }
-
-  &__meta {
-    font-size: var(--font-size-75);
-    color: rgba(var(--center-channel-color-rgb), 0.64);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-
-    span {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--spacing-xxxxs);
-    }
-  }
-}
-
-// ---------------------------------------------------------------------------
 // Right-hand sidebar dialer
 // ---------------------------------------------------------------------------
 @keyframes rhs-enter {

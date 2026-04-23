@@ -15,6 +15,8 @@ export interface IconButtonProps extends Omit<
 > {
   /** Optional CSS class name. */
   className?: string;
+  /** Numeric count shown inline after the icon. Figma: Count. */
+  count?: number;
   /** When true, uses destructive (danger) styling. Figma: Destructive. */
   destructive?: boolean;
   /** Icon to show. Size the glyph via SVG_SIZE_MAP: e.g. `<Icon glyph={<GlobeIcon size={SVG_SIZE_MAP['16']} />} size="16" />`. */
@@ -29,6 +31,8 @@ export interface IconButtonProps extends Omit<
   style?: IconButtonStyle;
   /** When true, shows toggled/selected state. Figma: Toggled = On. */
   toggled?: boolean;
+  /** When true, shows a small unread dot over the icon. Figma: Unread Badge. */
+  unreadBadge?: boolean;
   /** When true, forces the pressed/active visual state (subtler than toggled). */
   active?: boolean;
 }
@@ -53,6 +57,7 @@ export const ICON_BUTTON_ICON_SIZES: Record<
  */
 export default function IconButton({
   className = '',
+  count,
   destructive = false,
   icon,
   padding = 'Default',
@@ -60,6 +65,7 @@ export default function IconButton({
   size = 'Medium',
   style = 'Default',
   toggled = false,
+  unreadBadge = false,
   active = false,
   disabled,
   type = 'button',
@@ -76,6 +82,8 @@ export default function IconButton({
     : '';
   const roundedClass = rounded ? styles['icon-button--rounded'] : '';
   const toggledClass = toggled ? styles['icon-button--toggled'] : '';
+  const hasCount = count !== undefined;
+  const hasCountClass = hasCount ? styles['icon-button--has-count'] : '';
   const activeClass = active ? styles['icon-button--active'] : '';
 
   const rootClass = [
@@ -86,6 +94,7 @@ export default function IconButton({
     destructiveClass,
     roundedClass,
     toggledClass,
+    hasCountClass,
     activeClass,
     className,
   ]
@@ -103,7 +112,13 @@ export default function IconButton({
     >
       <span className={styles['icon-button__icon-slot']} aria-hidden>
         {icon}
+        {unreadBadge && (
+          <span className={styles['icon-button__unread-badge']} />
+        )}
       </span>
+      {hasCount && (
+        <span className={styles['icon-button__count']}>{count}</span>
+      )}
     </button>
   );
 }

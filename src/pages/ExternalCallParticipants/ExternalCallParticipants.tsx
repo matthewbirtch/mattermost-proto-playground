@@ -394,7 +394,7 @@ interface WelcomeSceneProps {
   onJoin: (name: string) => void;
 }
 
-function WelcomeScene({ channelName, onJoin }: WelcomeSceneProps) {
+function WelcomeScene({ onJoin }: WelcomeSceneProps) {
   const [name, setName] = useState('');
 
   const handleSubmit = (e: FormEvent) => {

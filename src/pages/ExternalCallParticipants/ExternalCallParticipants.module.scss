@@ -126,6 +126,7 @@
   left: 0;
   right: 0;
   width: calc((100% - 96px) * 2 / 3);
+  min-width: 728px;
   margin-inline: auto;
   z-index: 10;
   display: flex;
@@ -135,6 +136,22 @@
   border-radius: var(--radius-l);
   box-shadow: var(--elevation-6);
   overflow: hidden;
+
+  // Fullscreen variant — used for the guest perspective. Fills the AppShell
+  // frame like the .welcome block instead of sitting inside the chat shell.
+  &--fullscreen {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: calc(100% - 160px);
+    height: calc(100% - 80px);
+    max-width: 1440px;
+    max-height: 860px;
+    min-width: 0;
+    margin: auto;
+  }
 
   &__app-header {
     position: relative;
@@ -275,6 +292,49 @@
     gap: var(--spacing-xs);
   }
 
+  // Call window icon button overrides. Higher specificity via `button` element
+  // selector so these beat IconButton's default inverted/destructive rules.
+  &__header-right button,
+  &__controls-left button,
+  &__controls-middle button,
+  &__controls-right button {
+    border-radius: var(--radius-m);
+  }
+
+  &__header-right button,
+  &__controls-left button,
+  &__controls-middle button {
+    color: rgba(var(--color-neutral-0-rgb), 0.64);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(var(--color-neutral-0-rgb), 0.16);
+      color: var(--color-neutral-0);
+    }
+
+    &:active:not(:disabled):not([data-active='true']) {
+      background-color: rgba(var(--color-neutral-0-rgb), 0.24);
+    }
+
+    &[data-active='true']:not(:disabled) {
+      background-color: rgba(var(--color-neutral-0-rgb), 0.16);
+      color: var(--color-neutral-0);
+    }
+  }
+
+  &__controls-left button,
+  &__controls-middle button {
+    background-color: rgba(var(--color-neutral-0-rgb), 0.08);
+  }
+
+  &__controls-right button {
+    background-color: var(--error-text);
+    color: var(--color-neutral-0);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-red-600);
+      color: var(--color-neutral-0);
+    }
+  }
 }
 
 // ─── Docked Call Widget ────────────────────────────────────────────────────
@@ -428,5 +488,184 @@
   &__menu-divider {
     margin: var(--spacing-xxs) 0;
     border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.12);
+  }
+}
+
+// ─── Welcome Scene (guest join screen) ─────────────────────────────────────
+
+.welcome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 160px);
+  height: calc(100% - 80px);
+  max-width: 1440px;
+  max-height: 860px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: #14213e;
+  color: var(--color-neutral-0);
+
+  &__texture {
+    position: absolute;
+    opacity: 0.3;
+    inset: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+
+  &__glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 60% 50% at 50% 100%,
+        rgba(28, 88, 217, 0.28) 0%,
+        rgba(20, 33, 62, 0) 70%
+      );
+  }
+
+  &__card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xl);
+    width: 100%;
+    max-width: 420px;
+    padding: var(--spacing-xxl);
+    border: 1px solid rgba(var(--color-neutral-0-rgb), 0.12);
+    border-radius: var(--radius-l);
+    background:
+      linear-gradient(
+        180deg,
+        rgba(var(--color-neutral-0-rgb), 0.06) 0%,
+        rgba(var(--color-neutral-0-rgb), 0.02) 100%
+      ),
+      rgba(20, 33, 62, 0.72);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--elevation-6);
+  }
+
+  &__icon {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background: rgba(var(--color-neutral-0-rgb), 0.12);
+    color: var(--color-neutral-0);
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xxs);
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-0);
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: var(--font-size-100);
+    line-height: var(--line-height-100);
+    color: rgba(var(--color-neutral-0-rgb), 0.72);
+  }
+
+  &__form {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+    width: 100%;
+  }
+
+  &__input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__footer {
+    margin: 0;
+    font-size: var(--font-size-75);
+    line-height: var(--line-height-75);
+    color: rgba(var(--color-neutral-0-rgb), 0.56);
+    text-align: center;
+  }
+
+  &__channel {
+    font-weight: var(--font-weight-semibold);
+    color: rgba(var(--color-neutral-0-rgb), 0.88);
+  }
+}
+
+// ─── Scene switcher ────────────────────────────────────────────────────────
+
+.scene-switcher {
+  position: fixed;
+  top: var(--spacing-xs);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  padding: var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-xxxs) var(--spacing-m);
+  background: var(--center-channel-bg);
+
+  &__label {
+    font-size: var(--font-size-50);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: var(--font-weight-semibold);
+    color: rgba(var(--center-channel-color-rgb), 0.64);
+  }
+
+  &__segmented {
+    display: inline-flex;
+    background: rgba(var(--center-channel-color-rgb), 0.08);
+    padding: 2px;
+    border-radius: var(--radius-full);
+    gap: 2px;
+  }
+
+  &__tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(var(--center-channel-color-rgb), 0.75);
+    font-size: var(--font-size-75);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-xxxs) var(--spacing-m);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-quick) var(--ease-transition),
+      color var(--duration-quick) var(--ease-transition);
+
+    &:hover {
+      color: var(--center-channel-color);
+    }
+
+    &--active {
+      background: var(--center-channel-bg);
+      color: var(--center-channel-color);
+      box-shadow: var(--elevation-1);
+    }
   }
 }

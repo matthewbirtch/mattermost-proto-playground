@@ -129,3 +129,42 @@ For any phone/call action, use the filled compass icon `@mattermost/compass-icon
 ## Typography: prefer semibold over bold
 
 Use `var(--font-weight-semibold)` (600) wherever bold emphasis is needed. Do **not** use `var(--font-weight-bold)` (700) or `font-weight: bold` / `font-weight: 700` unless explicitly required by a Figma spec that specifies 700.
+
+## Animation: popover panel open/close
+
+Popover panels (menus, info popovers, dropdowns) animate on mount/unmount with a combined scale + fade:
+
+| Phase | Scale | Opacity | Duration | Easing |
+|---|---|---|---|---|
+| Opening | `90%` → `100%` | `0` → `1` | `--duration-quick` | `--ease-entrance` (easeOut) |
+| Closing | `100%` → `90%` | `1` → `0` | `--duration-quick` | `--ease-exit` (easeIn) |
+
+Set `transform-origin` so the scale grows from the anchor direction (e.g. `transform-origin: top left` for a popover that opens below-and-right of its trigger).
+
+## Scrollbars: minimal style for scrolling content
+
+Any element with `overflow: auto`, `overflow: scroll`, `overflow-y: auto|scroll`, or `overflow-x: auto|scroll` must use the minimal scrollbar treatment — thin track, subtle translucent thumb, transparent track, darker on hover. Never ship the browser-default chunky scrollbar on content regions.
+
+```scss
+scrollbar-width: thin;
+scrollbar-color: rgba(var(--center-channel-color-rgb), 0.24) transparent;
+
+&::-webkit-scrollbar {
+  width: 8px;   // use `height: 8px` for horizontal scrollers
+}
+&::-webkit-scrollbar-track {
+  background: transparent;
+}
+&::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--center-channel-color-rgb), 0.24);
+  border-radius: 3px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background-color var(--duration-quick) var(--ease-transition);
+}
+&::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--center-channel-color-rgb), 0.4);
+}
+```
+
+Reference implementation: the `__messages` block in `src/pages/Layouts/Layouts.module.scss`. If this starts to recur in more places, extract a `@mixin minimal-scrollbar` into `src/styles/mixins.scss`.

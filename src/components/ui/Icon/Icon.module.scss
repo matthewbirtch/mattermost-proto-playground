@@ -16,7 +16,6 @@
   // Children are absolutely centred so they bleed equally on all sides.
   &__glyph-area {
     position: relative;
-    overflow: hidden;
     flex-shrink: 0;
 
     > * {

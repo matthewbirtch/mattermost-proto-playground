@@ -22,8 +22,12 @@ import VolumeHighIcon from '@mattermost/compass-icons/components/volume-high';
 import VideoOutlineIcon from '@mattermost/compass-icons/components/video-outline';
 import ChevronRightIcon from '@mattermost/compass-icons/components/chevron-right';
 import CogOutlineIcon from '@mattermost/compass-icons/components/cog-outline';
+import CloseIcon from '@mattermost/compass-icons/components/close';
+import PhoneIcon from '@mattermost/compass-icons/components/phone';
+import AccountOutlineIcon from '@mattermost/compass-icons/components/account-outline';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
 import CallParticipantAvatar from '@/components/ui/CallParticipantAvatar/CallParticipantAvatar';
+import LabelTag from '@/components/ui/LabelTag/LabelTag';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
 import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
@@ -62,13 +66,17 @@ const EXTERNAL_LINK =
 const DIAL_IN_NUMBER = '+1 669 444 9171 (US)';
 const DIAL_IN_PIN = '938 394 234';
 
+type ParticipantKind = 'user' | 'external-link' | 'dial-in';
+
 type Participant = {
   id: string;
   name: string;
-  avatarSrc: string;
+  avatarSrc?: string;
   host?: boolean;
   talking?: boolean;
   muted?: boolean;
+  kind?: ParticipantKind;
+  external?: boolean;
 };
 
 const PARTICIPANTS: Participant[] = [
@@ -83,6 +91,26 @@ const PARTICIPANTS: Participant[] = [
   { id: 'isabella', name: 'Isabella Cruz', avatarSrc: avatarIsabellaCruz, muted: true },
   { id: 'leila', name: 'Leila Haddad', avatarSrc: avatarLeilaHaddad, muted: true },
   { id: 'lucas', name: 'Lucas Meyer', avatarSrc: avatarLukasMeyer, muted: true },
+];
+
+// Guest view: drop the last two internal participants and show an external-link
+// guest + a dial-in caller instead, matching the external-participants Figma.
+const GUEST_PARTICIPANTS: Participant[] = [
+  ...PARTICIPANTS.slice(0, -2),
+  {
+    id: 'external-james',
+    name: 'James Smith',
+    kind: 'external-link',
+    external: true,
+    muted: true,
+  },
+  {
+    id: 'dialin-5555',
+    name: '+1-555-555-5555',
+    kind: 'dial-in',
+    external: true,
+    muted: true,
+  },
 ];
 
 type SceneId = 'welcome' | 'widget' | 'popout' | 'guest';
@@ -138,8 +166,15 @@ export default function ExternalCallParticipants() {
   const [muted, setMuted] = useState(true);
   const [handRaised, setHandRaised] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [guestName, setGuestName] = useState('');
 
   const popoutOpen = scene === 'popout';
+
+  const guestParticipants: Participant[] = GUEST_PARTICIPANTS.map((p) =>
+    p.id === 'external-james' && guestName.trim()
+      ? { ...p, name: guestName.trim() }
+      : p,
+  );
 
   if (scene === 'welcome') {
     return (
@@ -147,7 +182,10 @@ export default function ExternalCallParticipants() {
         <SceneSwitcher active={scene} onChange={setScene} />
         <WelcomeScene
           channelName="UX Design"
-          onJoin={() => setScene('guest')}
+          onJoin={(name) => {
+            setGuestName(name);
+            setScene('guest');
+          }}
         />
       </>
     );
@@ -159,7 +197,9 @@ export default function ExternalCallParticipants() {
         <SceneSwitcher active={scene} onChange={setScene} />
         <CallPopout
           variant="fullscreen"
-          participants={PARTICIPANTS}
+          guestView
+          participants={guestParticipants}
+          currentUserId="external-james"
           muted={muted}
           onToggleMute={() => setMuted((m) => !m)}
           onLeave={() => setScene('welcome')}
@@ -288,6 +328,7 @@ export default function ExternalCallParticipants() {
       {popoutOpen && (
         <CallPopout
           participants={PARTICIPANTS}
+          currentUserId="leonard"
           muted={muted}
           onToggleMute={() => setMuted((m) => !m)}
           onCollapse={() => {
@@ -344,7 +385,7 @@ function WelcomeScene({ channelName, onJoin }: WelcomeSceneProps) {
         <div className={styles['welcome__form']}>
           <TextInput
             className={styles['welcome__input']}
-            label="Your name"
+            placeholder="Your name"
             autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -371,6 +412,8 @@ function WelcomeScene({ channelName, onJoin }: WelcomeSceneProps) {
 
 interface CallPopoutProps {
   participants: Participant[];
+  /** ID of the signed-in participant (used for the "(you)" label in the participants panel). */
+  currentUserId?: string;
   muted: boolean;
   onToggleMute: () => void;
   onCollapse?: () => void;
@@ -381,10 +424,13 @@ interface CallPopoutProps {
   onExternalEnabledChange: (v: boolean) => void;
   /** 'windowed' renders inside a fake browser chrome. 'fullscreen' fills the frame. */
   variant?: 'windowed' | 'fullscreen';
+  /** When true, the Call Info panel renders in 'guest' mode (no internal link, no toggle, only external details). */
+  guestView?: boolean;
 }
 
 function CallPopout({
   participants,
+  currentUserId,
   muted,
   onToggleMute,
   onCollapse,
@@ -394,8 +440,10 @@ function CallPopout({
   externalEnabled,
   onExternalEnabledChange,
   variant = 'windowed',
+  guestView = false,
 }: CallPopoutProps) {
   const fullscreen = variant === 'fullscreen';
+  const [participantsOpen, setParticipantsOpen] = useState(false);
   const rootClass = `${styles.popout} ${
     fullscreen ? styles['popout--fullscreen'] : ''
   }`;
@@ -460,6 +508,7 @@ function CallPopout({
           {infoOpen && (
             <div className={styles['popout__info-popover']}>
               <CallInfoPanel
+                variant={guestView ? 'guest' : 'host'}
                 internalLink={INTERNAL_LINK}
                 externalLink={EXTERNAL_LINK}
                 dialInNumber={DIAL_IN_NUMBER}
@@ -471,20 +520,31 @@ function CallPopout({
           )}
         </div>
 
-        <div className={styles['popout__room']}>
-          <div className={styles['popout__grid']}>
-            {participants.map((p) => (
-              <CallParticipantAvatar
-                key={p.id}
-                src={p.avatarSrc}
-                alt={p.name}
-                name={p.name}
-                size="Medium"
-                host={p.host}
-                talking={p.talking}
-              />
-            ))}
+        <div className={styles['popout__stage']}>
+          <div className={styles['popout__room']}>
+            <div className={styles['popout__grid']}>
+              {participants.map((p) => (
+                <CallParticipantAvatar
+                  key={p.id}
+                  src={p.avatarSrc}
+                  alt={p.name}
+                  name={p.name}
+                  size="Medium"
+                  kind={p.kind}
+                  host={p.host}
+                  external={p.external}
+                  talking={p.talking}
+                />
+              ))}
+            </div>
           </div>
+          {participantsOpen && (
+            <ParticipantsPanel
+              participants={participants}
+              currentUserId={currentUserId}
+              onClose={() => setParticipantsOpen(false)}
+            />
+          )}
         </div>
 
         <div className={styles['popout__controls']}>
@@ -492,9 +552,11 @@ function CallPopout({
             <IconButton
               size="Medium"
               style="Inverted"
+              active={participantsOpen}
               count={participants.length}
               aria-label={`Participants (${participants.length})`}
               icon={<Icon size="20" glyph={<AccountMultipleOutlineIcon />} />}
+              onClick={() => setParticipantsOpen((v) => !v)}
             />
           </div>
 
@@ -517,12 +579,14 @@ function CallPopout({
               aria-label="Share screen"
               icon={<Icon size="20" glyph={<MonitorOffIcon />} />}
             />
-            <IconButton
-              size="Medium"
-              style="Inverted"
-              aria-label="Record"
-              icon={<Icon size="20" glyph={<RecordCircleOutlineIcon />} />}
-            />
+            {!fullscreen && (
+              <IconButton
+                size="Medium"
+                style="Inverted"
+                aria-label="Record"
+                icon={<Icon size="20" glyph={<RecordCircleOutlineIcon />} />}
+              />
+            )}
             <IconButton
               size="Medium"
               style="Inverted"
@@ -555,6 +619,168 @@ function CallPopout({
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Participants Panel (right sidebar) ─────────────────────────────────────
+
+interface ParticipantsPanelProps {
+  participants: Participant[];
+  currentUserId?: string;
+  onClose: () => void;
+}
+
+function ParticipantsPanel({
+  participants,
+  currentUserId,
+  onClose,
+}: ParticipantsPanelProps) {
+  const internal = participants.filter((p) => !p.external);
+  const external = participants.filter((p) => p.external);
+
+  return (
+    <aside
+      className={styles['participants-panel']}
+      aria-label="Participants"
+    >
+      <div className={styles['participants-panel__header']}>
+        <h2 className={styles['participants-panel__title']}>Participants</h2>
+        <div className={styles['participants-panel__header-actions']}>
+          <Button
+            emphasis="Link"
+            size="X-Small"
+            leadingIcon={<Icon size="12" glyph={<MicrophoneOffIcon />} />}
+          >
+            Mute all
+          </Button>
+          <IconButton
+            size="Small"
+            aria-label="Close participants"
+            icon={<Icon size="16" glyph={<CloseIcon />} />}
+            onClick={onClose}
+          />
+        </div>
+      </div>
+
+      <div className={styles['participants-panel__scroll']}>
+        <ul className={styles['participants-panel__list']}>
+          {internal.map((p) => (
+            <ParticipantListItem
+              key={p.id}
+              participant={p}
+              isYou={p.id === currentUserId}
+            />
+          ))}
+        </ul>
+
+        {external.length > 0 && (
+          <>
+            <div
+              className={styles['participants-panel__divider']}
+              role="separator"
+            />
+            <div className={styles['participants-panel__group-title']}>
+              External Participants
+            </div>
+            <ul className={styles['participants-panel__list']}>
+              {external.map((p) => (
+                <ParticipantListItem
+                  key={p.id}
+                  participant={p}
+                  isYou={p.id === currentUserId}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </aside>
+  );
+}
+
+interface ParticipantListItemProps {
+  participant: Participant;
+  isYou?: boolean;
+}
+
+function ParticipantListItem({
+  participant,
+  isYou = false,
+}: ParticipantListItemProps) {
+  const {
+    name,
+    avatarSrc,
+    host = false,
+    external = false,
+    muted = false,
+    kind = 'user',
+  } = participant;
+
+  const isUserKind = kind === 'user';
+
+  const fallbackClass = [
+    styles['participants-panel__avatar-fallback'],
+    kind === 'dial-in'
+      ? styles['participants-panel__avatar-fallback--dial-in']
+      : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const micClass = [
+    styles['participants-panel__mic'],
+    muted
+      ? styles['participants-panel__mic--off']
+      : styles['participants-panel__mic--on'],
+  ].join(' ');
+
+  return (
+    <li className={styles['participants-panel__item']}>
+      <div className={styles['participants-panel__item-avatar']}>
+        {isUserKind && avatarSrc ? (
+          <UserAvatar size="24" src={avatarSrc} alt={name} />
+        ) : (
+          <span className={fallbackClass} role="img" aria-label={name}>
+            <Icon
+              size="16"
+              glyph={kind === 'dial-in' ? <PhoneIcon /> : <AccountOutlineIcon />}
+            />
+          </span>
+        )}
+      </div>
+
+      <div className={styles['participants-panel__item-identity']}>
+        <span className={styles['participants-panel__name']}>{name}</span>
+        {isYou && (
+          <span className={styles['participants-panel__you']}>(you)</span>
+        )}
+        {host && <LabelTag label="HOST" size="X-Small" casing="All Caps" />}
+        {external && (
+          <LabelTag label="EXTERNAL" size="X-Small" casing="All Caps" />
+        )}
+      </div>
+
+      <div className={styles['participants-panel__item-actions']}>
+        <span className={styles['participants-panel__more']}>
+          <IconButton
+            size="Small"
+            padding="Compact"
+            aria-label={`More actions for ${name}`}
+            icon={<Icon size="16" glyph={<DotsHorizontalIcon />} />}
+          />
+        </span>
+        <span
+          className={micClass}
+          role="img"
+          aria-label={muted ? 'Muted' : 'Unmuted'}
+        >
+          <Icon
+            size="16"
+            glyph={muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
+          />
+        </span>
+      </div>
+    </li>
   );
 }
 

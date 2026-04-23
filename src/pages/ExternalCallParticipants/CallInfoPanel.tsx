@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ContentCopyIcon from '@mattermost/compass-icons/components/content-copy';
+import CheckIcon from '@mattermost/compass-icons/components/check';
 import CogOutlineIcon from '@mattermost/compass-icons/components/cog-outline';
 import CloseIcon from '@mattermost/compass-icons/components/close';
 import Icon from '@/components/ui/Icon/Icon';
@@ -8,21 +9,25 @@ import Switch from '@/components/ui/Switch/Switch';
 import Button from '@/components/ui/Button/Button';
 import styles from './CallInfoPanel.module.scss';
 
+export type CallInfoPanelVariant = 'host' | 'guest';
+
 export interface CallInfoPanelProps {
   className?: string;
-  /** Internal channel join URL. */
-  internalLink: string;
+  /** Panel variant. 'host' shows internal link + external-participants toggle. 'guest' shows only external details (for external-link participants). Default: 'host'. */
+  variant?: CallInfoPanelVariant;
+  /** Internal channel join URL. Ignored in 'guest' variant. */
+  internalLink?: string;
   /** External guest URL shown when external participants are enabled. */
   externalLink: string;
   /** Dial-in phone number shown when SIP is enabled. */
   dialInNumber: string;
   /** Dial-in PIN shown when SIP is enabled. */
   dialInPin: string;
-  /** Whether the "Enable external participants" toggle is on. */
-  externalEnabled: boolean;
-  /** Toggle handler. */
-  onExternalEnabledChange: (next: boolean) => void;
-  /** Settings cog click (opens link-type/SIP settings popover — wired to console.log for now). */
+  /** Whether the "Enable external participants" toggle is on. Ignored in 'guest' variant (always treated as enabled). */
+  externalEnabled?: boolean;
+  /** Toggle handler. Ignored in 'guest' variant. */
+  onExternalEnabledChange?: (next: boolean) => void;
+  /** Settings cog click (opens link-type/SIP settings popover — wired to console.log for now). Ignored in 'guest' variant. */
   onSettingsClick?: () => void;
   /** When true, panel fills its container's width instead of its fixed 366px. */
   fullWidth?: boolean;
@@ -32,6 +37,7 @@ export interface CallInfoPanelProps {
 
 export default function CallInfoPanel({
   className = '',
+  variant = 'host',
   internalLink,
   externalLink,
   dialInNumber,
@@ -42,13 +48,15 @@ export default function CallInfoPanel({
   fullWidth = false,
   onClose,
 }: CallInfoPanelProps) {
+  const isGuest = variant === 'guest';
+  const externalVisible = isGuest || externalEnabled === true;
   const [copied, setCopied] = useState<string | null>(null);
 
   const copy = async (key: string, value: string) => {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(key);
-      window.setTimeout(() => setCopied((c) => (c === key ? null : c)), 1400);
+      window.setTimeout(() => setCopied((c) => (c === key ? null : c)), 2000);
     } catch {
       // no-op: prototype
     }
@@ -77,45 +85,60 @@ export default function CallInfoPanel({
         )}
       </header>
 
+      {!isGuest && internalLink && (
+        <>
+          <section className={styles['call-info__section']}>
+            <div className={styles['call-info__eyebrow']}>INTERNAL LINK</div>
+            <div className={styles['call-info__kv']}>
+              <span className={styles['call-info__value']}>{internalLink}</span>
+              <IconButton
+                size="Small"
+                padding="Compact"
+                aria-label={
+                  copied === 'internal'
+                    ? 'Copied internal link'
+                    : 'Copy internal link'
+                }
+                icon={
+                  <Icon
+                    size="16"
+                    glyph={
+                      copied === 'internal' ? <CheckIcon /> : <ContentCopyIcon />
+                    }
+                  />
+                }
+                onClick={() => copy('internal', internalLink)}
+              />
+            </div>
+          </section>
+
+          <div className={styles['call-info__divider']} role="separator" />
+        </>
+      )}
+
       <section className={styles['call-info__section']}>
-        <div className={styles['call-info__eyebrow']}>INTERNAL LINK</div>
-        <div className={styles['call-info__kv']}>
-          <span className={styles['call-info__value']}>{internalLink}</span>
-          <IconButton
-            size="Small"
-            padding="Compact"
-            aria-label={
-              copied === 'internal' ? 'Copied internal link' : 'Copy internal link'
-            }
-            icon={<Icon size="16" glyph={<ContentCopyIcon />} />}
-            onClick={() => copy('internal', internalLink)}
-          />
-        </div>
-      </section>
+        {!isGuest && (
+          <div className={styles['call-info__toggle-row']}>
+            <Switch
+              className={styles['call-info__switch']}
+              size="Medium"
+              semiBold
+              checked={externalEnabled}
+              onChange={(e) => onExternalEnabledChange?.(e.currentTarget.checked)}
+            >
+              {fullWidth ? 'External participants' : 'Enable external participants'}
+            </Switch>
+            <IconButton
+              size="Small"
+              padding="Compact"
+              aria-label="External link settings"
+              icon={<Icon size="16" glyph={<CogOutlineIcon />} />}
+              onClick={onSettingsClick}
+            />
+          </div>
+        )}
 
-      <div className={styles['call-info__divider']} role="separator" />
-
-      <section className={styles['call-info__section']}>
-        <div className={styles['call-info__toggle-row']}>
-          <Switch
-            className={styles['call-info__switch']}
-            size="Medium"
-            semiBold
-            checked={externalEnabled}
-            onChange={(e) => onExternalEnabledChange(e.currentTarget.checked)}
-          >
-            {fullWidth ? 'External participants' : 'Enable external participants'}
-          </Switch>
-          <IconButton
-            size="Small"
-            padding="Compact"
-            aria-label="External link settings"
-            icon={<Icon size="16" glyph={<CogOutlineIcon />} />}
-            onClick={onSettingsClick}
-          />
-        </div>
-
-        {externalEnabled && (
+        {externalVisible && (
           <div className={styles['call-info__external']}>
             <div className={styles['call-info__group']}>
               <div className={styles['call-info__eyebrow']}>EXTERNAL LINK</div>
@@ -129,7 +152,14 @@ export default function CallInfoPanel({
                       ? 'Copied external link'
                       : 'Copy external link'
                   }
-                  icon={<Icon size="16" glyph={<ContentCopyIcon />} />}
+                  icon={
+                    <Icon
+                      size="16"
+                      glyph={
+                        copied === 'external' ? <CheckIcon /> : <ContentCopyIcon />
+                      }
+                    />
+                  }
                   onClick={() => copy('external', externalLink)}
                 />
               </div>
@@ -151,7 +181,12 @@ export default function CallInfoPanel({
             <Button
               size="Small"
               emphasis="Tertiary"
-              leadingIcon={<Icon size="12" glyph={<ContentCopyIcon />} />}
+              leadingIcon={
+                <Icon
+                  size="12"
+                  glyph={copied === 'full' ? <CheckIcon /> : <ContentCopyIcon />}
+                />
+              }
               onClick={() =>
                 copy(
                   'full',

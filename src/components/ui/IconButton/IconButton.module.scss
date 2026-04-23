@@ -44,10 +44,28 @@
   // Elements
   // ---------------------------------------------------------------------------
   &__icon-slot {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+  }
+
+  &__unread-badge {
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background-color: var(--sidebar-text-active-border);
+    box-shadow: 0 0 0 2px var(--center-channel-bg);
+    pointer-events: none;
+  }
+
+  &__count {
+    font-weight: var(--font-weight-semibold);
+    color: inherit;
   }
 
   // ---------------------------------------------------------------------------
@@ -57,6 +75,11 @@
     width: 24px;
     height: 24px;
     padding: var(--spacing-xxs);
+
+    .icon-button__count {
+      font-size: var(--font-size-75);
+      line-height: 12px;
+    }
 
     &.icon-button--padding-compact {
       width: 20px;
@@ -70,6 +93,11 @@
     height: 32px;
     padding: var(--spacing-xs);
 
+    .icon-button__count {
+      font-size: var(--font-size-100);
+      line-height: 14px;
+    }
+
     &.icon-button--padding-compact {
       width: 28px;
       height: 28px;
@@ -81,6 +109,11 @@
     width: 40px;
     height: 40px;
     padding: var(--spacing-s);
+
+    .icon-button__count {
+      font-size: var(--font-size-200);
+      line-height: 16px;
+    }
 
     &.icon-button--padding-compact {
       width: 36px;
@@ -94,11 +127,25 @@
     height: 48px;
     padding: var(--spacing-m);
 
+    .icon-button__count {
+      font-size: var(--font-size-300);
+      line-height: 18px;
+    }
+
     &.icon-button--padding-compact {
       width: 44px;
       height: 44px;
       padding: var(--spacing-s);
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Count modifier — switches from fixed-width square to auto-width with
+  // inline count after the icon. Figma: Count = True.
+  // ---------------------------------------------------------------------------
+  &--has-count {
+    width: auto;
+    gap: var(--spacing-xxxs);
   }
 
   // ---------------------------------------------------------------------------
@@ -115,6 +162,10 @@
     background-color: var(--button-bg);
     color: var(--button-color);
 
+    .icon-button__unread-badge {
+      box-shadow: 0 0 0 2px var(--button-bg);
+    }
+
     &:focus-visible {
       box-shadow:
         0 0 0 3px var(--center-channel-bg),
@@ -129,6 +180,10 @@
     background-color: transparent;
     color: rgba(var(--sidebar-text-rgb), 0.64);
 
+    .icon-button__unread-badge {
+      box-shadow: 0 0 0 2px var(--sidebar-header-bg);
+    }
+
     &:hover:not(:disabled) {
       background-color: rgba(var(--sidebar-text-rgb), 0.08);
       color: var(--sidebar-text);
@@ -139,6 +194,10 @@
     &.icon-button--toggled {
       background-color: var(--sidebar-text);
       color: var(--sidebar-bg);
+
+      .icon-button__unread-badge {
+        box-shadow: 0 0 0 2px var(--sidebar-text);
+      }
     }
     &:focus-visible {
       box-shadow:

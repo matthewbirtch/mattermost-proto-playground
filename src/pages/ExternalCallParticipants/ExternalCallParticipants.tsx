@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import type { FormEvent } from 'react';
 import InformationOutlineIcon from '@mattermost/compass-icons/components/information-outline';
 import ArrowCollapseIcon from '@mattermost/compass-icons/components/arrow-collapse';
+import ArrowRightIcon from '@mattermost/compass-icons/components/arrow-right';
+import PhoneInTalkIcon from '@mattermost/compass-icons/components/phone-in-talk';
 import MicrophoneOffIcon from '@mattermost/compass-icons/components/microphone-off';
 import MicrophoneIcon from '@mattermost/compass-icons/components/microphone';
 import MonitorOffIcon from '@mattermost/compass-icons/components/monitor-off';
@@ -20,7 +23,6 @@ import VideoOutlineIcon from '@mattermost/compass-icons/components/video-outline
 import ChevronRightIcon from '@mattermost/compass-icons/components/chevron-right';
 import CogOutlineIcon from '@mattermost/compass-icons/components/cog-outline';
 import UserAvatar from '@/components/ui/UserAvatar/UserAvatar';
-import Button from '@/components/ui/Button/Button';
 import CallParticipantAvatar from '@/components/ui/CallParticipantAvatar/CallParticipantAvatar';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
@@ -28,6 +30,8 @@ import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
 import Icon from '@/components/ui/Icon/Icon';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import MessageInput from '@/components/ui/MessageInput';
+import Button from '@/components/ui/Button/Button';
+import TextInput from '@/components/ui/TextInput/TextInput';
 import MenuItem from '@/components/ui/MenuItem/MenuItem';
 import MessageSeparator from '@/components/ui/MessageSeparator/MessageSeparator';
 import Post from '@/components/ui/Post/Post';
@@ -47,6 +51,7 @@ import avatarLukasMeyer from '@/assets/avatars/Lukas Meyer.png';
 import avatarMarco from '@/assets/avatars/Marco Rinaldi.png';
 import avatarSofia from '@/assets/avatars/Sofia Bauer.png';
 import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
+import welcomeBg from '@/assets/illustrations/call-welcome-bg.svg';
 import CallInfoPanel from './CallInfoPanel';
 import styles from './ExternalCallParticipants.module.scss';
 
@@ -80,17 +85,97 @@ const PARTICIPANTS: Participant[] = [
   { id: 'lucas', name: 'Lucas Meyer', avatarSrc: avatarLukasMeyer, muted: true },
 ];
 
+type SceneId = 'welcome' | 'widget' | 'popout' | 'guest';
+
+const SCENES: { id: SceneId; label: string }[] = [
+  { id: 'widget', label: 'Widget' },
+  { id: 'popout', label: 'Popout' },
+  { id: 'welcome', label: 'Welcome' },
+  { id: 'guest', label: 'Guest' },
+];
+
+function SceneSwitcher({
+  active,
+  onChange,
+}: {
+  active: SceneId;
+  onChange: (id: SceneId) => void;
+}) {
+  return (
+    <div
+      className={styles['scene-switcher']}
+      role="tablist"
+      aria-label="Prototype entry points"
+    >
+      <span className={styles['scene-switcher__label']}>Entry point</span>
+      <div className={styles['scene-switcher__segmented']}>
+        {SCENES.map((s) => {
+          const isActive = s.id === active;
+          return (
+            <button
+              key={s.id}
+              role="tab"
+              aria-selected={isActive}
+              className={`${styles['scene-switcher__tab']} ${
+                isActive ? styles['scene-switcher__tab--active'] : ''
+              }`}
+              onClick={() => onChange(s.id)}
+            >
+              {s.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function ExternalCallParticipants() {
   const [externalEnabled, setExternalEnabled] = useState(false);
-  const [popoutOpen, setPopoutOpen] = useState(false);
+  const [scene, setScene] = useState<SceneId>('widget');
   const [callInfoOpen, setCallInfoOpen] = useState(false);
   const [widgetOverlay, setWidgetOverlay] = useState<'menu' | 'info' | null>(null);
   const [muted, setMuted] = useState(true);
   const [handRaised, setHandRaised] = useState(false);
   const [sharing, setSharing] = useState(false);
 
+  const popoutOpen = scene === 'popout';
+
+  if (scene === 'welcome') {
+    return (
+      <>
+        <SceneSwitcher active={scene} onChange={setScene} />
+        <WelcomeScene
+          channelName="UX Design"
+          onJoin={() => setScene('guest')}
+        />
+      </>
+    );
+  }
+
+  if (scene === 'guest') {
+    return (
+      <>
+        <SceneSwitcher active={scene} onChange={setScene} />
+        <CallPopout
+          variant="fullscreen"
+          participants={PARTICIPANTS}
+          muted={muted}
+          onToggleMute={() => setMuted((m) => !m)}
+          onLeave={() => setScene('welcome')}
+          infoOpen={callInfoOpen}
+          onInfoToggle={() => setCallInfoOpen((v) => !v)}
+          externalEnabled={externalEnabled}
+          onExternalEnabledChange={setExternalEnabled}
+        />
+      </>
+    );
+  }
+
   return (
-    <div className={styles.page}>
+    <>
+      <SceneSwitcher active={scene} onChange={setScene} />
+      <div className={styles.page}>
       <div className={styles['page__global-header']}>
         <GlobalHeader
           product="Channels"
@@ -186,8 +271,8 @@ export default function ExternalCallParticipants() {
             onToggleHand={() => setHandRaised((h) => !h)}
             sharing={sharing}
             onToggleShare={() => setSharing((s) => !s)}
-            onExpand={() => setPopoutOpen(true)}
-            onLeave={() => setPopoutOpen(false)}
+            onExpand={() => setScene('popout')}
+            onLeave={() => setScene('widget')}
             overlay={widgetOverlay}
             onToggleMenu={() =>
               setWidgetOverlay((v) => (v == null ? 'menu' : null))
@@ -206,16 +291,78 @@ export default function ExternalCallParticipants() {
           muted={muted}
           onToggleMute={() => setMuted((m) => !m)}
           onCollapse={() => {
-            setPopoutOpen(false);
+            setScene('widget');
             setCallInfoOpen(false);
           }}
-          onLeave={() => setPopoutOpen(false)}
+          onLeave={() => setScene('widget')}
           infoOpen={callInfoOpen}
           onInfoToggle={() => setCallInfoOpen((v) => !v)}
           externalEnabled={externalEnabled}
           onExternalEnabledChange={setExternalEnabled}
         />
       )}
+      </div>
+    </>
+  );
+}
+
+// ─── Welcome Scene (guest join screen) ──────────────────────────────────────
+
+interface WelcomeSceneProps {
+  channelName: string;
+  onJoin: (name: string) => void;
+}
+
+function WelcomeScene({ channelName, onJoin }: WelcomeSceneProps) {
+  const [name, setName] = useState('');
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onJoin(name.trim());
+  };
+
+  return (
+    <div className={styles.welcome}>
+      <div
+        className={styles['welcome__texture']}
+        style={{ backgroundImage: `url(${welcomeBg})` }}
+        aria-hidden
+      />
+      <div className={styles['welcome__glow']} aria-hidden />
+      <form className={styles['welcome__card']} onSubmit={handleSubmit}>
+        <div className={styles['welcome__icon']}>
+          <Icon size="32" glyph={<PhoneInTalkIcon />} />
+        </div>
+
+        <div className={styles['welcome__heading']}>
+          <h1 className={styles['welcome__title']}>Welcome to the call</h1>
+          <p className={styles['welcome__subtitle']}>
+            Please enter your name to join the call
+          </p>
+        </div>
+
+        <div className={styles['welcome__form']}>
+          <TextInput
+            className={styles['welcome__input']}
+            label="Your name"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Button
+            type="submit"
+            emphasis="Primary"
+            size="Medium"
+            trailingIcon={<Icon size="16" glyph={<ArrowRightIcon />} />}
+          >
+            Join
+          </Button>
+        </div>
+
+        <p className={styles['welcome__footer']}>
+          You&rsquo;ll join as a guest
+        </p>
+      </form>
     </div>
   );
 }
@@ -226,12 +373,14 @@ interface CallPopoutProps {
   participants: Participant[];
   muted: boolean;
   onToggleMute: () => void;
-  onCollapse: () => void;
+  onCollapse?: () => void;
   onLeave: () => void;
   infoOpen: boolean;
   onInfoToggle: () => void;
   externalEnabled: boolean;
   onExternalEnabledChange: (v: boolean) => void;
+  /** 'windowed' renders inside a fake browser chrome. 'fullscreen' fills the frame. */
+  variant?: 'windowed' | 'fullscreen';
 }
 
 function CallPopout({
@@ -244,33 +393,41 @@ function CallPopout({
   onInfoToggle,
   externalEnabled,
   onExternalEnabledChange,
+  variant = 'windowed',
 }: CallPopoutProps) {
+  const fullscreen = variant === 'fullscreen';
+  const rootClass = `${styles.popout} ${
+    fullscreen ? styles['popout--fullscreen'] : ''
+  }`;
+
   return (
     <div
-      className={styles.popout}
+      className={rootClass}
       role="dialog"
       aria-modal="false"
       aria-label="Call - UX Design"
     >
-      <div className={styles['popout__app-header']}>
-        <span className={styles['popout__window-controls']}>
-          <button
-            type="button"
-            aria-label="Close call window"
-            className={`${styles['popout__window-dot']} ${styles['popout__window-dot--close']}`}
-            onClick={onCollapse}
-          />
-          <span
-            aria-hidden
-            className={`${styles['popout__window-dot']} ${styles['popout__window-dot--min']}`}
-          />
-          <span
-            aria-hidden
-            className={`${styles['popout__window-dot']} ${styles['popout__window-dot--max']}`}
-          />
-        </span>
-        <span className={styles['popout__app-title']}>Call - UX Design</span>
-      </div>
+      {!fullscreen && (
+        <div className={styles['popout__app-header']}>
+          <span className={styles['popout__window-controls']}>
+            <button
+              type="button"
+              aria-label="Close call window"
+              className={`${styles['popout__window-dot']} ${styles['popout__window-dot--close']}`}
+              onClick={onCollapse}
+            />
+            <span
+              aria-hidden
+              className={`${styles['popout__window-dot']} ${styles['popout__window-dot--min']}`}
+            />
+            <span
+              aria-hidden
+              className={`${styles['popout__window-dot']} ${styles['popout__window-dot--max']}`}
+            />
+          </span>
+          <span className={styles['popout__app-title']}>Call - UX Design</span>
+        </div>
+      )}
 
       <div className={styles['popout__container']}>
         <div className={styles['popout__header']}>
@@ -284,18 +441,20 @@ function CallPopout({
             <IconButton
               size="Small"
               style="Inverted"
-              toggled={infoOpen}
+              active={infoOpen}
               aria-label={infoOpen ? 'Close call info' : 'Open call info'}
               icon={<Icon size="16" glyph={<InformationOutlineIcon />} />}
               onClick={onInfoToggle}
             />
-            <IconButton
-              size="Small"
-              style="Inverted"
-              aria-label="Collapse call"
-              icon={<Icon size="16" glyph={<ArrowCollapseIcon />} />}
-              onClick={onCollapse}
-            />
+            {!fullscreen && (
+              <IconButton
+                size="Small"
+                style="Inverted"
+                aria-label="Collapse call"
+                icon={<Icon size="16" glyph={<ArrowCollapseIcon />} />}
+                onClick={onCollapse}
+              />
+            )}
           </div>
 
           {infoOpen && (
@@ -330,26 +489,26 @@ function CallPopout({
 
         <div className={styles['popout__controls']}>
           <div className={styles['popout__controls-left']}>
-            <Button
+            <IconButton
               size="Medium"
-              appearance="Inverted"
-              emphasis="Tertiary"
-              leadingIcon={
-                <Icon size="20" glyph={<AccountMultipleOutlineIcon />} />
-              }
+              style="Inverted"
+              count={participants.length}
               aria-label={`Participants (${participants.length})`}
-            >
-              {participants.length}
-            </Button>
+              icon={<Icon size="20" glyph={<AccountMultipleOutlineIcon />} />}
+            />
           </div>
 
           <div className={styles['popout__controls-middle']}>
             <IconButton
               size="Medium"
               style="Inverted"
-              toggled={muted}
               aria-label={muted ? 'Unmute' : 'Mute'}
-              icon={<Icon size="20" glyph={<MicrophoneOffIcon />} />}
+              icon={
+                <Icon
+                  size="20"
+                  glyph={muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
+                />
+              }
               onClick={onToggleMute}
             />
             <IconButton
@@ -486,7 +645,7 @@ function CallWidget({
             <IconButton
               size="Small"
               padding="Compact"
-              toggled={muted}
+              active={muted}
               destructive={muted}
               aria-label={muted ? 'Unmute microphone' : 'Mute microphone'}
               icon={
@@ -500,7 +659,7 @@ function CallWidget({
             <IconButton
               size="Small"
               padding="Compact"
-              toggled={handRaised}
+              active={handRaised}
               aria-label={handRaised ? 'Lower hand' : 'Raise hand'}
               icon={
                 <Icon
@@ -513,7 +672,7 @@ function CallWidget({
             <IconButton
               size="Small"
               padding="Compact"
-              toggled={sharing}
+              active={sharing}
               aria-label={sharing ? 'Stop sharing screen' : 'Share screen'}
               icon={
                 <Icon
@@ -526,7 +685,7 @@ function CallWidget({
             <IconButton
               size="Small"
               padding="Compact"
-              toggled={overlay === 'menu'}
+              active={overlay === 'menu'}
               aria-label={overlay === 'menu' ? 'Close call menu' : 'Open call menu'}
               icon={<Icon size="16" glyph={<DotsHorizontalIcon />} />}
               onClick={onToggleMenu}

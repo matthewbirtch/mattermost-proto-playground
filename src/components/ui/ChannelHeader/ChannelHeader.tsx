@@ -148,42 +148,34 @@ export default function ChannelHeader({
 
           <div className={styles['channel-header__stat-icons']}>
             {muted && (
-              <button
-                className={styles['channel-header__stat-btn']}
-                type="button"
+              <IconButton
+                size="X-Small"
                 aria-label="Notifications muted"
-              >
-                <Icon size="12" glyph={<BellOffOutlineIcon />} />
-              </button>
+                icon={<Icon size="12" glyph={<BellOffOutlineIcon />} />}
+              />
             )}
             {showMembers && (
-              <button
-                className={styles['channel-header__stat-btn']}
-                type="button"
+              <IconButton
+                size="X-Small"
                 aria-label={`${memberCount} members`}
-              >
-                <Icon size="12" glyph={<AccountOutlineIcon />} />
-                <span className={styles['channel-header__stat-count']}>{memberCount}</span>
-              </button>
+                count={memberCount}
+                icon={<Icon size="12" glyph={<AccountOutlineIcon />} />}
+              />
             )}
             {pinnedCount != null && (
-              <button
-                className={styles['channel-header__stat-btn']}
-                type="button"
+              <IconButton
+                size="X-Small"
                 aria-label={`${pinnedCount} pinned messages`}
-              >
-                <Icon size="12" glyph={<PinOutlineIcon />} />
-                <span className={styles['channel-header__stat-count']}>{pinnedCount}</span>
-              </button>
+                count={pinnedCount}
+                icon={<Icon size="12" glyph={<PinOutlineIcon />} />}
+              />
             )}
             {showFiles && (
-              <button
-                className={styles['channel-header__stat-btn']}
-                type="button"
+              <IconButton
+                size="X-Small"
                 aria-label="Files"
-              >
-                <Icon size="12" glyph={<FileTextOutlineIcon />} />
-              </button>
+                icon={<Icon size="12" glyph={<FileTextOutlineIcon />} />}
+              />
             )}
           </div>
         </div>

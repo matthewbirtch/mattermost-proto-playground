@@ -763,6 +763,74 @@ export default function Components() {
               icon={<Icon glyph={<GlobeIcon />} size="20" />}
             />
           </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>
+              Count
+            </span>
+            <IconButton
+              aria-label="12 notifications, X-Small"
+              count={12}
+              icon={<Icon glyph={<GlobeIcon />} size="12" />}
+              size="X-Small"
+            />
+            <IconButton
+              aria-label="48 notifications, Small"
+              count={48}
+              icon={<Icon glyph={<GlobeIcon />} size="16" />}
+              size="Small"
+            />
+            <IconButton
+              aria-label="425 notifications, Medium"
+              count={425}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+            />
+            <IconButton
+              aria-label="9 notifications, Large"
+              count={9}
+              icon={<Icon glyph={<GlobeIcon />} size="24" />}
+              size="Large"
+            />
+          </div>
+          <div className={styles['components__button-row']}>
+            <span className={styles['components__instance-label']}>
+              Unread badge
+            </span>
+            <IconButton
+              aria-label="Unread, X-Small"
+              icon={<Icon glyph={<GlobeIcon />} size="12" />}
+              size="X-Small"
+              unreadBadge
+            />
+            <IconButton
+              aria-label="Unread, Small"
+              icon={<Icon glyph={<GlobeIcon />} size="16" />}
+              size="Small"
+              unreadBadge
+            />
+            <IconButton
+              aria-label="Unread, Medium"
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+              unreadBadge
+            />
+            <IconButton
+              aria-label="Unread, Large"
+              icon={<Icon glyph={<GlobeIcon />} size="24" />}
+              size="Large"
+              unreadBadge
+            />
+            <IconButton
+              aria-label="Unread, toggled"
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+              toggled
+              unreadBadge
+            />
+            <IconButton
+              aria-label="Unread with count"
+              count={3}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+              unreadBadge
+            />
+          </div>
           <div
             className={[
               styles['components__button-row'],
@@ -776,6 +844,18 @@ export default function Components() {
               aria-label="Inverted icon button"
               icon={<Icon glyph={<GlobeIcon />} size="20" />}
               style="Inverted"
+            />
+            <IconButton
+              aria-label="Inverted with count"
+              count={7}
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+              style="Inverted"
+            />
+            <IconButton
+              aria-label="Inverted with unread badge"
+              icon={<Icon glyph={<GlobeIcon />} size="20" />}
+              style="Inverted"
+              unreadBadge
             />
           </div>
         </div>

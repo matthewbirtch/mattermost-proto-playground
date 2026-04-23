@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import InformationOutlineIcon from '@mattermost/compass-icons/components/information-outline';
 import ArrowCollapseIcon from '@mattermost/compass-icons/components/arrow-collapse';
@@ -93,9 +93,10 @@ const PARTICIPANTS: Participant[] = [
   { id: 'lucas', name: 'Lucas Meyer', avatarSrc: avatarLukasMeyer, muted: true },
 ];
 
-// Guest view: drop the last two internal participants and show an external-link
-// guest + a dial-in caller instead, matching the external-participants Figma.
-const GUEST_PARTICIPANTS: Participant[] = [
+// Full call roster shown to the host (widget + popout) and, with the same
+// externals, to the guest view. Drops the last two internal participants and
+// adds an external-link guest + a dial-in caller, matching the Figma.
+const CALL_PARTICIPANTS: Participant[] = [
   ...PARTICIPANTS.slice(0, -2),
   {
     id: 'external-james',
@@ -158,6 +159,39 @@ function SceneSwitcher({
   );
 }
 
+// --duration-quick is 150ms; keep in sync if that token changes.
+const POPOVER_TRANSITION_MS = 150;
+
+// Keeps a popover mounted for the duration of its exit animation so the close
+// transition can play before React unmounts the node. See CLAUDE.md:
+// "Animation: popover panel open/close".
+function usePopoverTransition(open: boolean) {
+  const [mounted, setMounted] = useState(open);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      // Two rAFs: first yields so React commits the mounted-but-hidden state,
+      // second yields so the browser paints it — then we flip `visible` and the
+      // CSS transition has a "before" value to animate from.
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setVisible(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        if (raf2) cancelAnimationFrame(raf2);
+      };
+    }
+    setVisible(false);
+    const t = window.setTimeout(() => setMounted(false), POPOVER_TRANSITION_MS);
+    return () => window.clearTimeout(t);
+  }, [open]);
+
+  return { mounted, visible };
+}
+
 export default function ExternalCallParticipants() {
   const [externalEnabled, setExternalEnabled] = useState(false);
   const [scene, setScene] = useState<SceneId>('widget');
@@ -172,7 +206,7 @@ export default function ExternalCallParticipants() {
 
   const popoutOpen = scene === 'popout';
 
-  const guestParticipants: Participant[] = GUEST_PARTICIPANTS.map((p) =>
+  const guestParticipants: Participant[] = CALL_PARTICIPANTS.map((p) =>
     p.id === 'external-james' && guestName.trim()
       ? { ...p, name: guestName.trim() }
       : p,
@@ -303,7 +337,7 @@ export default function ExternalCallParticipants() {
       {!popoutOpen && (
         <div className={styles['page__widget-wrap']}>
           <CallWidget
-            participants={PARTICIPANTS}
+            participants={CALL_PARTICIPANTS}
             currentUserId="leonard"
             talkerName="Leonard R."
             talkerAvatarSrc={avatarLeonard}
@@ -333,7 +367,7 @@ export default function ExternalCallParticipants() {
 
       {popoutOpen && (
         <CallPopout
-          participants={PARTICIPANTS}
+          participants={CALL_PARTICIPANTS}
           currentUserId="leonard"
           muted={muted}
           onToggleMute={() => setMuted((m) => !m)}
@@ -450,6 +484,7 @@ function CallPopout({
 }: CallPopoutProps) {
   const fullscreen = variant === 'fullscreen';
   const [participantsOpen, setParticipantsOpen] = useState(false);
+  const infoTransition = usePopoverTransition(infoOpen);
   const rootClass = `${styles.popout} ${
     fullscreen ? styles['popout--fullscreen'] : ''
   }`;
@@ -511,8 +546,14 @@ function CallPopout({
             )}
           </div>
 
-          {infoOpen && (
-            <div className={styles['popout__info-popover']}>
+          {infoTransition.mounted && (
+            <div
+              className={`${styles['popout__info-popover']} ${
+                infoTransition.visible
+                  ? styles['popout__info-popover--visible']
+                  : ''
+              }`}
+            >
               <CallInfoPanel
                 variant={guestView ? 'guest' : 'host'}
                 internalLink={INTERNAL_LINK}
@@ -855,6 +896,10 @@ function CallWidget({
   ]
     .filter(Boolean)
     .join(' ');
+
+  const menuTransition = usePopoverTransition(overlay === 'menu');
+  const infoTransition = usePopoverTransition(overlay === 'info');
+  const participantsTransition = usePopoverTransition(overlay === 'participants');
   return (
     <div className={styles.widget} role="region" aria-label="Active call">
       <div className={styles['widget__body']}>
@@ -958,8 +1003,12 @@ function CallWidget({
         </div>
       </div>
 
-      {overlay === 'menu' && (
-        <div className={styles['widget__popover']}>
+      {menuTransition.mounted && (
+        <div
+          className={`${styles['widget__popover']} ${
+            menuTransition.visible ? styles['widget__popover--visible'] : ''
+          }`}
+        >
           <div className={styles['widget__menu']} role="menu">
             <MenuItem
               label="Audio output"
@@ -1004,8 +1053,12 @@ function CallWidget({
         </div>
       )}
 
-      {overlay === 'info' && (
-        <div className={styles['widget__popover']}>
+      {infoTransition.mounted && (
+        <div
+          className={`${styles['widget__popover']} ${
+            infoTransition.visible ? styles['widget__popover--visible'] : ''
+          }`}
+        >
           <CallInfoPanel
             fullWidth
             onClose={onCloseCallInfo}
@@ -1019,8 +1072,14 @@ function CallWidget({
         </div>
       )}
 
-      {overlay === 'participants' && (
-        <div className={styles['widget__popover']}>
+      {participantsTransition.mounted && (
+        <div
+          className={`${styles['widget__popover']} ${
+            participantsTransition.visible
+              ? styles['widget__popover--visible']
+              : ''
+          }`}
+        >
           <ParticipantsPanel
             variant="widget"
             participants={participants}

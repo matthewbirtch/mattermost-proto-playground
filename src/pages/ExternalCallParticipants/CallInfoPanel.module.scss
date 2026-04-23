@@ -12,6 +12,19 @@
 
   &--full-width {
     width: 100%;
+    padding: var(--spacing-xxxs) 0 var(--spacing-s);
+
+    .call-info__header {
+      padding: var(--spacing-xxxs) var(--spacing-l);
+    }
+
+    .call-info__section {
+      padding: var(--spacing-xxxs) var(--spacing-l);
+    }
+
+    .call-info__external {
+      gap: var(--spacing-s);
+    }
   }
 
   &__header {
@@ -84,7 +97,7 @@
   &__external {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xxl);
+    gap: var(--spacing-l);
   }
 
   &__group {

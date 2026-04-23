@@ -1,14 +1,18 @@
 import type { ImgHTMLAttributes } from 'react';
 import { toKebab } from '@/utils/string';
-import Icon from '@/components/ui/Icon/Icon';
+import Icon, { type IconSize } from '@/components/ui/Icon/Icon';
 import MicrophoneOffIcon from '@mattermost/compass-icons/components/microphone-off';
 import MicrophoneIcon from '@mattermost/compass-icons/components/microphone';
 import HandRightIcon from '@mattermost/compass-icons/components/hand-right';
+import AccountIcon from '@mattermost/compass-icons/components/account-outline';
+import PhoneIcon from '@mattermost/compass-icons/components/phone';
 import styles from './CallParticipantAvatar.module.scss';
 
 export type CallParticipantAvatarSize = 'Large' | 'Medium' | 'Small' | 'XS';
 
 export type CallParticipantMuteState = 'muted' | 'unmuted';
+
+export type CallParticipantKind = 'user' | 'external-link' | 'dial-in';
 
 export interface CallParticipantAvatarProps extends Omit<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -18,8 +22,10 @@ export interface CallParticipantAvatarProps extends Omit<
   alt: string;
   /** Optional CSS class name. */
   className?: string;
-  /** Image URL for the participant. */
-  src: string;
+  /** Image URL for the participant. Ignored when `kind` is not 'user'. */
+  src?: string;
+  /** Participant kind. 'external-link' shows a silhouette fallback; 'dial-in' shows a phone glyph on a green circle. Default: 'user'. */
+  kind?: CallParticipantKind;
   /** Size variant. Default: Large. */
   size?: CallParticipantAvatarSize;
   /** Participant's display name shown below the avatar. */
@@ -28,6 +34,8 @@ export interface CallParticipantAvatarProps extends Omit<
   muteState?: CallParticipantMuteState;
   /** When true, shows the host label. */
   host?: boolean;
+  /** When true, shows the EXTERNAL label (for external-link and dial-in participants). */
+  external?: boolean;
   /** When true, shows the talking indicator ring. */
   talking?: boolean;
   /** When true, shows the raised-hand overlay. */
@@ -54,7 +62,9 @@ const SIZE_PX: Record<CallParticipantAvatarSize, number> = {
 export default function CallParticipantAvatar({
   alt,
   className = '',
+  external = false,
   host = false,
+  kind = 'user',
   muteState,
   name,
   raisedHand = false,
@@ -65,11 +75,23 @@ export default function CallParticipantAvatar({
   ...imgProps
 }: CallParticipantAvatarProps) {
   const sizeClass = styles[`call-participant-avatar--size-${toKebab(size)}`];
-  const rootClass = [styles['call-participant-avatar'], sizeClass, className]
+  const kindClass =
+    kind === 'user'
+      ? ''
+      : styles[`call-participant-avatar--kind-${toKebab(kind)}`];
+  const rootClass = [
+    styles['call-participant-avatar'],
+    sizeClass,
+    kindClass,
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 
   const px = SIZE_PX[size];
+
+  const glyphSize: IconSize =
+    size === 'Large' ? '52' : size === 'Medium' ? '40' : size === 'Small' ? '32' : '28';
 
   return (
     <div className={rootClass}>
@@ -77,14 +99,28 @@ export default function CallParticipantAvatar({
         {talking && (
           <span className={styles['call-participant-avatar__talking-ring']} aria-hidden />
         )}
-        <img
-          {...imgProps}
-          alt={alt}
-          className={styles['call-participant-avatar__image']}
-          src={src}
-          width={px}
-          height={px}
-        />
+        {kind === 'user' ? (
+          <img
+            {...imgProps}
+            alt={alt}
+            className={styles['call-participant-avatar__image']}
+            src={src}
+            width={px}
+            height={px}
+          />
+        ) : (
+          <span
+            role="img"
+            aria-label={alt}
+            className={styles['call-participant-avatar__fallback']}
+            style={{ width: px, height: px }}
+          >
+            <Icon
+              size={glyphSize}
+              glyph={kind === 'dial-in' ? <PhoneIcon /> : <AccountIcon />}
+            />
+          </span>
+        )}
         {muteState === 'muted' && (
           <span
             className={[
@@ -135,6 +171,11 @@ export default function CallParticipantAvatar({
       )}
       {host && (
         <span className={styles['call-participant-avatar__host-label']}>HOST</span>
+      )}
+      {external && (
+        <span className={styles['call-participant-avatar__host-label']}>
+          EXTERNAL
+        </span>
       )}
     </div>
   );

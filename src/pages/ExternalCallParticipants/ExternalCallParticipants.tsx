@@ -162,7 +162,9 @@ export default function ExternalCallParticipants() {
   const [externalEnabled, setExternalEnabled] = useState(false);
   const [scene, setScene] = useState<SceneId>('widget');
   const [callInfoOpen, setCallInfoOpen] = useState(false);
-  const [widgetOverlay, setWidgetOverlay] = useState<'menu' | 'info' | null>(null);
+  const [widgetOverlay, setWidgetOverlay] = useState<
+    'menu' | 'info' | 'participants' | null
+  >(null);
   const [muted, setMuted] = useState(true);
   const [handRaised, setHandRaised] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -301,7 +303,8 @@ export default function ExternalCallParticipants() {
       {!popoutOpen && (
         <div className={styles['page__widget-wrap']}>
           <CallWidget
-            participantCount={PARTICIPANTS.length}
+            participants={PARTICIPANTS}
+            currentUserId="leonard"
             talkerName="Leonard R."
             talkerAvatarSrc={avatarLeonard}
             channelName="UX Design"
@@ -315,7 +318,10 @@ export default function ExternalCallParticipants() {
             onLeave={() => setScene('widget')}
             overlay={widgetOverlay}
             onToggleMenu={() =>
-              setWidgetOverlay((v) => (v == null ? 'menu' : null))
+              setWidgetOverlay((v) => (v === 'menu' ? null : 'menu'))
+            }
+            onToggleParticipants={() =>
+              setWidgetOverlay((v) => (v === 'participants' ? null : 'participants'))
             }
             onOpenCallInfo={() => setWidgetOverlay('info')}
             onCloseCallInfo={() => setWidgetOverlay(null)}
@@ -627,22 +633,30 @@ function CallPopout({
 interface ParticipantsPanelProps {
   participants: Participant[];
   currentUserId?: string;
-  onClose: () => void;
+  onClose?: () => void;
+  /** 'widget' renders a compact variant for the docked call widget popover. */
+  variant?: 'default' | 'widget';
 }
 
 function ParticipantsPanel({
   participants,
   currentUserId,
   onClose,
+  variant = 'default',
 }: ParticipantsPanelProps) {
   const internal = participants.filter((p) => !p.external);
   const external = participants.filter((p) => p.external);
+  const isWidget = variant === 'widget';
+
+  const rootClass = [
+    styles['participants-panel'],
+    isWidget ? styles['participants-panel--widget'] : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <aside
-      className={styles['participants-panel']}
-      aria-label="Participants"
-    >
+    <aside className={rootClass} aria-label="Participants">
       <div className={styles['participants-panel__header']}>
         <h2 className={styles['participants-panel__title']}>Participants</h2>
         <div className={styles['participants-panel__header-actions']}>
@@ -653,12 +667,14 @@ function ParticipantsPanel({
           >
             Mute all
           </Button>
-          <IconButton
-            size="Small"
-            aria-label="Close participants"
-            icon={<Icon size="16" glyph={<CloseIcon />} />}
-            onClick={onClose}
-          />
+          {!isWidget && onClose && (
+            <IconButton
+              size="Small"
+              aria-label="Close participants"
+              icon={<Icon size="16" glyph={<CloseIcon />} />}
+              onClick={onClose}
+            />
+          )}
         </div>
       </div>
 
@@ -787,7 +803,8 @@ function ParticipantListItem({
 // ─── Docked Call Widget (widget version of Call Info) ───────────────────────
 
 interface CallWidgetProps {
-  participantCount: number;
+  participants: Participant[];
+  currentUserId?: string;
   talkerName: string;
   talkerAvatarSrc: string;
   channelName: string;
@@ -799,8 +816,9 @@ interface CallWidgetProps {
   onToggleShare: () => void;
   onExpand: () => void;
   onLeave: () => void;
-  overlay: 'menu' | 'info' | null;
+  overlay: 'menu' | 'info' | 'participants' | null;
   onToggleMenu: () => void;
+  onToggleParticipants: () => void;
   onOpenCallInfo: () => void;
   onCloseCallInfo: () => void;
   externalEnabled: boolean;
@@ -808,7 +826,8 @@ interface CallWidgetProps {
 }
 
 function CallWidget({
-  participantCount,
+  participants,
+  currentUserId,
   talkerName,
   talkerAvatarSrc,
   channelName,
@@ -822,11 +841,20 @@ function CallWidget({
   onLeave,
   overlay,
   onToggleMenu,
+  onToggleParticipants,
   onOpenCallInfo,
   onCloseCallInfo,
   externalEnabled,
   onExternalEnabledChange,
 }: CallWidgetProps) {
+  const participantCount = participants.length;
+  const participantsActive = overlay === 'participants';
+  const participantsButtonClass = [
+    styles['widget__participants'],
+    participantsActive ? styles['widget__participants--active'] : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
   return (
     <div className={styles.widget} role="region" aria-label="Active call">
       <div className={styles['widget__body']}>
@@ -860,8 +888,10 @@ function CallWidget({
         <div className={styles['widget__controls']}>
           <button
             type="button"
-            className={styles['widget__participants']}
+            className={participantsButtonClass}
             aria-label={`${participantCount} participants`}
+            aria-expanded={participantsActive}
+            onClick={onToggleParticipants}
           >
             <Icon size="16" glyph={<AccountMultipleOutlineIcon />} />
             <span>{participantCount}</span>
@@ -985,6 +1015,16 @@ function CallWidget({
             dialInPin={DIAL_IN_PIN}
             externalEnabled={externalEnabled}
             onExternalEnabledChange={onExternalEnabledChange}
+          />
+        </div>
+      )}
+
+      {overlay === 'participants' && (
+        <div className={styles['widget__popover']}>
+          <ParticipantsPanel
+            variant="widget"
+            participants={participants}
+            currentUserId={currentUserId}
           />
         </div>
       )}

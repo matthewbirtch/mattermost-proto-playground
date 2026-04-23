@@ -126,7 +126,7 @@
   left: 0;
   right: 0;
   width: calc((100% - 96px) * 2 / 3);
-  min-width: 728px;
+  min-width: 1024px;
   margin-inline: auto;
   z-index: 10;
   display: flex;
@@ -253,6 +253,20 @@
     top: calc(100% - var(--spacing-xxxs));
     right: 36px;
     z-index: 5;
+    opacity: 0;
+    transform: scale(0.9);
+    transform-origin: top right;
+    transition:
+      opacity var(--duration-quick) var(--ease-exit),
+      transform var(--duration-quick) var(--ease-exit);
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity var(--duration-quick) var(--ease-entrance),
+        transform var(--duration-quick) var(--ease-entrance);
+    }
   }
 
   &__stage {
@@ -266,10 +280,11 @@
   &__room {
     flex: 1 1 auto;
     min-width: 0;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-l) 10%;
+    padding: var(--spacing-l) 8%;
     background: rgba(var(--button-color-rgb), 0.08);
     border-radius: var(--radius-m);
   }
@@ -712,6 +727,20 @@
     bottom: calc(100% + var(--spacing-xs));
     z-index: 5;
     border-radius: var(--radius-m);
+    opacity: 0;
+    transform: scale(0.9);
+    transform-origin: bottom center;
+    transition:
+      opacity var(--duration-quick) var(--ease-exit),
+      transform var(--duration-quick) var(--ease-exit);
+
+    &--visible {
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity var(--duration-quick) var(--ease-entrance),
+        transform var(--duration-quick) var(--ease-entrance);
+    }
   }
 
   &__menu {

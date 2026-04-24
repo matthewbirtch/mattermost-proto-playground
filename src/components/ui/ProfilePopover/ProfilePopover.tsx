@@ -33,6 +33,19 @@ export interface ProfilePopoverLocalTime {
   hourDifference?: string;
 }
 
+export interface ProfilePopoverPhone {
+  number: string;
+  /** Category label, e.g. "NIPR", "NIPR Conf Bridge", "SIPR Extension". */
+  label?: string;
+  /** Trunk / gateway identifier, e.g. "DSN", "DISN Gateway". */
+  sipTrunk?: string;
+  /** Per-row phone glyph; overrides the popover-level `phoneIcon` when set. */
+  icon?: ReactNode;
+  href?: string;
+  /** When provided, the number click runs this handler instead of navigating. */
+  onClick?: () => void;
+}
+
 export interface ProfilePopoverProps {
   /** Whose profile is shown. Default: 'Others'. */
   user?: ProfilePopoverUser;
@@ -48,15 +61,8 @@ export interface ProfilePopoverProps {
   title?: string;
   /** Email address. */
   email?: string;
-  /** Phone row shown under the email. */
-  phone?: {
-    number: string;
-    /** Secondary line beneath the number, e.g. "DISN Gateway • LB-4". */
-    sub?: string;
-    href?: string;
-    /** When provided, the number click runs this handler instead of navigating. */
-    onClick?: () => void;
-  };
+  /** Phone rows shown under the email. */
+  phones?: ProfilePopoverPhone[];
   /** Caption above the name, e.g. "Last online 6 hrs ago". */
   lastOnline?: string;
   /** Role tag shown at the very top, e.g. "System Admin". */
@@ -124,7 +130,7 @@ export default function ProfilePopover({
   username,
   title,
   email,
-  phone,
+  phones,
   lastOnline,
   role,
   localTime,
@@ -154,8 +160,9 @@ export default function ProfilePopover({
     .filter(Boolean)
     .join(' ');
 
+  const hasPhones = Boolean(phones && phones.length > 0);
   const hasTitlesBlock =
-    Boolean(email) || Boolean(phone) || Boolean(sharedOrg) || staff || coreCommitter || Boolean(githubHandle);
+    Boolean(email) || hasPhones || Boolean(sharedOrg) || staff || coreCommitter || Boolean(githubHandle);
   const hasSecondary = hasTitlesBlock || Boolean(localTime) || Boolean(customStatus);
 
   return (
@@ -201,41 +208,46 @@ export default function ProfilePopover({
                   {email}
                 </MetaRow>
               )}
-              {phone && (
-                <div
-                  className={[
-                    styles['profile-popover__meta-item'],
-                    styles['profile-popover__meta-item--stacked'],
-                  ].join(' ')}
-                >
-                  <span className={styles['profile-popover__meta-icon']} aria-hidden>
-                    <Icon size="16" glyph={phoneIcon ?? <PhoneIcon />} />
-                  </span>
-                  <div className={styles['profile-popover__phone-body']}>
-                    {phone.onClick ? (
-                      <button
-                        type="button"
-                        className={styles['profile-popover__meta-link']}
-                        onClick={phone.onClick}
-                      >
-                        {phone.number}
-                      </button>
-                    ) : (
-                      <a
-                        className={styles['profile-popover__meta-link']}
-                        href={phone.href ?? `tel:${phone.number}`}
-                      >
-                        {phone.number}
-                      </a>
-                    )}
-                    {phone.sub && (
-                      <span className={styles['profile-popover__phone-sub']}>
-                        {phone.sub}
-                      </span>
-                    )}
+              {phones?.map((p, i) => {
+                const subParts = [p.label, p.sipTrunk].filter(Boolean);
+                const subText = subParts.join(' • ');
+                return (
+                  <div
+                    key={`${p.number}-${i}`}
+                    className={[
+                      styles['profile-popover__meta-item'],
+                      styles['profile-popover__meta-item--stacked'],
+                    ].join(' ')}
+                  >
+                    <span className={styles['profile-popover__meta-icon']} aria-hidden>
+                      <Icon size="16" glyph={p.icon ?? phoneIcon ?? <PhoneIcon />} />
+                    </span>
+                    <div className={styles['profile-popover__phone-body']}>
+                      {subText && (
+                        <span className={styles['profile-popover__phone-sub']}>
+                          {subText}
+                        </span>
+                      )}
+                      {p.onClick ? (
+                        <button
+                          type="button"
+                          className={styles['profile-popover__meta-link']}
+                          onClick={p.onClick}
+                        >
+                          {p.number}
+                        </button>
+                      ) : (
+                        <a
+                          className={styles['profile-popover__meta-link']}
+                          href={p.href ?? `tel:${p.number}`}
+                        >
+                          {p.number}
+                        </a>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })}
               {sharedOrg && (
                 <MetaRow
                   icon={<Icon size="16" glyph={<CircleMultipleOutlineIcon />} />}

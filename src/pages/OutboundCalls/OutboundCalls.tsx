@@ -16,6 +16,7 @@ import AccountPlusOutlineIcon from '@mattermost/compass-icons/components/account
 import AccountMultipleOutlineIcon from '@mattermost/compass-icons/components/account-multiple-outline';
 import DialpadIcon from '@/components/icons/DialpadIcon';
 import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
+import PhoneLockIcon from '@/components/icons/PhoneLockIcon';
 import Icon, { SVG_SIZE_MAP } from '@/components/ui/Icon/Icon';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import MenuItem from '@/components/ui/MenuItem/MenuItem';
@@ -45,12 +46,13 @@ import styles from './OutboundCalls.module.scss';
 
 // ── Mock data ───────────────────────────────────────────────────────────────
 
-type PhoneKind = 'work' | 'mobile';
+type PhoneKind = 'standard' | 'conference' | 'secure';
 type Phone = {
   number: string;
+  /** Category label, e.g. "NIPR", "NIPR Conf Bridge", "SIPR Extension". */
   label: string;
   kind: PhoneKind;
-  secure: boolean;
+  /** Trunk / gateway identifier shown next to the label, e.g. "DSN", "DSN Gateway". */
   sipTrunk?: string;
 };
 type Contact = {
@@ -77,21 +79,25 @@ const CONTACTS: Contact[] = [
     online: true,
     localTime: { time: '11:42 PM', timezone: 'JST', hourDifference: '13 hrs ahead' },
     phones: [
-      { number: '+1 (415) 555-0142', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-4' },
-      { number: '+81 3 5555 0188', label: 'Mobile', kind: 'mobile', secure: false, sipTrunk: 'Twilio • APAC-1' },
+      { number: '+1 (415) 555-0142', label: 'NIPR', kind: 'standard', sipTrunk: 'DSN' },
+      { number: '1-888-555-0188,,*2274#', label: 'NIPR Conf Bridge', kind: 'conference' },
     ],
   },
   {
     id: 'leonard',
     name: 'Leonard Riley',
     handle: '@leonard',
-    email: 'leonard.riley@mattermost.com',
-    title: 'Engineering Manager',
+    email: 'leonard.riley@dia.mil',
+    title: 'Targeting Analyst',
     role: 'System Admin',
     avatar: avatarLeonard,
     online: true,
     localTime: { time: '10:42 AM', timezone: 'EST' },
-    phones: [{ number: '+1 (212) 555-0199', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-4' }],
+    phones: [
+      { number: '555-0174', label: 'NIPR', kind: 'standard', sipTrunk: 'DSN' },
+      { number: '1-888-333-3343,,*3456#', label: 'NIPR Conf Bridge', kind: 'conference' },
+      { number: 'Ext. 44260', label: 'SIPR Extension', kind: 'secure', sipTrunk: 'DSN Gateway' },
+    ],
   },
   {
     id: 'danielle',
@@ -103,8 +109,8 @@ const CONTACTS: Contact[] = [
     online: false,
     localTime: { time: '3:42 PM', timezone: 'WAT', hourDifference: '5 hrs ahead' },
     phones: [
-      { number: '+234 1 555 0116', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-2' },
-      { number: '+234 803 555 8890', label: 'Mobile', kind: 'mobile', secure: false, sipTrunk: 'Twilio • EMEA-2' },
+      { number: '+234 1 555 0116', label: 'NIPR', kind: 'standard', sipTrunk: 'DSN' },
+      { number: 'Ext. 51820', label: 'SIPR Extension', kind: 'secure', sipTrunk: 'DSN Gateway' },
     ],
   },
   {
@@ -116,7 +122,7 @@ const CONTACTS: Contact[] = [
     avatar: avatarArjunPatel,
     online: true,
     localTime: { time: '2:42 PM', timezone: 'GMT', hourDifference: '4 hrs ahead' },
-    phones: [{ number: '+44 20 7946 0814', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-1' }],
+    phones: [{ number: '+44 20 7946 0814', label: 'NIPR', kind: 'standard', sipTrunk: 'DSN' }],
   },
   {
     id: 'ethan',
@@ -127,7 +133,7 @@ const CONTACTS: Contact[] = [
     avatar: avatarEthanBrooks,
     online: false,
     localTime: { time: '9:42 AM', timezone: 'CST', hourDifference: '1 hr behind' },
-    phones: [{ number: '+1 (512) 555-0163', label: 'Work', kind: 'work', secure: true, sipTrunk: 'DISN Gateway • LB-3' }],
+    phones: [{ number: '+1 (512) 555-0163', label: 'NIPR', kind: 'standard', sipTrunk: 'DSN' }],
   },
 ];
 
@@ -311,10 +317,21 @@ type StartCallAction =
       type: 'phone';
       label: string;
       number: string;
-      secure: boolean;
+      kind: PhoneKind;
+      sipTrunk?: string;
       contactId: string;
       phoneIndex: number;
     };
+
+function phoneGlyphFor(kind: PhoneKind, secureClass?: string): React.ReactElement {
+  if (kind === 'conference') return <OutboundCallIcon />;
+  if (kind === 'secure') return <PhoneLockIcon className={secureClass} />;
+  return <PhoneIcon />;
+}
+
+function phoneLabelText(phone: { label: string; sipTrunk?: string }): string {
+  return [phone.label, phone.sipTrunk].filter(Boolean).join(' • ');
+}
 
 function StartCallMenu({
   actions,
@@ -337,9 +354,14 @@ function StartCallMenu({
           label = 'Start an audio call';
           icon = <Icon glyph={<PhoneIcon />} size="16" />;
         } else if (action.type === 'phone') {
-          label = `Call ${action.label}`;
+          label = `Call ${phoneLabelText(action)}`;
           secondaryLabel = action.number;
-          icon = <Icon glyph={<OutboundCallIcon />} size="16" />;
+          icon = (
+            <Icon
+              glyph={phoneGlyphFor(action.kind, styles['phone-icon--secure'])}
+              size="16"
+            />
+          );
         } else if (action.type === 'conference') {
           label = 'Call conference bridge';
           secondaryLabel = CONFERENCE_BRIDGE.number;
@@ -461,24 +483,18 @@ function PositionedProfilePopover({
   onStartCall: (contactId: string, phoneIndex: number) => void;
   onOpenDialer: () => void;
 }) {
-  const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
-  const workPhone = workIndex >= 0 ? contact.phones[workIndex] : null;
-
   const actions: StartCallAction[] = [
     { id: 'audio', type: 'audio' },
-    ...(workPhone
-      ? [
-          {
-            id: `${contact.id}:${workIndex}`,
-            type: 'phone' as const,
-            label: workPhone.label,
-            number: workPhone.number,
-            secure: workPhone.secure,
-            contactId: contact.id,
-            phoneIndex: workIndex,
-          },
-        ]
-      : []),
+    ...contact.phones.map((p, i) => ({
+      id: `${contact.id}:${i}`,
+      type: 'phone' as const,
+      label: p.label,
+      number: p.number,
+      kind: p.kind,
+      sipTrunk: p.sipTrunk,
+      contactId: contact.id,
+      phoneIndex: i,
+    })),
     { id: 'dialpad', type: 'dialpad' },
   ];
 
@@ -537,20 +553,17 @@ function PositionedProfilePopover({
         username={contact.handle}
         title={contact.title}
         email={contact.email}
-        phone={
-          contact.phones[0]
-            ? {
-                number: contact.phones[0].number,
-                sub: contact.phones[0].sipTrunk,
-                onClick: () => onStartCall(contact.id, 0),
-              }
-            : undefined
-        }
+        phones={contact.phones.map((p, i) => ({
+          number: p.number,
+          label: p.label,
+          sipTrunk: p.sipTrunk,
+          icon: phoneGlyphFor(p.kind, styles['phone-icon--secure']),
+          onClick: () => onStartCall(contact.id, i),
+        }))}
         role={contact.role}
         localTime={contact.localTime}
         lastOnline={contact.online ? undefined : 'Last online 2 hrs ago'}
         onClose={beginClose}
-        phoneIcon={<OutboundCallIcon />}
         callButton={
           <PopoverCallButton actions={actions} onSelect={handleSelect} />
         }
@@ -737,24 +750,21 @@ function DMScene({
   onOpenDialer: () => void;
 }) {
   const contact = CONTACT_MAP['aiko'];
-  const workIndex = contact.phones.findIndex((p) => p.kind === 'work');
-  const workPhone = workIndex >= 0 ? contact.phones[workIndex] : null;
+  const primaryIndex = contact.phones.findIndex((p) => p.kind === 'standard');
+  const primaryPhone = primaryIndex >= 0 ? contact.phones[primaryIndex] : null;
 
   const actions: StartCallAction[] = [
     { id: 'audio', type: 'audio' },
-    ...(workPhone
-      ? [
-          {
-            id: `${contact.id}:${workIndex}`,
-            type: 'phone' as const,
-            label: workPhone.label,
-            number: workPhone.number,
-            secure: workPhone.secure,
-            contactId: contact.id,
-            phoneIndex: workIndex,
-          },
-        ]
-      : []),
+    ...contact.phones.map((p, i) => ({
+      id: `${contact.id}:${i}`,
+      type: 'phone' as const,
+      label: p.label,
+      number: p.number,
+      kind: p.kind,
+      sipTrunk: p.sipTrunk,
+      contactId: contact.id,
+      phoneIndex: i,
+    })),
     { id: 'dialpad', type: 'dialpad' },
   ];
 
@@ -764,8 +774,8 @@ function DMScene({
     } else if (action.type === 'phone') {
       onStartCall(action.contactId, action.phoneIndex);
     } else if (action.type === 'audio') {
-      // Simulated Mattermost Calls WebRTC audio call — prototype reuses the work phone.
-      onStartCall(contact.id, workIndex >= 0 ? workIndex : 0);
+      // Simulated Mattermost Calls WebRTC audio call — prototype reuses the primary phone.
+      onStartCall(contact.id, primaryIndex >= 0 ? primaryIndex : 0);
     }
   };
 
@@ -816,10 +826,10 @@ function DMScene({
         >
           <p className={layoutStyles['layouts__post-text']}>
             Or just ring my direct line:{' '}
-            {workPhone && (
+            {primaryPhone && (
               <PhoneNumberLink
-                number={workPhone.number}
-                onClick={() => onStartCall(contact.id, workIndex)}
+                number={primaryPhone.number}
+                onClick={() => onStartCall(contact.id, primaryIndex)}
               />
             )}
           </p>
@@ -2001,7 +2011,7 @@ export default function OutboundCalls() {
       role: 'Unknown number',
       avatar: '',
       online: false,
-      phones: [{ number: n, label: 'Dialed', kind: 'mobile', secure: false }],
+      phones: [{ number: n, label: 'Dialed', kind: 'standard' }],
     };
     return fakeId;
   };
@@ -2020,8 +2030,7 @@ export default function OutboundCalls() {
       phones: [{
         number: CONFERENCE_BRIDGE.number,
         label: 'Conference',
-        kind: 'work',
-        secure: false,
+        kind: 'conference',
       }],
     };
     setKeypadOpen(false);

@@ -99,8 +99,14 @@ export interface ChannelsSidebarProps {
   showDialPad?: boolean;
   moreUnreadsAbove?: boolean;
   moreUnreadsBelow?: boolean;
-  /** Name of the channel/DM to highlight as active. Pass '' for none. */
+  /** Name of the channel/DM to highlight as active. Pass '' for none. Match against resolved (overridden) names. */
   activeChannelName?: string;
+  /**
+   * Rename built-in channel/DM items without editing this component.
+   * Keys are the default names; values are the display names to use instead.
+   * Applies to visible labels, avatar alt text, active matching, and onItemClick callback args.
+   */
+  channelNameOverrides?: Record<string, string>;
   avatarAikoTan?: string;
   avatarArjunPatel?: string;
   avatarDanielOkoro?: string;
@@ -108,7 +114,7 @@ export interface ChannelsSidebarProps {
   avatarDavidLiang?: string;
   avatarEmmaNovak?: string;
   avatarEthanBrooks?: string;
-  /** Fires when any sidebar item is clicked. The `name` matches the item's visible name. */
+  /** Fires when any sidebar item is clicked. The `name` matches the item's visible (resolved) name. */
   onItemClick?: (name: string) => void;
 }
 
@@ -122,6 +128,7 @@ export default function ChannelsSidebar({
   moreUnreadsAbove = false,
   moreUnreadsBelow = false,
   activeChannelName = 'UX Design',
+  channelNameOverrides,
   avatarAikoTan = '',
   avatarArjunPatel = '',
   avatarDanielOkoro = '',
@@ -131,7 +138,9 @@ export default function ChannelsSidebar({
   avatarEthanBrooks = '',
   onItemClick,
 }: ChannelsSidebarProps) {
-  const isActive = (name: string) => name === activeChannelName;
+  const resolveName = (original: string) =>
+    channelNameOverrides?.[original] ?? original;
+  const isActive = (name: string) => resolveName(name) === activeChannelName;
 
   return (
     <div className={styles['channels-sidebar']}>
@@ -140,14 +149,14 @@ export default function ChannelsSidebar({
 
       {/* Threads + Drafts */}
       <div className={styles['channels-sidebar__top-group']}>
-        <ChannelSidebarItem name="Threads" leadingVisual="Threads" />
-        <ChannelSidebarItem name="Drafts" leadingVisual="Drafts" status="Mention" mentionCount={1} />
+        <ChannelSidebarItem name={resolveName('Threads')} leadingVisual="Threads" />
+        <ChannelSidebarItem name={resolveName('Drafts')} leadingVisual="Drafts" status="Mention" mentionCount={1} />
         {showDialPad && (
           <ChannelSidebarItem
-            name="Dial Pad"
+            name={resolveName('Dial Pad')}
             leadingVisual="Dial Pad"
             active={isActive('Dial Pad')}
-            onClick={onItemClick ? () => onItemClick('Dial Pad') : undefined}
+            onClick={onItemClick ? () => onItemClick(resolveName('Dial Pad')) : undefined}
           />
         )}
       </div>
@@ -160,28 +169,28 @@ export default function ChannelsSidebar({
           {showUnreadsCategory && (
             <div className={styles['channels-sidebar__channel-group']}>
               <SidebarCategory label="Unreads" showChevron={false} />
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active={isActive('UX Design')} />
-              <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" active={isActive('Orion')} />
-              <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
-              <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
-              <ChannelSidebarItem name="Race Teams" leadingVisual="Private" status="Unread" active={isActive('Race Teams')} />
+              <ChannelSidebarItem name={resolveName('UX Design')} leadingVisual="Public" active={isActive('UX Design')} />
+              <ChannelSidebarItem name={resolveName('Orion')} leadingVisual="Public" status="Unread" active={isActive('Orion')} />
+              <ChannelSidebarItem name={resolveName('Release Discussion')} leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
+              <ChannelSidebarItem name={resolveName('Customer Onboarding')} leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
+              <ChannelSidebarItem name={resolveName('Race Teams')} leadingVisual="Private" status="Unread" active={isActive('Race Teams')} />
               <ChannelSidebarItem
-                name="Arjun Patel"
+                name={resolveName('Arjun Patel')}
                 leadingVisual="Direct Message"
                 status="Mention"
                 mentionCount={1}
                 avatarSrc={avatarArjunPatel}
-                avatarAlt="Arjun Patel"
+                avatarAlt={resolveName('Arjun Patel')}
                 showAvatarStatus
                 active={isActive('Arjun Patel')}
               />
               <ChannelSidebarItem
-                name="Daniel Okoro"
+                name={resolveName('Daniel Okoro')}
                 leadingVisual="Direct Message"
                 status="Mention"
                 mentionCount={1}
                 avatarSrc={avatarDanielOkoro}
-                avatarAlt="Daniel Okoro"
+                avatarAlt={resolveName('Daniel Okoro')}
                 showAvatarStatus
                 active={isActive('Daniel Okoro')}
               />
@@ -191,48 +200,48 @@ export default function ChannelsSidebar({
           {/* Favorites */}
           <div className={styles['channels-sidebar__channel-group']}>
             <SidebarCategory label="Favorites" />
-            <ChannelSidebarItem name="UI Redesign" leadingVisual="Public" active={isActive('UI Redesign')} />
+            <ChannelSidebarItem name={resolveName('UI Redesign')} leadingVisual="Public" active={isActive('UI Redesign')} />
             {!showUnreadsCategory && (
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active={isActive('UX Design')} />
+              <ChannelSidebarItem name={resolveName('UX Design')} leadingVisual="Public" active={isActive('UX Design')} />
             )}
             <ChannelSidebarItem
-              name="softphone-ux"
+              name={resolveName('softphone-ux')}
               leadingVisual="Public"
               active={isActive('softphone-ux')}
-              onClick={onItemClick ? () => onItemClick('softphone-ux') : undefined}
+              onClick={onItemClick ? () => onItemClick(resolveName('softphone-ux')) : undefined}
             />
             <ChannelSidebarItem
-              name="Aiko Tan"
+              name={resolveName('Aiko Tan')}
               leadingVisual="Direct Message"
               avatarSrc={avatarAikoTan}
-              avatarAlt="Aiko Tan"
+              avatarAlt={resolveName('Aiko Tan')}
               showAvatarStatus
               active={isActive('Aiko Tan')}
-              onClick={onItemClick ? () => onItemClick('Aiko Tan') : undefined}
+              onClick={onItemClick ? () => onItemClick(resolveName('Aiko Tan')) : undefined}
             />
-            <ChannelSidebarItem name="Hilda Martin, Steve M..." leadingVisual="Group Message" memberCount={2} />
+            <ChannelSidebarItem name={resolveName('Hilda Martin, Steve M...')} leadingVisual="Group Message" memberCount={2} />
           </div>
 
           {/* Channels */}
           <div className={styles['channels-sidebar__channel-group']}>
             <SidebarCategory label="Channels" />
-            <ChannelSidebarItem name="Contributors" leadingVisual="Public" active={isActive('Contributors')} />
-            <ChannelSidebarItem name="Developers" leadingVisual="Public" active={isActive('Developers')} />
+            <ChannelSidebarItem name={resolveName('Contributors')} leadingVisual="Public" active={isActive('Contributors')} />
+            <ChannelSidebarItem name={resolveName('Developers')} leadingVisual="Public" active={isActive('Developers')} />
             {!showUnreadsCategory && (
               <>
-                <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" active={isActive('Orion')} />
-                <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
+                <ChannelSidebarItem name={resolveName('Orion')} leadingVisual="Public" status="Unread" active={isActive('Orion')} />
+                <ChannelSidebarItem name={resolveName('Release Discussion')} leadingVisual="Public" status="Unread" active={isActive('Release Discussion')} />
               </>
             )}
-            <ChannelSidebarItem name="calling-eng" leadingVisual="Public" active={isActive('calling-eng')} />
-            <ChannelSidebarItem name="Security Incident" leadingVisual="Public" active={isActive('Security Incident')} />
-            <ChannelSidebarItem name="System Status" leadingVisual="Private" active={isActive('System Status')} />
-            <ChannelSidebarItem name="Product Support" leadingVisual="Private" active={isActive('Product Support')} />
-            <ChannelSidebarItem name="telephony-vendors" leadingVisual="Private" active={isActive('telephony-vendors')} />
+            <ChannelSidebarItem name={resolveName('calling-eng')} leadingVisual="Public" active={isActive('calling-eng')} />
+            <ChannelSidebarItem name={resolveName('Security Incident')} leadingVisual="Public" active={isActive('Security Incident')} />
+            <ChannelSidebarItem name={resolveName('System Status')} leadingVisual="Private" active={isActive('System Status')} />
+            <ChannelSidebarItem name={resolveName('Product Support')} leadingVisual="Private" active={isActive('Product Support')} />
+            <ChannelSidebarItem name={resolveName('telephony-vendors')} leadingVisual="Private" active={isActive('telephony-vendors')} />
             {!showUnreadsCategory && (
               <>
-                <ChannelSidebarItem name="Sales Partners" leadingVisual="Private" status="Unread" active={isActive('Sales Partners')} />
-                <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
+                <ChannelSidebarItem name={resolveName('Sales Partners')} leadingVisual="Private" status="Unread" active={isActive('Sales Partners')} />
+                <ChannelSidebarItem name={resolveName('Customer Onboarding')} leadingVisual="Private" status="Unread" active={isActive('Customer Onboarding')} />
               </>
             )}
           </div>
@@ -243,57 +252,57 @@ export default function ChannelsSidebar({
             {!showUnreadsCategory && (
               <>
                 <ChannelSidebarItem
-                  name="Arjun Patel"
+                  name={resolveName('Arjun Patel')}
                   leadingVisual="Direct Message"
                   status="Mention"
                   mentionCount={1}
                   avatarSrc={avatarArjunPatel}
-                  avatarAlt="Arjun Patel"
+                  avatarAlt={resolveName('Arjun Patel')}
                   showAvatarStatus
                   active={isActive('Arjun Patel')}
                 />
                 <ChannelSidebarItem
-                  name="Daniel Okoro"
+                  name={resolveName('Daniel Okoro')}
                   leadingVisual="Direct Message"
                   status="Mention"
                   mentionCount={1}
                   avatarSrc={avatarDanielOkoro}
-                  avatarAlt="Daniel Okoro"
+                  avatarAlt={resolveName('Daniel Okoro')}
                   showAvatarStatus
                   active={isActive('Daniel Okoro')}
                 />
               </>
             )}
-            <ChannelSidebarItem name="Richard McDaniel, P..." leadingVisual="Group Message" memberCount={2} />
+            <ChannelSidebarItem name={resolveName('Richard McDaniel, P...')} leadingVisual="Group Message" memberCount={2} />
             <ChannelSidebarItem
-              name="Darius Cole"
+              name={resolveName('Darius Cole')}
               leadingVisual="Direct Message"
               avatarSrc={avatarDariusCole}
-              avatarAlt="Darius Cole"
+              avatarAlt={resolveName('Darius Cole')}
               showAvatarStatus
               active={isActive('Darius Cole')}
             />
             <ChannelSidebarItem
-              name="David Liang"
+              name={resolveName('David Liang')}
               leadingVisual="Direct Message"
               avatarSrc={avatarDavidLiang}
-              avatarAlt="David Liang"
+              avatarAlt={resolveName('David Liang')}
               showAvatarStatus
               active={isActive('David Liang')}
             />
             <ChannelSidebarItem
-              name="Emma Novak"
+              name={resolveName('Emma Novak')}
               leadingVisual="Direct Message"
               avatarSrc={avatarEmmaNovak}
-              avatarAlt="Emma Novak"
+              avatarAlt={resolveName('Emma Novak')}
               showAvatarStatus
               active={isActive('Emma Novak')}
             />
             <ChannelSidebarItem
-              name="Ethan Brooks"
+              name={resolveName('Ethan Brooks')}
               leadingVisual="Direct Message"
               avatarSrc={avatarEthanBrooks}
-              avatarAlt="Ethan Brooks"
+              avatarAlt={resolveName('Ethan Brooks')}
               showAvatarStatus
               active={isActive('Ethan Brooks')}
             />

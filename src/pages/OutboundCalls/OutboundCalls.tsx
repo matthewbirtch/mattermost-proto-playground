@@ -588,19 +588,19 @@ const CHANNEL_POSTS: PostItem[] = [
     id: 'p1',
     contactId: 'aiko',
     timestamp: '9:14 AM',
-    body: 'Morning! I pushed the new softphone component to the prototype playground. Poke it and let me know what to refine.',
+    body: 'Morning. Briefing packet for the 11:00 handover is posted — give it a once-over before the sync.',
   },
   {
     id: 'p2',
     contactId: 'leonard',
     timestamp: '9:21 AM',
-    body: "Quick one — can someone jump on a call with the mobile team? They have a blocker on the softphone keypad work.",
+    body: "Need someone to run a line-check with the forward element before we step off. Any takers?",
   },
   {
     id: 'p3',
     contactId: 'danielle',
     timestamp: '9:38 AM',
-    body: "I can take it. Leonard, what's the best number to reach you on?",
+    body: "I've got it. Leonard, what's the best number to reach you on?",
   },
 ];
 
@@ -677,8 +677,8 @@ function ChannelScene({
     <>
       <ChannelHeader
         type="Channel"
-        name="softphone-ux"
-        description="Design + eng working group for the Mattermost outbound calling prototype."
+        name="op-nightingale"
+        description="Tasking + coordination channel for the Nightingale working group."
         memberCount={8}
         pinnedCount={1}
         callButton={
@@ -721,18 +721,18 @@ function ChannelScene({
             timestamp="9:42 AM"
           >
             <p className={layoutStyles['layouts__post-text']}>
-              Best line is{' '}
+              Reach me on{' '}
               <PhoneNumberLink
                 number={CONTACT_MAP['leonard'].phones[0].number}
                 onClick={() => onStartCall('leonard', 0)}
               />
-              {' '}— free for the next hour.
+              {' '}— I'm at my desk for the next hour.
             </p>
           </Post>
         </ProfileClickable>
       </div>
       <div className={layoutStyles['layouts__message-input']}>
-        <MessageInput placeholder="Message softphone-ux" />
+        <MessageInput placeholder="Message op-nightingale" />
       </div>
     </>
   );
@@ -805,7 +805,7 @@ function DMScene({
           timestamp="9:02 AM"
         >
           <p className={layoutStyles['layouts__post-text']}>
-            Hey! Do you have a minute to walk through the outbound calling flow? Easier by voice.
+            Hey — have a minute? Need to walk through the Nightingale comms plan before the 11:00 handover. Easier by voice.
           </p>
         </Post>
         <Post
@@ -815,7 +815,7 @@ function DMScene({
           timestamp="9:04 AM"
         >
           <p className={layoutStyles['layouts__post-text']}>
-            Yep — tap the Call button above or open my profile and pick a number, either works.
+            Copy — hit Call above or pick a number off my profile, either works.
           </p>
         </Post>
         <Post
@@ -2280,7 +2280,7 @@ export default function OutboundCalls() {
             <TeamSidebar
               activeTeamId="contributors"
               teams={[
-                { id: 'contributors', name: 'Contributors', src: avatarStaffTeam },
+                { id: 'contributors', name: 'Task Force Aurora', src: avatarStaffTeam },
                 { id: 'design', name: 'Design', initials: 'De', unread: true },
                 { id: 'acme', name: 'Acme', initials: 'Ac', mentions: 3 },
               ]}
@@ -2293,20 +2293,30 @@ export default function OutboundCalls() {
           <div className={styles['calls__outer-panel']}>
             <div className={styles['calls__channels-sidebar']}>
               <ChannelsSidebar
-                teamName="Contributors"
+                teamName="Task Force Aurora"
                 showFilter
                 showDialPad={scene === 'dialer'}
+                channelNameOverrides={{
+                  'softphone-ux': 'op-nightingale',
+                  'calling-eng': 'comms-ops',
+                  'telephony-vendors': 'asset-liaison',
+                  'Security Incident': 'Counterintel Alert',
+                  'UX Design': 'Targeting Review',
+                  'UI Redesign': 'Case Orion',
+                  'Orion': 'Project Orion',
+                  'Release Discussion': 'Briefing Room',
+                }}
                 activeChannelName={
                   scene === 'channel'
-                    ? 'softphone-ux'
+                    ? 'op-nightingale'
                     : scene === 'dm'
                     ? 'Aiko Tan'
                     : scene === 'dialer'
                     ? 'Dial Pad'
                     : scene === 'rhs'
-                    ? 'softphone-ux'
+                    ? 'op-nightingale'
                     : scene === 'team-sidebar'
-                    ? 'softphone-ux'
+                    ? 'op-nightingale'
                     : ''
                 }
                 avatarAikoTan={avatarAikoTan}
@@ -2317,7 +2327,7 @@ export default function OutboundCalls() {
                 avatarEmmaNovak={avatarEmmaNovak}
                 avatarEthanBrooks={avatarEthanBrooks}
                 onItemClick={(name) => {
-                  if (name === 'softphone-ux') setScene('channel');
+                  if (name === 'op-nightingale') setScene('channel');
                   else if (name === 'Aiko Tan') setScene('dm');
                   else if (name === 'Dial Pad') setScene('dialer');
                 }}

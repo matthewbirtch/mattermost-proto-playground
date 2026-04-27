@@ -241,3 +241,33 @@ export function buildDefaultChannelsSidebarModel(
 
   return { topGroupItems, groups };
 }
+
+/**
+ * Applies per-page display renames (keys = default names from the model) to
+ * `name` and `avatarAlt` on each row, matching pre-model `channelNameOverrides` behavior.
+ */
+export function applyChannelNameOverrides(
+  model: ChannelsSidebarModel,
+  channelNameOverrides?: Record<string, string>,
+): ChannelsSidebarModel {
+  if (!channelNameOverrides || Object.keys(channelNameOverrides).length === 0) {
+    return model;
+  }
+
+  const resolve = (s: string) => channelNameOverrides[s] ?? s;
+
+  const mapRow = (row: ChannelsSidebarItemModel): ChannelsSidebarItemModel => ({
+    ...row,
+    name: resolve(row.name),
+    avatarAlt:
+      row.avatarAlt != null ? resolve(row.avatarAlt) : row.avatarAlt,
+  });
+
+  return {
+    topGroupItems: model.topGroupItems.map(mapRow),
+    groups: model.groups.map((g) => ({
+      ...g,
+      items: g.items.map(mapRow),
+    })),
+  };
+}

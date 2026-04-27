@@ -7,6 +7,7 @@ import MoreUnreadsBanner from '@/components/ui/MoreUnreadsBanner/MoreUnreadsBann
 import IconButton from '@/components/ui/IconButton/IconButton';
 import Icon from '@/components/ui/Icon/Icon';
 import {
+  applyChannelNameOverrides,
   buildDefaultChannelsSidebarModel,
   type ChannelsSidebarModel,
 } from './channelsSidebarModel';
@@ -104,6 +105,12 @@ export interface ChannelsSidebarProps {
   showFilter?: boolean;
   moreUnreadsAbove?: boolean;
   moreUnreadsBelow?: boolean;
+  /**
+   * Rename built-in channel/DM items without editing the model.
+   * Keys are the default names; values are the display names to use instead.
+   * Applies to `name` and `avatarAlt` on each item (same as the legacy hardcoded list).
+   */
+  channelNameOverrides?: Record<string, string>;
   avatarAikoTan?: string;
   avatarArjunPatel?: string;
   avatarDanielOkoro?: string;
@@ -121,6 +128,7 @@ export default function ChannelsSidebar({
   showFilter = false,
   moreUnreadsAbove = false,
   moreUnreadsBelow = false,
+  channelNameOverrides,
   avatarAikoTan = '',
   avatarArjunPatel = '',
   avatarDanielOkoro = '',
@@ -130,7 +138,7 @@ export default function ChannelsSidebar({
   avatarEthanBrooks = '',
   model: modelProp,
 }: ChannelsSidebarProps) {
-  const model =
+  const baseModel =
     modelProp ??
     buildDefaultChannelsSidebarModel({
       showUnreadsCategory,
@@ -142,6 +150,7 @@ export default function ChannelsSidebar({
       avatarEmmaNovak,
       avatarEthanBrooks,
     });
+  const model = applyChannelNameOverrides(baseModel, channelNameOverrides);
 
   return (
     <div className={styles['channels-sidebar']}>
@@ -149,8 +158,11 @@ export default function ChannelsSidebar({
       <SidebarNavigator showFilter={showFilter} />
 
       <div className={styles['channels-sidebar__top-group']}>
-        {model.topGroupItems.map((row) => (
-          <ChannelSidebarItem key={row.name} {...row} />
+        {model.topGroupItems.map((row, i) => (
+          <ChannelSidebarItem
+            key={`top-${i}-${row.name}`}
+            {...row}
+          />
         ))}
       </div>
 

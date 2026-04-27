@@ -1,0 +1,107 @@
+import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
+import MessageInput from '@/components/ui/MessageInput';
+import MessageSeparator from '@/components/ui/MessageSeparator/MessageSeparator';
+import Post from '@/components/ui/Post/Post';
+import { OutboundCallPhoneNumberLink } from '@/pages/OutboundCalls/OutboundCallPhoneNumberLink';
+import { SegmentedCallButton } from '@/pages/OutboundCalls/OutboundCallStartCallMenu';
+import { avatarLeonard, CONTACT_MAP } from '@/pages/OutboundCalls/outboundCallData';
+import type { StartCallAction } from '@/types/outboundCall';
+import layoutStyles from '@/pages/Layouts/Layouts.module.scss';
+
+export function DMScene({
+  onOpenProfile,
+  onStartCall,
+  onOpenDialer,
+}: {
+  onOpenProfile: (contactId: string, rect: DOMRect) => void;
+  onStartCall: (contactId: string, phoneIndex: number) => void;
+  onOpenDialer: () => void;
+}) {
+  const contact = CONTACT_MAP['aiko'];
+  const primaryIndex = contact.phones.findIndex((p) => p.kind === 'standard');
+  const primaryPhone = primaryIndex >= 0 ? contact.phones[primaryIndex] : null;
+
+  const actions: StartCallAction[] = [
+    { id: 'audio', type: 'audio' },
+    ...contact.phones.map((p, i) => ({
+      id: `${contact.id}:${i}`,
+      type: 'phone' as const,
+      label: p.label,
+      number: p.number,
+      kind: p.kind,
+      sipTrunk: p.sipTrunk,
+      contactId: contact.id,
+      phoneIndex: i,
+    })),
+    { id: 'dialpad', type: 'dialpad' },
+  ];
+
+  const handleSelect = (action: StartCallAction) => {
+    if (action.type === 'dialpad') {
+      onOpenDialer();
+    } else if (action.type === 'phone') {
+      onStartCall(action.contactId, action.phoneIndex);
+    } else if (action.type === 'audio') {
+      onStartCall(contact.id, primaryIndex >= 0 ? primaryIndex : 0);
+    }
+  };
+
+  return (
+    <>
+      <ChannelHeader
+        type="DM"
+        name={contact.name}
+        description={contact.title}
+        avatarSrc={contact.avatar}
+        avatarStatus={contact.online}
+        onNameClick={(e) => onOpenProfile(contact.id, e.currentTarget.getBoundingClientRect())}
+        callButton={<SegmentedCallButton actions={actions} onSelect={handleSelect} />}
+      />
+
+      <div className={layoutStyles['layouts__messages']}>
+        <MessageSeparator type="Date" label="Today" />
+
+        <Post
+          avatarSrc={contact.avatar}
+          avatarAlt={contact.name}
+          username={contact.name}
+          timestamp="9:02 AM"
+        >
+          <p className={layoutStyles['layouts__post-text']}>
+            Hey — have a minute? Need to walk through the Nightingale comms plan before the 11:00
+            handover. Easier by voice.
+          </p>
+        </Post>
+        <Post
+          avatarSrc={avatarLeonard}
+          avatarAlt="Leonard Riley"
+          username="Leonard Riley"
+          timestamp="9:04 AM"
+        >
+          <p className={layoutStyles['layouts__post-text']}>
+            Copy — hit Call above or pick a number off my profile, either works.
+          </p>
+        </Post>
+        <Post
+          avatarSrc={contact.avatar}
+          avatarAlt={contact.name}
+          username={contact.name}
+          timestamp="9:05 AM"
+        >
+          <p className={layoutStyles['layouts__post-text']}>
+            Or just ring my direct line:{' '}
+            {primaryPhone && (
+              <OutboundCallPhoneNumberLink
+                number={primaryPhone.number}
+                onClick={() => onStartCall(contact.id, primaryIndex)}
+              />
+            )}
+          </p>
+        </Post>
+      </div>
+      <div className={layoutStyles['layouts__message-input']}>
+        <MessageInput placeholder={`Message ${contact.name}`} />
+      </div>
+    </>
+  );
+}

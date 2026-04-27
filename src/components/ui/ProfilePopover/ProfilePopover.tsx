@@ -50,8 +50,8 @@ export interface ProfilePopoverProps {
   email?: string;
   /** Caption above the name, e.g. "Last online 6 hrs ago". */
   lastOnline?: string;
-  /** Role tag shown at the very top, e.g. "System Admin". */
-  role?: string;
+  /** Role tag shown at the very top, e.g. "System Admin". (Named `jobRole` to avoid clashing with the ARIA `role` attribute in JSX.) */
+  jobRole?: string;
   /** Local time block. */
   localTime?: ProfilePopoverLocalTime;
   /** Custom status. */
@@ -108,7 +108,7 @@ export default function ProfilePopover({
   title,
   email,
   lastOnline,
-  role,
+  jobRole,
   localTime,
   customStatus,
   sharedOrg,
@@ -134,9 +134,9 @@ export default function ProfilePopover({
 
   return (
     <div className={rootClass}>
-      {role && (
+      {jobRole && (
         <div className={styles['profile-popover__role-tag']}>
-          <LabelTag label={role} casing="All Caps" size="X-Small" />
+          <LabelTag label={jobRole} casing="All Caps" size="X-Small" />
         </div>
       )}
 

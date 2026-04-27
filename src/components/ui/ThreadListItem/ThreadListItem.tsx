@@ -1,3 +1,4 @@
+import { type KeyboardEvent, useCallback } from 'react';
 import LabelTag from '../LabelTag/LabelTag';
 import UnreadBadge from '../UnreadBadge/UnreadBadge';
 import styles from './ThreadListItem.module.scss';
@@ -50,8 +51,25 @@ export default function ThreadListItem({
     .filter(Boolean)
     .join(' ');
 
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (!onClick) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        onClick();
+      }
+    },
+    [onClick],
+  );
+
   return (
-    <div className={rootClass} onClick={onClick}>
+    <div
+      className={rootClass}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? handleKeyDown : undefined}
+    >
       <div className={styles['thread-list-item__thread']}>
         <div className={styles['thread-list-item__container']}>
           <div className={styles['thread-list-item__post-content']}>

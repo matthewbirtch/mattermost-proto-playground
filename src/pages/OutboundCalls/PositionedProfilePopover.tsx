@@ -102,7 +102,7 @@ export function PositionedProfilePopover({
           icon: phoneGlyphFor(p.kind, styles['phone-icon--secure']),
           onClick: () => onStartCall(contact.id, i),
         }))}
-        role={contact.role}
+        jobRole={contact.role}
         localTime={contact.localTime}
         lastOnline={contact.online ? undefined : 'Last online 2 hrs ago'}
         onClose={beginClose}

@@ -24,6 +24,33 @@
     object-fit: cover;
   }
 
+  // Fallback avatar rendered for non-'user' participant kinds
+  // (external-link guests and dial-in callers). Sized via inline width/height
+  // so it matches the image variants across size modifiers.
+  &__fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    color: var(--center-channel-bg, var(--color-neutral-0));
+    background-color: var(--color-neutral-400);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Kind modifiers — override fallback color for specific participant kinds
+  // ---------------------------------------------------------------------------
+  &--kind-external-link {
+    .call-participant-avatar__fallback {
+      background-color: var(--color-neutral-400);
+    }
+  }
+
+  &--kind-dial-in {
+    .call-participant-avatar__fallback {
+      background-color: var(--color-success);
+    }
+  }
+
   // Talking indicator — glowing ring around the avatar
   &__talking-ring {
     position: absolute;

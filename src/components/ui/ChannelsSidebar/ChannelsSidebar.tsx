@@ -6,9 +6,11 @@ import ChannelSidebarItem from '@/components/ui/ChannelSidebarItem/ChannelSideba
 import MoreUnreadsBanner from '@/components/ui/MoreUnreadsBanner/MoreUnreadsBanner';
 import IconButton from '@/components/ui/IconButton/IconButton';
 import Icon from '@/components/ui/Icon/Icon';
+import {
+  buildDefaultChannelsSidebarModel,
+  type ChannelsSidebarModel,
+} from './channelsSidebarModel';
 import styles from './ChannelsSidebar.module.scss';
-
-// ── Sub-components ────────────────────────────────────────────────────────────
 
 function SidebarHeader({ teamName }: { teamName: string }) {
   return (
@@ -61,12 +63,18 @@ interface SidebarCategoryProps {
   showPlusButton?: boolean;
 }
 
-function SidebarCategory({ label, showChevron = true, showPlusButton = false }: SidebarCategoryProps) {
+function SidebarCategory({
+  label,
+  showChevron = true,
+  showPlusButton = false,
+}: SidebarCategoryProps) {
   const categoryClass = [
     styles['channels-sidebar__category'],
     !showChevron ? styles['channels-sidebar__category--no-chevron'] : '',
     showPlusButton ? styles['channels-sidebar__category--has-action'] : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={categoryClass}>
@@ -90,8 +98,6 @@ function SidebarCategory({ label, showChevron = true, showPlusButton = false }: 
   );
 }
 
-// ── Props ─────────────────────────────────────────────────────────────────────
-
 export interface ChannelsSidebarProps {
   teamName?: string;
   showUnreadsCategory?: boolean;
@@ -105,9 +111,9 @@ export interface ChannelsSidebarProps {
   avatarDavidLiang?: string;
   avatarEmmaNovak?: string;
   avatarEthanBrooks?: string;
+  /** When set, overrides the default channel tree (for per-prototype sidebars). */
+  model?: ChannelsSidebarModel;
 }
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ChannelsSidebar({
   teamName = 'Contributors',
@@ -122,146 +128,52 @@ export default function ChannelsSidebar({
   avatarDavidLiang = '',
   avatarEmmaNovak = '',
   avatarEthanBrooks = '',
+  model: modelProp,
 }: ChannelsSidebarProps) {
+  const model =
+    modelProp ??
+    buildDefaultChannelsSidebarModel({
+      showUnreadsCategory,
+      avatarAikoTan,
+      avatarArjunPatel,
+      avatarDanielOkoro,
+      avatarDariusCole,
+      avatarDavidLiang,
+      avatarEmmaNovak,
+      avatarEthanBrooks,
+    });
+
   return (
     <div className={styles['channels-sidebar']}>
       <SidebarHeader teamName={teamName} />
       <SidebarNavigator showFilter={showFilter} />
 
-      {/* Threads + Drafts */}
       <div className={styles['channels-sidebar__top-group']}>
-        <ChannelSidebarItem name="Threads" leadingVisual="Threads" />
-        <ChannelSidebarItem name="Drafts" leadingVisual="Drafts" status="Mention" mentionCount={1} />
+        {model.topGroupItems.map((row) => (
+          <ChannelSidebarItem key={row.name} {...row} />
+        ))}
       </div>
 
-      {/* Scrollable channel list */}
       <div className={styles['channels-sidebar__scroll-view']}>
         <div className={styles['channels-sidebar__channel-groups']}>
-
-          {/* Unreads category (On variant) */}
-          {showUnreadsCategory && (
-            <div className={styles['channels-sidebar__channel-group']}>
-              <SidebarCategory label="Unreads" showChevron={false} />
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active />
-              <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" />
-              <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" />
-              <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" />
-              <ChannelSidebarItem name="Race Teams" leadingVisual="Private" status="Unread" />
-              <ChannelSidebarItem
-                name="Arjun Patel"
-                leadingVisual="Direct Message"
-                status="Mention"
-                mentionCount={1}
-                avatarSrc={avatarArjunPatel}
-                avatarAlt="Arjun Patel"
-                showAvatarStatus
+          {model.groups.map((group) => (
+            <div
+              key={group.key}
+              className={styles['channels-sidebar__channel-group']}
+            >
+              <SidebarCategory
+                label={group.category.label}
+                showChevron={group.category.showChevron}
+                showPlusButton={group.category.showPlusButton}
               />
-              <ChannelSidebarItem
-                name="Daniel Okoro"
-                leadingVisual="Direct Message"
-                status="Mention"
-                mentionCount={1}
-                avatarSrc={avatarDanielOkoro}
-                avatarAlt="Daniel Okoro"
-                showAvatarStatus
-              />
+              {group.items.map((row, index) => (
+                <ChannelSidebarItem
+                  key={`${group.key}-${index}-${row.name}`}
+                  {...row}
+                />
+              ))}
             </div>
-          )}
-
-          {/* Favorites */}
-          <div className={styles['channels-sidebar__channel-group']}>
-            <SidebarCategory label="Favorites" />
-            <ChannelSidebarItem name="UI Redesign" leadingVisual="Public" />
-            {!showUnreadsCategory && (
-              <ChannelSidebarItem name="UX Design" leadingVisual="Public" active />
-            )}
-            <ChannelSidebarItem name="Hilda Martin, Steve M..." leadingVisual="Group Message" memberCount={2} />
-          </div>
-
-          {/* Channels */}
-          <div className={styles['channels-sidebar__channel-group']}>
-            <SidebarCategory label="Channels" />
-            <ChannelSidebarItem name="Contributors" leadingVisual="Public" />
-            <ChannelSidebarItem name="Developers" leadingVisual="Public" />
-            {!showUnreadsCategory && (
-              <>
-                <ChannelSidebarItem name="Orion" leadingVisual="Public" status="Unread" />
-                <ChannelSidebarItem name="Release Discussion" leadingVisual="Public" status="Unread" />
-              </>
-            )}
-            <ChannelSidebarItem name="Security Incident" leadingVisual="Public" />
-            <ChannelSidebarItem name="System Status" leadingVisual="Private" />
-            <ChannelSidebarItem name="Product Support" leadingVisual="Private" />
-            {!showUnreadsCategory && (
-              <>
-                <ChannelSidebarItem name="Sales Partners" leadingVisual="Private" status="Unread" />
-                <ChannelSidebarItem name="Customer Onboarding" leadingVisual="Private" status="Unread" />
-              </>
-            )}
-          </div>
-
-          {/* Direct Messages */}
-          <div className={styles['channels-sidebar__channel-group']}>
-            <SidebarCategory label="Direct Messages" showPlusButton />
-            <ChannelSidebarItem
-              name="Aiko Tan"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarAikoTan}
-              avatarAlt="Aiko Tan"
-              showAvatarStatus
-            />
-            {!showUnreadsCategory && (
-              <>
-                <ChannelSidebarItem
-                  name="Arjun Patel"
-                  leadingVisual="Direct Message"
-                  status="Mention"
-                  mentionCount={1}
-                  avatarSrc={avatarArjunPatel}
-                  avatarAlt="Arjun Patel"
-                  showAvatarStatus
-                />
-                <ChannelSidebarItem
-                  name="Daniel Okoro"
-                  leadingVisual="Direct Message"
-                  status="Mention"
-                  mentionCount={1}
-                  avatarSrc={avatarDanielOkoro}
-                  avatarAlt="Daniel Okoro"
-                  showAvatarStatus
-                />
-              </>
-            )}
-            <ChannelSidebarItem name="Richard McDaniel, P..." leadingVisual="Group Message" memberCount={2} />
-            <ChannelSidebarItem
-              name="Darius Cole"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarDariusCole}
-              avatarAlt="Darius Cole"
-              showAvatarStatus
-            />
-            <ChannelSidebarItem
-              name="David Liang"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarDavidLiang}
-              avatarAlt="David Liang"
-              showAvatarStatus
-            />
-            <ChannelSidebarItem
-              name="Emma Novak"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarEmmaNovak}
-              avatarAlt="Emma Novak"
-              showAvatarStatus
-            />
-            <ChannelSidebarItem
-              name="Ethan Brooks"
-              leadingVisual="Direct Message"
-              avatarSrc={avatarEthanBrooks}
-              avatarAlt="Ethan Brooks"
-              showAvatarStatus
-            />
-          </div>
+          ))}
         </div>
 
         {moreUnreadsAbove && (
@@ -280,3 +192,5 @@ export default function ChannelsSidebar({
     </div>
   );
 }
+
+export type { ChannelsSidebarModel } from './channelsSidebarModel';

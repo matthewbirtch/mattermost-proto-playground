@@ -164,6 +164,18 @@
     }
   }
 
+  // ── Call Widget demo ─────────────────────────────────────
+  &__call-widget-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-s);
+    max-width: 400px;
+    background-color: var(--center-channel-bg);
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    border-radius: var(--radius-m);
+    padding: var(--spacing-l);
+  }
+
   &__body-text {
     font-family: var(--font-family-body);
     font-size: var(--font-size-100);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@/components/ui/Button/Button';
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
 import GlobalHeader from '@/components/ui/GlobalHeader/GlobalHeader';
@@ -10,6 +10,7 @@ import Divider from '@/components/ui/Divider/Divider';
 import ChannelsSidebar from '@/components/ui/ChannelsSidebar/ChannelsSidebar';
 import TeamSidebar from '@/components/ui/TeamSidebar/TeamSidebar';
 import ProfilePopover from '@/components/ui/ProfilePopover/ProfilePopover';
+import CallWidget from '@/components/ui/CallWidget';
 import avatarStaffTeam from '@/assets/avatars/Staff Team.png';
 import avatarAikoTan from '@/assets/avatars/Aiko Tan.png';
 import avatarLeonard from '@/assets/avatars/Leonard Riley.png';
@@ -19,6 +20,7 @@ import avatarDariusCole from '@/assets/avatars/Darius Cole.png';
 import avatarDavidLiang from '@/assets/avatars/David Liang.png';
 import avatarEmmaNovak from '@/assets/avatars/Emma Novak.png';
 import avatarEthanBrooks from '@/assets/avatars/Ethan Brooks.png';
+import type { Participant } from '@/types/callParticipant';
 import styles from './Patterns.module.scss';
 
 const REMAINING_PATTERNS: string[] = [];
@@ -70,6 +72,56 @@ function ModalDemo() {
           </Modal>
         </ModalCanvas>
       </div>
+    </div>
+  );
+}
+
+// ── Call Widget demo ───────────────────────────────────────────────────────
+
+const callWidgetParticipants: Participant[] = [
+  { id: '1', name: 'Leonard Riley', avatarSrc: avatarLeonard, host: true, talking: true },
+  { id: '2', name: 'Aiko Tan', avatarSrc: avatarAikoTan },
+  { id: '3', name: 'Arjun Patel', avatarSrc: avatarArjunPatel, muted: true },
+];
+
+function CallWidgetDemo() {
+  const [overlay, setOverlay] = useState<'menu' | 'info' | 'participants' | null>(null);
+  const [muted, setMuted] = useState(false);
+  const [handRaised, setHandRaised] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [externalEnabled, setExternalEnabled] = useState(true);
+
+  return (
+    <div className={styles['patterns__call-widget-demo']}>
+      <p className={styles['patterns__variant-label']}>Active call (interactive)</p>
+      <CallWidget
+        participants={callWidgetParticipants}
+        currentUserId="1"
+        talkerName="Leonard Riley"
+        talkerAvatarSrc={avatarLeonard}
+        channelName="op-nightingale"
+        muted={muted}
+        onToggleMute={() => setMuted((m) => !m)}
+        handRaised={handRaised}
+        onToggleHand={() => setHandRaised((h) => !h)}
+        sharing={sharing}
+        onToggleShare={() => setSharing((s) => !s)}
+        onExpand={() => {}}
+        onLeave={() => {}}
+        overlay={overlay}
+        onToggleMenu={() => setOverlay((o) => (o === 'menu' ? null : 'menu'))}
+        onToggleParticipants={() =>
+          setOverlay((o) => (o === 'participants' ? null : 'participants'))
+        }
+        onOpenCallInfo={() => setOverlay('info')}
+        onCloseCallInfo={() => setOverlay(null)}
+        externalEnabled={externalEnabled}
+        onExternalEnabledChange={setExternalEnabled}
+        internalLink="https://mattermost.example.com/team/pl/join/abc123"
+        externalLink="https://guest.example.com/xyz"
+        dialInNumber="+1 669 555 0100"
+        dialInPin="123 456"
+      />
     </div>
   );
 }
@@ -253,6 +305,11 @@ export default function Patterns() {
           <p className={styles['patterns__variant-label']}>With priority + attachments</p>
           <MessageInput placeholder="Message #ux-design…" showPriorityIndicator showAttachments />
         </div>
+      </section>
+
+      <section className={styles['patterns__section']}>
+        <h2 className={styles['patterns__section-title']}>Call Widget</h2>
+        <CallWidgetDemo />
       </section>
 
       <section className={styles['patterns__section']}>

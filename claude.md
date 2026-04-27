@@ -1,5 +1,7 @@
 # Project instructions for AI
 
+**Where this file lives:** Edits to `CLAUDE.md` should **always be merged to `main`** (small PR or cherry-pick). Do not leave project-wide AI / contributor rules only on a long-lived feature branch—`main` is the canonical copy everyone and every branch should follow.
+
 ## SCSS component styles: BEM + nesting
 
 When writing or editing `*.module.scss` component styles, use a **single block as the root** and nest elements and modifiers under it. This keeps each component’s styles in one hierarchy and matches BEM.
@@ -64,6 +66,19 @@ When adding a new component to the playground, check the Figma file name:
 ## Building new components: reuse existing components first
 
 When building a new component, audit the elements it needs before writing any new code. If an existing component in `src/components/` already covers an element — especially when its name matches what Figma uses — use it directly rather than reimplementing it. Only build a new sub-component when nothing suitable exists.
+
+## Shared React hooks
+
+If these hooks exist in `src/hooks/`, use them instead of duplicating logic. (They may be introduced on a long-lived feature branch and cherry-picked to `main` later.)
+
+| Hook | File | Use when |
+|------|------|----------|
+| `useExitAnimation` | `useExitAnimation.ts` | A panel or overlay should stay mounted for `durationMs` after `open` becomes false so CSS exit animation can run. Returns `{ rendered, exiting }`. |
+| `useOutsideClose` | `useOutsideClose.ts` | A dropdown or custom menu is `open` and should close on `mousedown` outside a container `ref` (e.g. split button + menu). Pass `open` so listeners attach only while open. |
+
+**Profile popover + positioning:** `ProfilePopover` is the **content** card. Figma-anchored placement (e.g. from a message avatar `getBoundingClientRect()`) is a **separate concern**. Do not fork `ProfilePopover` for coordinates — either compose it inside a small page-local wrapper (e.g. `PositionedProfilePopover` in a prototype) or, if multiple prototypes need the same rules, add a **layout hook** such as `useAnchoredToRect` and keep `ProfilePopover` unchanged. Merge positioning into the design system only after UX parity with the popover animation spec in this file.
+
+**Note:** The **Outbound Calls** prototype (MM-56584) is maintained on a **feature branch only** — it is not planned for the `main` playground.
 
 ## Animation: easing and duration
 

@@ -268,7 +268,7 @@ export default function Patterns() {
               username="@leonard.riley"
               title="Lead Engineer, Enterprise"
               email="leonard.riley@acme.com"
-              role="System Admin"
+              jobRole="System Admin"
               lastOnline="Last online 6 hrs ago"
               staff
               localTime={{
@@ -289,7 +289,7 @@ export default function Patterns() {
               username="@leonard.riley"
               title="Lead Engineer, Enterprise"
               email="leonard.riley@acme.com"
-              role="System Admin"
+              jobRole="System Admin"
               lastOnline="Last online 6 hrs ago"
               sharedOrg="Acme Corp."
               staff
@@ -318,7 +318,7 @@ export default function Patterns() {
               username="@leonard.riley"
               title="Lead Engineer, Enterprise"
               email="leonard.riley@acme.com"
-              role="System Admin"
+              jobRole="System Admin"
               lastOnline="Last online 6 hrs ago"
               staff
               localTime={{
@@ -339,7 +339,7 @@ export default function Patterns() {
               username="@leonard.riley"
               title="Lead Engineer, Enterprise"
               email="leonard.riley@acme.com"
-              role="System Admin"
+              jobRole="System Admin"
               lastOnline="Last online 6 hrs ago"
               sharedOrg="Dunder Mifflin"
               staff

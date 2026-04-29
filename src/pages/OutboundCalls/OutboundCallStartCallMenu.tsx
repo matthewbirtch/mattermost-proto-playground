@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import PhoneIcon from '@mattermost/compass-icons/components/phone';
+import HeadphonesIcon from '@mattermost/compass-icons/components/headphones';
 import ChevronDownIcon from '@mattermost/compass-icons/components/chevron-down';
 import DialpadIcon from '@/components/icons/DialpadIcon';
 import OutboundCallIcon from '@/components/icons/OutboundCallIcon';
+import Divider from '@/components/ui/Divider/Divider';
 import Icon from '@/components/ui/Icon/Icon';
 import MenuItem from '@/components/ui/MenuItem/MenuItem';
 import { useOutsideClose } from '@/hooks/useOutsideClose';
@@ -14,19 +16,21 @@ import styles from './OutboundCalls.module.scss';
 function StartCallMenu({
   actions,
   onSelect,
+  audioLabel = 'Start audio call in this channel',
 }: {
   actions: StartCallAction[];
   onSelect: (action: StartCallAction) => void;
+  audioLabel?: string;
 }) {
   return (
     <ul className={styles['start-call-menu']} role="menu" aria-label="Start call options">
-      {actions.map((action) => {
+      {actions.map((action, i) => {
         let label: string;
         let secondaryLabel: string | undefined;
         let icon: React.ReactNode;
         if (action.type === 'audio') {
-          label = 'Start an audio call';
-          icon = <Icon glyph={<PhoneIcon />} size="16" />;
+          label = audioLabel;
+          icon = <Icon glyph={<HeadphonesIcon />} size="16" />;
         } else if (action.type === 'phone') {
           label = `Call ${phoneLabelText(action)}`;
           secondaryLabel = action.number;
@@ -44,16 +48,29 @@ function StartCallMenu({
           label = 'Use dial pad';
           icon = <Icon glyph={<DialpadIcon />} size="16" />;
         }
+        const next = actions[i + 1];
+        const showDividerAfter = action.type === 'audio' && next && next.type !== 'audio';
         return (
-          <li key={action.id} className={styles['start-call-menu__item']}>
-            <MenuItem
-              role="menuitem"
-              label={label}
-              secondaryLabel={secondaryLabel}
-              leadingVisual={icon}
-              onClick={() => onSelect(action)}
-            />
-          </li>
+          <Fragment key={action.id}>
+            <li className={styles['start-call-menu__item']}>
+              <MenuItem
+                role="menuitem"
+                label={label}
+                secondaryLabel={secondaryLabel}
+                leadingVisual={icon}
+                onClick={() => onSelect(action)}
+              />
+            </li>
+            {showDividerAfter && (
+              <li
+                className={styles['start-call-menu__divider']}
+                role="separator"
+                aria-hidden
+              >
+                <Divider />
+              </li>
+            )}
+          </Fragment>
         );
       })}
     </ul>
@@ -63,9 +80,11 @@ function StartCallMenu({
 export function SegmentedCallButton({
   actions,
   onSelect,
+  audioLabel,
 }: {
   actions: StartCallAction[];
   onSelect: (action: StartCallAction) => void;
+  audioLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -100,7 +119,7 @@ export function SegmentedCallButton({
       >
         <Icon glyph={<ChevronDownIcon />} size="12" />
       </button>
-      {open && <StartCallMenu actions={actions} onSelect={pick} />}
+      {open && <StartCallMenu actions={actions} onSelect={pick} audioLabel={audioLabel} />}
     </div>
   );
 }
@@ -108,9 +127,11 @@ export function SegmentedCallButton({
 export function PopoverCallButton({
   actions,
   onSelect,
+  audioLabel,
 }: {
   actions: StartCallAction[];
   onSelect: (action: StartCallAction) => void;
+  audioLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -134,7 +155,7 @@ export function PopoverCallButton({
         <Icon glyph={<PhoneIcon />} size="16" />
         <Icon glyph={<ChevronDownIcon />} size="12" />
       </button>
-      {open && <StartCallMenu actions={actions} onSelect={pick} />}
+      {open && <StartCallMenu actions={actions} onSelect={pick} audioLabel={audioLabel} />}
     </div>
   );
 }

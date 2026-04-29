@@ -106,7 +106,13 @@ export function PositionedProfilePopover({
         localTime={contact.localTime}
         lastOnline={contact.online ? undefined : 'Last online 2 hrs ago'}
         onClose={beginClose}
-        callButton={<PopoverCallButton actions={actions} onSelect={handleSelect} />}
+        callButton={
+          <PopoverCallButton
+            actions={actions}
+            onSelect={handleSelect}
+            audioLabel={`Start audio call with ${contact.name}`}
+          />
+        }
         state={closing ? 'closing' : 'open'}
         onAnimationEnd={handleAnimationEnd}
       />

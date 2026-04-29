@@ -25,7 +25,7 @@ export const CONTACTS: Contact[] = [
     name: 'Aiko Tan',
     handle: '@aiko',
     email: 'aiko.tan@mattermost.com',
-    title: 'Product Designer',
+    title: 'Threat Analyst',
     avatar: avatarAikoTan,
     online: true,
     localTime: { time: '11:42 PM', timezone: 'JST', hourDifference: '13 hrs ahead' },

@@ -1,9 +1,9 @@
 import ChannelHeader from '@/components/ui/ChannelHeader/ChannelHeader';
-import MessageInput from '@/components/ui/MessageInput';
 import MessageSeparator from '@/components/ui/MessageSeparator/MessageSeparator';
 import Post from '@/components/ui/Post/Post';
 import { OutboundCallPhoneNumberLink } from '@/pages/OutboundCalls/OutboundCallPhoneNumberLink';
 import { SegmentedCallButton } from '@/pages/OutboundCalls/OutboundCallStartCallMenu';
+import TelAutocompleteMessageInput from '@/pages/OutboundCalls/TelAutocompleteMessageInput';
 import { avatarLeonard, CONTACT_MAP } from '@/pages/OutboundCalls/outboundCallData';
 import type { StartCallAction } from '@/types/outboundCall';
 import layoutStyles from '@/pages/Layouts/Layouts.module.scss';
@@ -41,9 +41,8 @@ export function DMScene({
       onOpenDialer();
     } else if (action.type === 'phone') {
       onStartCall(action.contactId, action.phoneIndex);
-    } else if (action.type === 'audio') {
-      onStartCall(contact.id, primaryIndex >= 0 ? primaryIndex : 0);
     }
+    // 'audio' is a stub for a Mattermost Calls WebRTC call — no-op in prototype.
   };
 
   return (
@@ -55,7 +54,13 @@ export function DMScene({
         avatarSrc={contact.avatar}
         avatarStatus={contact.online}
         onNameClick={(e) => onOpenProfile(contact.id, e.currentTarget.getBoundingClientRect())}
-        callButton={<SegmentedCallButton actions={actions} onSelect={handleSelect} />}
+        callButton={
+          <SegmentedCallButton
+            actions={actions}
+            onSelect={handleSelect}
+            audioLabel={`Start audio call with ${contact.name}`}
+          />
+        }
       />
 
       <div className={layoutStyles['layouts__messages']}>
@@ -100,7 +105,7 @@ export function DMScene({
         </Post>
       </div>
       <div className={layoutStyles['layouts__message-input']}>
-        <MessageInput placeholder={`Message ${contact.name}`} />
+        <TelAutocompleteMessageInput placeholder={`Message ${contact.name}`} />
       </div>
     </>
   );

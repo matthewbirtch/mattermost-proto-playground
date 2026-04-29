@@ -5,8 +5,6 @@ export const OUTBOUND_SCENES: { id: SceneId; label: string }[] = [
   { id: 'channel', label: 'Channel' },
   { id: 'dm', label: 'Direct message' },
   { id: 'team-sidebar', label: 'Dialer v1' },
-  { id: 'rhs', label: 'Dialer v2' },
-  { id: 'dialer', label: 'Dialer v3' },
 ];
 
 export function OutboundCallSceneSwitcher({

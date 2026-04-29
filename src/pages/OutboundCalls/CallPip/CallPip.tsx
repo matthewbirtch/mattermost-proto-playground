@@ -185,6 +185,7 @@ export function CallPip({
 
   const DeviceIcon = AUDIO_ICON[audioDevice.kind];
   const controlsDisabled = call.status === 'ended';
+  const isCallInitiated = call.status === 'dialing' || call.status === 'connected';
   const showDtmf = (keypadOpen || isComposing) && call.status !== 'ended';
 
   const dtmfAnim = useExitAnimation(showDtmf, 150);
@@ -259,44 +260,8 @@ export function CallPip({
             )}
           </div>
           <div className={styles['pip__controls-right']}>
-            {isComposing ? (
-              <button
-                type="button"
-                aria-label="Cancel"
-                className={styles['pip__hangup']}
-                onClick={onDismiss}
-              >
-                <Icon glyph={<PhoneHangupIcon />} size="16" />
-              </button>
-            ) : (
-              <>
-                {canAddParticipant && (
-                  <IconButton
-                    aria-label={addingParticipant ? 'Close add participant' : 'Add participant'}
-                    size="Small"
-                    padding="Compact"
-                    active={addingParticipant}
-                    icon={<Icon glyph={<AccountPlusOutlineIcon />} size="16" />}
-                    onClick={
-                      addingParticipant ? onCloseAddParticipant : onOpenAddParticipant
-                    }
-                  />
-                )}
-                <IconButton
-                  aria-label={call.muted ? 'Unmute microphone' : 'Mute microphone'}
-                  size="Small"
-                  padding="Compact"
-                  toggled={call.muted}
-                  destructive={call.muted}
-                  disabled={controlsDisabled}
-                  icon={
-                    <Icon
-                      glyph={call.muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
-                      size="16"
-                    />
-                  }
-                  onClick={onToggleMute}
-                />
+            {(() => {
+              const devicePicker = (
                 <div className={styles['pip__more-wrap']} ref={deviceRef}>
                   <IconButton
                     aria-label="More options"
@@ -343,16 +308,79 @@ export function CallPip({
                     </ul>
                   )}
                 </div>
-                <button
-                  type="button"
-                  aria-label={call.status === 'ended' ? 'Dismiss' : 'End call'}
-                  className={styles['pip__hangup']}
-                  onClick={call.status === 'ended' ? onDismiss : onHangUp}
-                >
-                  <Icon glyph={<PhoneHangupIcon />} size="16" />
-                </button>
-              </>
-            )}
+              );
+
+              const micButton = (
+                <IconButton
+                  aria-label={call.muted ? 'Unmute microphone' : 'Mute microphone'}
+                  size="Small"
+                  padding="Compact"
+                  toggled={call.muted}
+                  destructive={call.muted}
+                  disabled={controlsDisabled}
+                  icon={
+                    <Icon
+                      glyph={call.muted ? <MicrophoneOffIcon /> : <MicrophoneIcon />}
+                      size="16"
+                    />
+                  }
+                  onClick={onToggleMute}
+                />
+              );
+
+              if (isComposing) {
+                return (
+                  <>
+                    {micButton}
+                    {devicePicker}
+                    <IconButton
+                      aria-label="Cancel"
+                      size="Small"
+                      padding="Compact"
+                      icon={<Icon glyph={<CloseIcon />} size="16" />}
+                      onClick={onDismiss}
+                    />
+                  </>
+                );
+              }
+
+              return (
+                <>
+                  {canAddParticipant && (
+                    <IconButton
+                      aria-label={addingParticipant ? 'Close add participant' : 'Add participant'}
+                      size="Small"
+                      padding="Compact"
+                      active={addingParticipant}
+                      icon={<Icon glyph={<AccountPlusOutlineIcon />} size="16" />}
+                      onClick={
+                        addingParticipant ? onCloseAddParticipant : onOpenAddParticipant
+                      }
+                    />
+                  )}
+                  {micButton}
+                  {devicePicker}
+                  {isCallInitiated ? (
+                    <button
+                      type="button"
+                      aria-label="End call"
+                      className={styles['pip__hangup']}
+                      onClick={onHangUp}
+                    >
+                      <Icon glyph={<PhoneHangupIcon />} size="16" />
+                    </button>
+                  ) : (
+                    <IconButton
+                      aria-label="Dismiss"
+                      size="Small"
+                      padding="Compact"
+                      icon={<Icon glyph={<CloseIcon />} size="16" />}
+                      onClick={onDismiss}
+                    />
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>
